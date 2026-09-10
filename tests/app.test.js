@@ -1,0 +1,299 @@
+import assert from 'node:assert/strict';
+import { after, describe, it } from 'node:test';
+import { bootApp, errorResponse, jsonResponse, networkFailure } from './dom-helpers.js';
+import { loadRawDatabase } from './helpers.js';
+
+const apps = [];
+
+async function boot(options) {
+  const app = await bootApp(options);
+  apps.push(app);
+  return app;
+}
+
+after(() => {
+  apps.forEach((app) => app.teardown());
+});
+
+const SESSION_QUERY = 'd=2026-09-10&l=4&c=samogloski-wyrazista-wymowa:1,gloska-dz:1,wprawki-rymowanki-treningowe:2';
+
+describe('start aplikacji', () => {
+  it('wczytuje bazę i pokazuje parametry sesji', async () => {
+    const app = await boot();
+    assert.match(app.text(), /Parametry sesji/);
+    assert.equal(app.queryAll('.params-row').length, 25);
+    assert.equal(app.query('#params-total').textContent.trim(), '25 ćwiczeń z 25 kategorii');
+    assert.match(app.query('#app-footer-info').textContent, /schemat 1\.0/);
+  });
+
+  it('nieznany adres wraca do parametrów', async () => {
+    const app = await boot({ hash: '#/nieistniejacy' });
+    assert.match(app.text(), /Parametry sesji/);
+    assert.equal(app.hash(), '#/params');
+  });
+
+  it('pokazuje przyczynę, gdy bazy nie da się pobrać', async () => {
+    const app = await boot({ response: errorResponse(404) });
+    assert.match(app.text(), /Nie można uruchomić aplikacji/);
+    assert.match(app.text(), /404/);
+    assert.equal(app.queryAll('.params-row').length, 0);
+  });
+
+  it('podpowiada uruchomienie serwera, gdy zapytanie nie dochodzi', async () => {
+    const app = await boot({ response: networkFailure() });
+    assert.match(app.text(), /Nie udało się pobrać pliku bazy/);
+    assert.match(app.text(), /serwera HTTP/);
+  });
+
+  it('pokazuje przyczynę niezgodności bazy ze schematem', async () => {
+    const broken = loadRawDatabase();
+    broken.exercises[0].variants[0].type = 'obrazek';
+    const app = await boot({ response: jsonResponse(broken) });
+    assert.match(app.text(), /nie odpowiada schematowi/);
+    assert.match(app.text(), /nieznany typ "obrazek"/);
+  });
+});
+
+describe('przebieg sesji', () => {
+  it('zatwierdzenie parametrów rozpoczyna sesję od pierwszego ćwiczenia', async () => {
+    const app = await boot();
+    await app.click('#params-submit');
+    assert.match(app.hash(), /^#\/session\/1\?/);
+    assert.match(app.hash(), /d=2026-09-10|d=\d{4}-\d{2}-\d{2}/);
+    assert.match(app.text(), /Ćwiczenie 1 z 25/);
+  });
+
+  it('przechodzi kolejno przez ćwiczenia i kończy podsumowaniem', async () => {
+    const app = await boot({ hash: `#/session/1?${SESSION_QUERY}` });
+    assert.match(app.text(), /Ćwiczenie 1 z 4/);
+    assert.ok(app.query('[data-role="prev"]').disabled);
+
+    await app.click('[data-role="next"]');
+    assert.match(app.hash(), /#\/session\/2/);
+    assert.match(app.text(), /Ćwiczenie 2 z 4/);
+
+    await app.click('[data-role="prev"]');
+    assert.match(app.hash(), /#\/session\/1/);
+
+    await app.goto(`#/session/4?${SESSION_QUERY}`);
+    assert.equal(app.query('[data-role="next"]').textContent.trim(), 'Zakończ sesję');
+    await app.click('[data-role="next"]');
+    assert.match(app.hash(), /^#\/summary/);
+    assert.match(app.text(), /Sesja zakończona/);
+    assert.equal(app.queryAll('.summary-list__item').length, 4);
+  });
+
+  it('strzałki na klawiaturze przechodzą między ćwiczeniami', async () => {
+    const app = await boot({ hash: `#/session/2?${SESSION_QUERY}` });
+    await app.press('ArrowRight');
+    assert.match(app.hash(), /#\/session\/3/);
+    await app.press('ArrowLeft');
+    assert.match(app.hash(), /#\/session\/2/);
+  });
+
+  it('numer kroku spoza zakresu jest przycinany', async () => {
+    const app = await boot({ hash: `#/session/99?${SESSION_QUERY}` });
+    assert.match(app.hash(), /#\/session\/4/);
+    assert.match(app.text(), /Ćwiczenie 4 z 4/);
+  });
+
+  it('sesja bez wybranych kategorii wraca do parametrów', async () => {
+    const app = await boot({ hash: '#/session/1?d=2026-09-10&l=4&c=' });
+    assert.equal(app.hash(), '#/params');
+    assert.match(app.text(), /Parametry sesji/);
+  });
+
+  it('ten sam adres po odświeżeniu daje ten sam zestaw ćwiczeń', async () => {
+    const first = await boot({ hash: `#/session/1?${SESSION_QUERY}` });
+    const titles = [];
+    for (let step = 1; step <= 4; step += 1) {
+      await first.goto(`#/session/${step}?${SESSION_QUERY}`);
+      titles.push(first.query('.exercise-card__title').textContent);
+    }
+
+    const second = await boot({ hash: `#/session/1?${SESSION_QUERY}` });
+    const reloaded = [];
+    for (let step = 1; step <= 4; step += 1) {
+      await second.goto(`#/session/${step}?${SESSION_QUERY}`);
+      reloaded.push(second.query('.exercise-card__title').textContent);
+    }
+
+    assert.deepEqual(reloaded, titles);
+  });
+
+  it('kolejność kroków odpowiada kolejności kategorii w adresie', async () => {
+    const app = await boot({ hash: `#/session/1?${SESSION_QUERY}` });
+    const categories = [];
+    for (let step = 1; step <= 4; step += 1) {
+      await app.goto(`#/session/${step}?${SESSION_QUERY}`);
+      categories.push(app.query('.exercise-card .chip').textContent);
+    }
+    assert.deepEqual(categories, [
+      'samogłoski — wyrazista wymowa',
+      'głoska dż',
+      'wprawki / rymowanki treningowe',
+      'wprawki / rymowanki treningowe',
+    ]);
+  });
+
+  it('ziarno z adresu zmienia zestaw, a jego brak przywraca zestaw dnia', async () => {
+    const query = 'd=2026-09-10&l=4&c=tekst-do-czytania-terapeutycznego:3';
+    const titles = async (app, suffix) => {
+      const result = [];
+      for (let step = 1; step <= 3; step += 1) {
+        await app.goto(`#/session/${step}?${query}${suffix}`);
+        result.push(app.query('.exercise-card__title').textContent);
+      }
+      return result;
+    };
+
+    const app = await boot({ hash: `#/session/1?${query}` });
+    const fromDate = await titles(app, '');
+    const fromSeed = await titles(app, '&seed=inne-ziarno');
+    const backToDate = await titles(app, '');
+
+    assert.notDeepEqual(fromSeed, fromDate);
+    assert.deepEqual(backToDate, fromDate);
+  });
+
+  it('przełącznik oznaczeń zmienia tryb wyświetlania treści', async () => {
+    const app = await boot({ hash: `#/session/1?${SESSION_QUERY}` });
+    assert.equal(app.query('.exercise-card').dataset.marks, 'full');
+    await app.click('[data-mark-mode="plain"]');
+    assert.equal(app.query('.exercise-card').dataset.marks, 'plain');
+    assert.equal(app.query('[data-mark-mode="plain"]').getAttribute('aria-pressed'), 'true');
+
+    await app.goto(`#/session/2?${SESSION_QUERY}`);
+    assert.equal(app.query('.exercise-card').dataset.marks, 'plain');
+  });
+
+  it('podsumowanie pozwala powtórzyć zestaw i wylosować nowy', async () => {
+    const app = await boot({ hash: `#/summary?${SESSION_QUERY}` });
+    await app.click('[data-role="repeat"]');
+    assert.match(app.hash(), /#\/session\/1/);
+
+    await app.goto(`#/summary?${SESSION_QUERY}`);
+    await app.click('[data-role="reroll"]');
+    assert.match(app.hash(), /#\/session\/1\?.*seed=/);
+  });
+});
+
+describe('parametry sesji', () => {
+  it('zmiana poziomu przelicza limity kategorii', async () => {
+    const app = await boot();
+    const select = app.query('#param-level');
+    select.value = '1';
+    select.dispatchEvent(new app.window.Event('change', { bubbles: true }));
+
+    const row = app.queryAll('.params-row').find((item) => item.dataset.category === 'tekst-do-czytania-terapeutycznego');
+    assert.equal(row.querySelector('[data-role="count"]').max, '8');
+    assert.match(row.textContent, /dostępnych: 8/);
+  });
+
+  it('wyłączenie kategorii zeruje licznik i zachowuje pozycję', async () => {
+    const app = await boot();
+    const before = app.queryAll('.params-row').map((row) => row.dataset.category);
+    const row = app.queryAll('.params-row')[0];
+    row.querySelector('[data-role="toggle"]').click();
+
+    assert.equal(row.dataset.active, 'false');
+    assert.equal(row.querySelector('[data-role="count"]').value, '0');
+    assert.equal(app.query('#params-total').textContent.trim(), '24 ćwiczenia z 24 kategorii');
+    assert.deepEqual(app.queryAll('.params-row').map((item) => item.dataset.category), before);
+  });
+
+  it('liczba ćwiczeń jest przycinana do dostępnych', async () => {
+    const app = await boot();
+    const row = app.queryAll('.params-row').find((item) => item.dataset.category === 'opozycje-fonologiczne');
+    const input = row.querySelector('[data-role="count"]');
+    input.value = '99';
+    input.dispatchEvent(new app.window.Event('input', { bubbles: true }));
+    input.dispatchEvent(new app.window.Event('change', { bubbles: true }));
+    assert.equal(input.value, '2');
+  });
+
+  it('strzałki zmieniają kolejność kategorii', async () => {
+    const app = await boot();
+    const before = app.queryAll('.params-row').map((row) => row.dataset.category);
+    app.queryAll('.params-row')[1].querySelector('[data-role="move"][data-offset="-1"]').click();
+    const after = app.queryAll('.params-row').map((row) => row.dataset.category);
+    assert.deepEqual(after.slice(0, 2), [before[1], before[0]]);
+  });
+
+  it('wyzerowanie wszystkich kategorii blokuje start sesji', async () => {
+    const app = await boot();
+    app.queryAll('.params-row').forEach((row) => {
+      const toggle = row.querySelector('[data-role="toggle"]');
+      if (row.dataset.active === 'true') {
+        toggle.click();
+      }
+    });
+    assert.ok(app.query('#params-submit').disabled);
+    assert.match(app.query('#params-total').textContent, /Brak wybranych ćwiczeń/);
+  });
+
+  it('własne ziarno z formularza trafia do adresu sesji', async () => {
+    const app = await boot();
+    app.query('#param-seed').value = 'moje-ziarno';
+    await app.click('#params-submit');
+    assert.match(app.hash(), /seed=moje-ziarno/);
+  });
+});
+
+describe('przeglądanie bazy', () => {
+  it('pokazuje całą bazę pogrupowaną po kategoriach', async () => {
+    const app = await boot({ hash: '#/browse' });
+    assert.equal(app.queryAll('.browse-item').length, 54);
+    assert.equal(app.queryAll('.browse-group').length, 25);
+    assert.match(app.text(), /Znaleziono 54 ćwiczenia/);
+  });
+
+  it('wyszukiwanie zawęża listę i zapisuje się w adresie', async () => {
+    const app = await boot({ hash: '#/browse' });
+    const input = app.query('#browse-query');
+    input.value = 'swiderki';
+    input.dispatchEvent(new app.window.Event('input', { bubbles: true }));
+
+    assert.equal(app.queryAll('.browse-item').length, 1);
+    assert.equal(app.hash(), '#/browse?q=swiderki');
+  });
+
+  it('filtruje po kategorii i poziomie', async () => {
+    const app = await boot({ hash: '#/browse?cat=tekst-do-czytania-terapeutycznego&level=2' });
+    const items = app.queryAll('.browse-item');
+    assert.ok(items.length > 0);
+    assert.equal(app.queryAll('.browse-group').length, 1);
+    assert.ok(items.every((item) => item.textContent.includes('poziom 2')));
+  });
+
+  it('informuje o braku wyników', async () => {
+    const app = await boot({ hash: '#/browse?q=zupelnie-nieistniejaca-fraza' });
+    assert.match(app.text(), /Żadne ćwiczenie nie pasuje/);
+  });
+
+  it('otwiera podgląd ćwiczenia z pełną treścią i surowymi danymi', async () => {
+    const app = await boot({ hash: '#/browse/adam-andrzejewski' });
+    assert.match(app.text(), /Adam Andrzejewski/);
+    assert.match(app.text(), /Metryka/);
+    assert.match(app.query('.raw-data').textContent, /"id": "adam-andrzejewski"/);
+    assert.match(app.text(), /Uwagi redakcyjne/);
+  });
+
+  it('podgląd zachowuje filtry w odnośniku powrotnym', async () => {
+    const app = await boot({ hash: '#/browse/adam-andrzejewski?q=adam&cat=tekst-do-czytania-terapeutycznego' });
+    const back = app.query('.btn--ghost');
+    assert.equal(back.getAttribute('href'), '#/browse?q=adam&cat=tekst-do-czytania-terapeutycznego');
+  });
+
+  it('nieznane ćwiczenie kończy się czytelnym komunikatem', async () => {
+    const app = await boot({ hash: '#/browse/nie-ma-takiego' });
+    assert.match(app.text(), /Nie znaleziono ćwiczenia/);
+    assert.match(app.text(), /nie-ma-takiego/);
+  });
+
+  it('pokazuje rejestr audytowy bazy', async () => {
+    const app = await boot({ hash: '#/browse' });
+    assert.match(app.text(), /Rejestr audytowy bazy/);
+    assert.equal(app.queryAll('.audit-table').length, 2);
+  });
+});

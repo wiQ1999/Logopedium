@@ -1,0 +1,17 @@
+{
+  "name": "logopedium",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Statyczna aplikacja SPA prowadząca codzienną sesję ćwiczeń logopedycznych.",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.js",
+    "test": "node --test \"tests/*.test.js\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

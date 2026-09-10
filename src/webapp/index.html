@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logopedium — ćwiczenia logopedyczne</title>
+  <meta name="description" content="Codzienna sesja ćwiczeń logopedycznych dobierana losowo z bazy zadań.">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/marks.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#app-main">Przejdź do treści</a>
+
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-brand" href="#/params">
+        <span class="app-brand__name">Logopedium</span>
+        <span class="app-brand__tag">ćwiczenia logopedyczne</span>
+      </a>
+      <nav class="app-nav" id="app-nav" aria-label="Tryby pracy">
+        <a class="app-nav__link" href="#/params" data-nav="session">Sesja</a>
+        <a class="app-nav__link" href="#/browse" data-nav="browse">Przeglądaj bazę</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-main" id="app-main" tabindex="-1">
+    <p class="loading">Wczytywanie bazy ćwiczeń…</p>
+  </main>
+
+  <footer class="app-footer">
+    <div class="app-footer__inner" id="app-footer-info"></div>
+  </footer>
+</body>
+</html>

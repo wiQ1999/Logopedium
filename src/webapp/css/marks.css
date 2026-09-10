@@ -1,0 +1,96 @@
+.target {
+  font-weight: 700;
+  color: var(--mark-target);
+}
+
+.legato {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.phonetic {
+  font-style: italic;
+}
+
+.uncertain {
+  color: var(--mark-uncertain);
+  font-style: italic;
+}
+
+.uncertain::before {
+  content: "[";
+}
+
+.uncertain::after {
+  content: "]";
+}
+
+.breath {
+  color: var(--mark-breath);
+  font-weight: 700;
+  padding: 0 0.15em;
+}
+
+.exhale {
+  display: inline-block;
+  min-width: 3.5em;
+  vertical-align: middle;
+  border-bottom: 2px solid var(--mark-exhale);
+  margin-bottom: 0.35em;
+}
+
+.exhale::after {
+  content: "\27A4";
+  display: inline-block;
+  position: relative;
+  left: calc(100% - 0.55em);
+  bottom: -0.55em;
+  font-size: 0.6em;
+  color: var(--mark-exhale);
+}
+
+.blank {
+  display: inline-block;
+  min-width: 2.25em;
+  border-bottom: 1px dotted var(--text-faint);
+  vertical-align: baseline;
+}
+
+.juncture {
+  color: var(--mark-juncture);
+  font-weight: 400;
+  padding: 0 0.05em;
+}
+
+[data-marks="target"] .legato {
+  text-decoration: none;
+}
+
+[data-marks="plain"] .target {
+  font-weight: inherit;
+  color: inherit;
+}
+
+[data-marks="plain"] .legato {
+  text-decoration: none;
+}
+
+.marks-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.marks-legend__item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.marks-legend__sample {
+  font-size: 0.9375rem;
+}
