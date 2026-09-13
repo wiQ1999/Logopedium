@@ -1,131 +1,126 @@
 {
-  "schemaVersion": "1.0",
-  "generated": "2026-09-08",
+  "schemaVersion": "1.1",
+  "generated": "2026-09-13",
   "categories": [
     {
+      "id": "rozgrzewka",
+      "name": "rozgrzewka"
+    },
+    {
+      "id": "terapia-miofunkcjonalna-polykanie",
+      "name": "terapia miofunkcjonalna — połykanie"
+    },
+    {
+      "id": "technika-legato-cwiczenia-bazowe",
+      "name": "technika legato — ćwiczenia bazowe"
+    },
+    {
+      "id": "sygmatyzm-miedzyzebowy-cwiczenia-ze-szpatulka",
+      "name": "sygmatyzm międzyzębowy — ćwiczenia ze szpatułką"
+    },
+    {
+      "id": "gloski-dziaslowe-wywolanie-i-roznicowanie",
+      "name": "głoski dziąsłowe — wywołanie i różnicowanie"
+    },
+    {
       "id": "samogloski-wyrazista-wymowa",
-      "name": "samogłoski — wyrazista wymowa",
-      "order": 1
+      "name": "samogłoski — wyrazista wymowa"
     },
     {
       "id": "samogloski-w-naglosie-zdania-aliteracyjne",
-      "name": "samogłoski w nagłosie — zdania aliteracyjne",
-      "order": 2
+      "name": "samogłoski w nagłosie — zdania aliteracyjne"
     },
     {
       "id": "gloski-nosowe-wzmocnienie-naglosu",
-      "name": "głoski nosowe — wzmocnienie nagłosu",
-      "order": 3
+      "name": "głoski nosowe — wzmocnienie nagłosu"
     },
     {
       "id": "zbitki-wyrazowe-na-gloske-m",
-      "name": "zbitki wyrazowe na głoskę m",
-      "order": 4
+      "name": "zbitki wyrazowe na głoskę m"
     },
     {
       "id": "opozycje-fonologiczne",
-      "name": "opozycje fonologiczne",
-      "order": 5
+      "name": "opozycje fonologiczne"
     },
     {
       "id": "roznicowanie-cz-s-s-sz-ch",
-      "name": "różnicowanie cz / s / ś / sz / ch",
-      "order": 6
+      "name": "różnicowanie cz / s / ś / sz / ch"
     },
     {
       "id": "roznicowanie-sz-szcz-cz",
-      "name": "różnicowanie sz / szcz / cz",
-      "order": 7
+      "name": "różnicowanie sz / szcz / cz"
     },
     {
       "id": "roznicowanie-grup-spolgloskowych",
-      "name": "różnicowanie grup spółgłoskowych",
-      "order": 8
+      "name": "różnicowanie grup spółgłoskowych"
     },
     {
       "id": "roznicowanie-szt-trz-strz",
-      "name": "różnicowanie szt / trz / strz",
-      "order": 9
+      "name": "różnicowanie szt / trz / strz"
     },
     {
       "id": "roznicowanie-trz-cz",
-      "name": "różnicowanie trz / cz",
-      "order": 10
+      "name": "różnicowanie trz / cz"
     },
     {
       "id": "grupa-spolgloskowa-szcz",
-      "name": "grupa spółgłoskowa szcz",
-      "order": 11
+      "name": "grupa spółgłoskowa szcz"
     },
     {
       "id": "grupy-spolgloskowe-z-trz-strz-psz",
-      "name": "grupy spółgłoskowe z trz / strz / psz",
-      "order": 12
+      "name": "grupy spółgłoskowe z trz / strz / psz"
     },
     {
       "id": "grupy-spolgloskowe-z-przyimkiem-w",
-      "name": "grupy spółgłoskowe z przyimkiem \"w\"",
-      "order": 13
+      "name": "grupy spółgłoskowe z przyimkiem \"w\""
     },
     {
       "id": "udzwiecznienie-na-zlaczu-s-z",
-      "name": "udźwięcznienie na złączu s / z",
-      "order": 14
+      "name": "udźwięcznienie na złączu s / z"
     },
     {
       "id": "gloski-szczelinowe-zestroje-z-s-ss",
-      "name": "głoski szczelinowe — zestroje z s / ss",
-      "order": 15
+      "name": "głoski szczelinowe — zestroje z s / ss"
     },
     {
       "id": "gloski-dziaslowe-logatomy-i-roznicowanie",
-      "name": "głoski dziąsłowe — logatomy i różnicowanie",
-      "order": 16
+      "name": "głoski dziąsłowe — logatomy i różnicowanie"
     },
     {
       "id": "gloska-dz",
-      "name": "głoska dż",
-      "order": 17
+      "name": "głoska dż"
     },
     {
       "id": "gloski-miekkie-zmiekczenia",
-      "name": "głoski miękkie / zmiękczenia",
-      "order": 18
+      "name": "głoski miękkie / zmiękczenia"
     },
     {
       "id": "wprawki-rymowanki-treningowe",
-      "name": "wprawki / rymowanki treningowe",
-      "order": 19
+      "name": "wprawki / rymowanki treningowe"
     },
     {
       "id": "tekst-do-czytania-terapeutycznego",
-      "name": "tekst do czytania terapeutycznego",
-      "order": 20
+      "name": "tekst do czytania terapeutycznego"
     },
     {
       "id": "regulacja-oddechowa-zagadki-definicyjne",
-      "name": "regulacja oddechowa — zagadki definicyjne",
-      "order": 21
+      "name": "regulacja oddechowa — zagadki definicyjne"
     },
     {
       "id": "regulacja-oddechowa-dopowiadanie-zdan",
-      "name": "regulacja oddechowa — dopowiadanie zdań",
-      "order": 22
+      "name": "regulacja oddechowa — dopowiadanie zdań"
     },
     {
       "id": "automatyzacja-techniki-legato-mowa-spontaniczna",
-      "name": "automatyzacja techniki legato — mowa spontaniczna",
-      "order": 23
+      "name": "automatyzacja techniki legato — mowa spontaniczna"
     },
     {
       "id": "automatyzacja-techniki-legato-mowa-spontaniczna-cd",
-      "name": "automatyzacja techniki legato — mowa spontaniczna (cd.)",
-      "order": 24
+      "name": "automatyzacja techniki legato — mowa spontaniczna (cd.)"
     },
     {
       "id": "afirmacje-nastawienie-do-pracy-nad-glosem",
-      "name": "afirmacje / nastawienie do pracy nad głosem",
-      "order": 25
+      "name": "afirmacje / nastawienie do pracy nad głosem"
     }
   ],
   "exercises": [
@@ -155,7 +150,6 @@
         {
           "id": "adam-andrzejewski-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -195,7 +189,6 @@
         {
           "id": "alicja-izabela-i-ewelina-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -236,7 +229,6 @@
         {
           "id": "alsza-szla-roznicowanie-sz-l-w1",
           "label": "Zadanie 1 — sz przed l",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "alsza — szla · olszo — szlo · elsze — szle · ulszu — szlu",
@@ -281,7 +273,6 @@
         {
           "id": "alsza-szla-roznicowanie-sz-l-w2",
           "label": "Zadanie 2 — różnicowanie \"tsze / szcze\"",
-          "order": 2,
           "type": "items",
           "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> Różnicuj starannie:</p>",
           "syllablesHtml": null,
@@ -322,7 +313,6 @@
         {
           "id": "alsza-szla-roznicowanie-sz-l-w3",
           "label": "Zadanie 3 — wygłosowe \"szcz\"",
-          "order": 3,
           "type": "items",
           "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> ...warcie głoski <em>cz</em> zdecydowanie kończy poszum głoski <em>sz</em>. Jest ono mocne<br>\n<span class=\"uncertain\">ucięte</span> ...krótkie; poślizg w żadnym wypadku nie powinien się „ciągnąć\":</p>",
           "syllablesHtml": null,
@@ -395,7 +385,6 @@
         {
           "id": "alsza-szla-roznicowanie-sz-l-w4",
           "label": "Zadanie 4 — złącza akcentowe",
-          "order": 4,
           "type": "items",
           "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> ...raźnie oddzielaj głoski „na złączach\", czyli łącznie akcentowo, zestro-<br>\n<span class=\"uncertain\">ucięte</span> ...o, ale osobno artykulacyjnie:</p>",
           "syllablesHtml": null,
@@ -449,7 +438,6 @@
         {
           "id": "arogancki-aligator-ambitnie-adoruje-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -509,9 +497,8 @@
         {
           "id": "as-za-napis-zamazany-w1",
           "label": null,
-          "order": 1,
           "type": "syllables",
-          "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> …bezdźwięczny (-s z-); podobnie postępujemy w ćwiczeniu zestrojów:</p>",
+          "instructionHtml": null,
           "syllablesHtml": "as-za  es-ze  ys-zy  is-zy  os-zo  us-zu   <span class=\"uncertain\">oznaczenie (L)</span>",
           "textHtml": null,
           "noteHtml": null,
@@ -521,7 +508,6 @@
         {
           "id": "as-za-napis-zamazany-w2",
           "label": null,
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -597,7 +583,6 @@
         {
           "id": "borys-i-bronislawa-bromscy-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -638,7 +623,6 @@
         {
           "id": "brzydka-blondynka-beata-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -683,7 +667,6 @@
         {
           "id": "chrabaszcz-i-dylizans-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -727,7 +710,6 @@
         {
           "id": "chrzaszcz-flirciarz-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -760,7 +742,6 @@
         {
           "id": "cwiczenia-pracuje-nad-moim-glosem-w1",
           "label": "Grupa: ĆWICZENIA",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -817,7 +798,6 @@
         {
           "id": "cwiczenia-pracuje-nad-moim-glosem-w2",
           "label": "Grupa: PRACA GŁOSEM",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -854,7 +834,6 @@
         {
           "id": "cwiczenia-pracuje-nad-moim-glosem-w3",
           "label": "Grupa: INNE",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -877,6 +856,224 @@
             {
               "id": "cwiczenia-pracuje-nad-moim-glosem-w3-p04",
               "html": "kocham moje ciało, dbam o nie, opiekuję się nim i pozwalam mu wydobywać najpiękniejsze dźwięki"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cwiczenia-ze-szpatulka-s-z-c-dz",
+      "title": "Ćwiczenia ze szpatułką (s, z, c, dz)",
+      "categoryId": "sygmatyzm-miedzyzebowy-cwiczenia-ze-szpatulka",
+      "phonemes": [
+        "s",
+        "z",
+        "c",
+        "dz"
+      ],
+      "positions": [
+        "nagłos",
+        "śródgłos",
+        "wygłos"
+      ],
+      "level": null,
+      "randomizable": true,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Ćwiczenia właściwe. Każdą pozycję czytamy najpierw ze szpatułką między siekaczami (nie za głęboko), następnie przy zwarciu centralnym — delikatne zaciśnięcie zębów blokujące manipulację językiem. Po opanowaniu s/z/c/dz przechodzimy do opozycji s/sz i c/cz, które są już w korpusie: „opozycje-s-sz-w-zestawieniach-dwuwyrazowych\" oraz „opozycje-c-cz-w-jednym-wyrazie\". W oryginale wyraz „cykada\" wystąpił dwukrotnie — pozostawiono jedno wystąpienie.",
+      "headerHtml": null,
+      "contextHtml": "<p><span class=\"target\">Zasady wykonania</span></p>\n<p>- Szpatułkę delikatnie przygryzamy zębami, ułożoną poziomo między siekaczami. Stanowi barierę dla języka podczas artykulacji.<br>\n- Najpierw każdą sylabę, wyraz i wyrażenie czytamy ze szpatułką między siekaczami.<br>\n- Następnie ustawiamy zęby — delikatne zaciśnięcie podczas wymowy newralgicznych głosek. Siekacze powinny blokować język, górne nachodzą na dolne.<br>\n- Język i wargi układamy symetrycznie. Subtelnie dociskamy kąciki ust do zębów. Uwaga na pracę mięśnia dźwigacza kącika ust.<br>\n- Powietrze powinno lecieć wzdłuż środka języka.<br>\n- Nie zaciskamy mocno zębów — delikatnie nachodzą na siebie; staw skroniowo-żuchwowy nie powinien być napięty.<br>\n- Język nieznacznie uniesiony, maksymalnie do miejsca styku górnych siekaczy z dolnymi.<br>\n- Newralgiczne głoski wydłużamy, np. &lt;span class=\"phonetic\"&gt;a<span class=\"target\">ss</span>a&lt;/span&gt;.</p>",
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w1",
+          "label": "Zadanie 1 — sylaby",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w1-p01",
+              "html": "<span class=\"target\">s</span>a · e<span class=\"target\">s</span>a · u<span class=\"target\">s</span>e · a<span class=\"target\">s</span>"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w1-p02",
+              "html": "<span class=\"target\">z</span>a · e<span class=\"target\">z</span>o · u<span class=\"target\">z</span>e · y<span class=\"target\">z</span>"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w1-p03",
+              "html": "<span class=\"target\">c</span>a · y<span class=\"target\">c</span>y · u<span class=\"target\">c</span>e · a<span class=\"target\">c</span>"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w1-p04",
+              "html": "<span class=\"target\">dz</span>a · e<span class=\"target\">dz</span>o · u<span class=\"target\">dz</span>e · a<span class=\"target\">dz</span>"
+            }
+          ]
+        },
+        {
+          "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w2",
+          "label": "Zadanie 2 — wyrazy z c",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w2-p01",
+              "html": "<span class=\"target\">c</span>ytryna"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w2-p02",
+              "html": "<span class=\"target\">c</span>ebula"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w2-p03",
+              "html": "<span class=\"target\">c</span>ykada"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w2-p04",
+              "html": "<span class=\"target\">c</span>ement"
+            }
+          ]
+        },
+        {
+          "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w3",
+          "label": "Zadanie 3 — wyrazy z s",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w3-p01",
+              "html": "<span class=\"target\">s</span>arna"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w3-p02",
+              "html": "<span class=\"target\">s</span>owa"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w3-p03",
+              "html": "<span class=\"target\">s</span>o<span class=\"target\">s</span>na"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w3-p04",
+              "html": "<span class=\"target\">s</span>mak"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w3-p05",
+              "html": "<span class=\"target\">s</span>łoń<span class=\"target\">c</span>e"
+            }
+          ]
+        },
+        {
+          "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w4",
+          "label": "Zadanie 4 — wyrazy z z",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w4-p01",
+              "html": "<span class=\"target\">z</span>ebra"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w4-p02",
+              "html": "<span class=\"target\">z</span>aka<span class=\"target\">z</span>"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w4-p03",
+              "html": "<span class=\"target\">z</span>amek"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w4-p04",
+              "html": "<span class=\"target\">z</span>aspa"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w4-p05",
+              "html": "<span class=\"target\">z</span>espół"
+            }
+          ]
+        },
+        {
+          "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w5",
+          "label": "Zadanie 5 — wyrazy z dz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w5-p01",
+              "html": "<span class=\"target\">dz</span>ban"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w5-p02",
+              "html": "<span class=\"target\">dz</span>wonek"
+            }
+          ]
+        },
+        {
+          "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6",
+          "label": "Zadanie 6 — wyrażenia",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p01",
+              "html": "<span class=\"target\">s</span>amotny <span class=\"target\">s</span>trażak"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p02",
+              "html": "<span class=\"target\">c</span>ały <span class=\"target\">c</span>ukierek"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p03",
+              "html": "<span class=\"target\">z</span>abawny <span class=\"target\">z</span>nak"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p04",
+              "html": "pa<span class=\"target\">s</span>ek <span class=\"target\">s</span>eledynowy"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p05",
+              "html": "chu<span class=\"target\">s</span>tka w pa<span class=\"target\">s</span>ki"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p06",
+              "html": "ko<span class=\"target\">s</span>tka <span class=\"target\">c</span>ukru"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p07",
+              "html": "<span class=\"target\">z</span>aka<span class=\"target\">z</span>any owo<span class=\"target\">c</span>"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p08",
+              "html": "ma<span class=\"target\">z</span>aki i pi<span class=\"target\">s</span>aki"
+            },
+            {
+              "id": "cwiczenia-ze-szpatulka-s-z-c-dz-w6-p09",
+              "html": "ko<span class=\"target\">s</span>y i ko<span class=\"target\">c</span>e"
             }
           ]
         }
@@ -911,7 +1108,6 @@
         {
           "id": "cwiczenie-17-dzakarta-w1",
           "label": "Zadanie 1 — wyrazy z dż",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">ǯa  ǯe  ǯy  ǯ'i  ǯo  ǯu  ǯǫ  ǯę</span>   <span class=\"uncertain\">oznaczenie (L)</span>",
@@ -1008,7 +1204,6 @@
         {
           "id": "cwiczenie-17-dzakarta-w2",
           "label": "Zadanie 2 — zdanie",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1025,7 +1220,6 @@
         {
           "id": "cwiczenie-17-dzakarta-w3",
           "label": "Zadanie 3 — dź / żdż",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1066,7 +1260,6 @@
         {
           "id": "cwiczenie-17-dzakarta-w4",
           "label": "Zadanie 4 — tekst: „Kara podejrzana\" (fragment), Albin Dziekoński",
-          "order": 4,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1107,7 +1300,6 @@
         {
           "id": "cwiczenie-26-sta-tsa-w1",
           "label": "Zadanie 1 — zestroje szt / trz",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">šta-ţša  šte-ţše  šty-ţšy  što-ţšo  štu-ţšu  štǫ-ţšǫ</span>   <span class=\"uncertain\">oznaczenie (L)</span>",
@@ -1184,7 +1376,6 @@
         {
           "id": "cwiczenie-26-sta-tsa-w2",
           "label": "Zadanie 2 — wygłosowe \"szt\"",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1217,7 +1408,6 @@
         {
           "id": "cwiczenie-26-sta-tsa-w3",
           "label": "Zadanie 3 — uzupełnianie brakujących głosek",
-          "order": 3,
           "type": "items",
           "instructionHtml": "<p>Wyrazy w prawej kolumnie należy uzupełnić brakującymi głoskam<span class=\"uncertain\">i — ucięte</span></p>",
           "syllablesHtml": "<span class=\"phonetic\">sţša  sţše  sţšy  sţšo  sţšu  sţšǫ</span>   <span class=\"uncertain\">oznaczenie (L)</span>",
@@ -1298,7 +1488,6 @@
         {
           "id": "didzej-darek-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1336,7 +1525,6 @@
         {
           "id": "elektryczne-echo-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1373,7 +1561,6 @@
         {
           "id": "ewentualnie-ezoteryczne-ewolucje-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1400,6 +1587,70 @@
             {
               "id": "ewentualnie-ezoteryczne-ewolucje-w1-p05",
               "html": "<span class=\"target\">E</span>sencja <span class=\"target\">e</span>liksiru <span class=\"target\">e</span>ksploduje <span class=\"target\">e</span>maliowaną <span class=\"target\">e</span>rupcją."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fonacja-uplynnianie-mowy",
+      "title": "Fonacja — upłynnianie mowy",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "a",
+        "o",
+        "u",
+        "e",
+        "y",
+        "i"
+      ],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Kolejność samogłosek jest stała i wynika z metody — nie wolno jej losować ani zmieniać. W drugim etapie do fonacji dokłada się rysowanie znaku nieskończoności; jeden wokalizant na jednym wydechu i jednym ruchu „ósemki\".",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Mówimy melodyjnie, wydłużając samogłoski w podanej kolejności. Później do tej<br>\nczynności dokładamy rysowanie znaku nieskończoności — staramy się powiedzieć<br>\nwokalizant na jednym wydechu i na jednym ruchu „ósemki\".</p>",
+      "variants": [
+        {
+          "id": "fonacja-uplynnianie-mowy-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "fonacja-uplynnianie-mowy-w1-p01",
+              "html": "<span class=\"target\">A</span>"
+            },
+            {
+              "id": "fonacja-uplynnianie-mowy-w1-p02",
+              "html": "<span class=\"target\">O</span>"
+            },
+            {
+              "id": "fonacja-uplynnianie-mowy-w1-p03",
+              "html": "<span class=\"target\">U</span>"
+            },
+            {
+              "id": "fonacja-uplynnianie-mowy-w1-p04",
+              "html": "<span class=\"target\">E</span>"
+            },
+            {
+              "id": "fonacja-uplynnianie-mowy-w1-p05",
+              "html": "<span class=\"target\">Y</span>"
+            },
+            {
+              "id": "fonacja-uplynnianie-mowy-w1-p06",
+              "html": "<span class=\"target\">I</span>"
             }
           ]
         }
@@ -1434,7 +1685,6 @@
         {
           "id": "fsfa-w-swatce-w1",
           "label": null,
-          "order": 1,
           "type": "syllables",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">fsfa  fsfe  fsfy  fsf'i  fsfo  fsfu  fsfǫ</span>   <span class=\"uncertain\">oznaczenie (L)</span>",
@@ -1446,7 +1696,6 @@
         {
           "id": "fsfa-w-swatce-w2",
           "label": null,
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1499,6 +1748,98 @@
       ]
     },
     {
+      "id": "gradacja-glosnosci",
+      "title": "Gradacja głośności",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "pt",
+        "bd",
+        "td",
+        "dd"
+      ],
+      "positions": [
+        "nagłos"
+      ],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Każdy wiersz czytamy dwukrotnie: od cichej do głośnej, następnie odwrotnie. Wiersze to zbitki spółgłoskowe — kolejność sylab w wierszu jest stała.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Czytamy sylaby od cichej do głośnej, następnie odwrotnie.</p>",
+      "variants": [
+        {
+          "id": "gradacja-glosnosci-w1",
+          "label": "Zadanie 1 — zbitka pt",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "gradacja-glosnosci-w1-p01",
+              "html": "<span class=\"target\">pt</span>a – <span class=\"target\">pt</span>o – <span class=\"target\">pt</span>u – <span class=\"target\">pt</span>e – <span class=\"target\">pt</span>y"
+            }
+          ]
+        },
+        {
+          "id": "gradacja-glosnosci-w2",
+          "label": "Zadanie 2 — zbitka bd",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "gradacja-glosnosci-w2-p01",
+              "html": "<span class=\"target\">bd</span>a – <span class=\"target\">bd</span>o – <span class=\"target\">bd</span>u – <span class=\"target\">bd</span>e – <span class=\"target\">bd</span>y"
+            }
+          ]
+        },
+        {
+          "id": "gradacja-glosnosci-w3",
+          "label": "Zadanie 3 — zbitka td",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "gradacja-glosnosci-w3-p01",
+              "html": "<span class=\"target\">t</span>e<span class=\"target\">d</span>a – <span class=\"target\">t</span>e<span class=\"target\">d</span>o – <span class=\"target\">t</span>e<span class=\"target\">d</span>u – <span class=\"target\">t</span>e<span class=\"target\">d</span>e – <span class=\"target\">t</span>e<span class=\"target\">d</span>y"
+            }
+          ]
+        },
+        {
+          "id": "gradacja-glosnosci-w4",
+          "label": "Zadanie 4 — zbitka dd",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "gradacja-glosnosci-w4-p01",
+              "html": "<span class=\"target\">dd</span>a – <span class=\"target\">dd</span>o – <span class=\"target\">dd</span>u – <span class=\"target\">dd</span>e – <span class=\"target\">dd</span>y"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "indyk-irytowal-interesownoscia",
       "title": "Indyk irytował interesownością",
       "categoryId": "samogloski-w-naglosie-zdania-aliteracyjne",
@@ -1524,7 +1865,6 @@
         {
           "id": "indyk-irytowal-interesownoscia-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1585,7 +1925,6 @@
         {
           "id": "kalosz-w-kapuscie-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1627,9 +1966,8 @@
         {
           "id": "klacz-sama-idzie-do-domu-w1",
           "label": "Podgrupa: cz + s",
-          "order": 1,
           "type": "items",
-          "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> ...powinna przeciągać na głoskę <span class=\"uncertain\">nieczytelne</span></p>",
+          "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">ač-sa  eč-se  yč-sy  ič-sy  oč-so  uč-su</span>",
           "textHtml": null,
           "noteHtml": null,
@@ -1668,7 +2006,6 @@
         {
           "id": "klacz-sama-idzie-do-domu-w2",
           "label": "Podgrupa: cz + ch",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">ač-χa  eč-χe  yč-χy  ič-χ'i  oč-χo  uč-χu</span>",
@@ -1705,7 +2042,6 @@
         {
           "id": "klacz-sama-idzie-do-domu-w3",
           "label": "Podgrupa: cz + ś",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">ač-śa  eč-śe  yč-śi  ič-śi  oč-śo  uč-śu</span>",
@@ -1742,7 +2078,6 @@
         {
           "id": "klacz-sama-idzie-do-domu-w4",
           "label": "Podgrupa: cz + sz",
-          "order": 4,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">ač-ša  eč-še  yč-šy  ič-šy  oč-šo  uč-šu</span>",
@@ -1824,7 +2159,6 @@
         {
           "id": "klamstwo-kleopatry-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1867,7 +2201,6 @@
         {
           "id": "kosccowe-sztucce-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1900,7 +2233,6 @@
         {
           "id": "ktos-moze-byc-przyjacielem-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2035,7 +2367,6 @@
         {
           "id": "kuzynka-katarzyny-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2075,7 +2406,6 @@
         {
           "id": "las-samotny-w1",
           "label": "Zadanie 1 — zestroje z wygłosowym s",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2144,7 +2474,6 @@
         {
           "id": "las-samotny-w2",
           "label": "Zadanie 2 — grupa -ss-",
-          "order": 2,
           "type": "items",
           "instructionHtml": "<p>Grupę -ss- wymawiamy jako jedną dłuższą głoskę:</p>",
           "syllablesHtml": null,
@@ -2221,7 +2550,6 @@
         {
           "id": "las-samotny-w3",
           "label": "Zadanie 3 — przyimek z / bez, przedrostek roz-",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2304,7 +2632,6 @@
         {
           "id": "mamrotliwa-marmolada-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2397,6 +2724,96 @@
       ]
     },
     {
+      "id": "mowa-legato-cwiczenia-bazowe",
+      "title": "Mowa legato — zasady i ćwiczenia bazowe",
+      "categoryId": "technika-legato-cwiczenia-bazowe",
+      "phonemes": [
+        "a",
+        "o",
+        "u",
+        "e",
+        "y"
+      ],
+      "positions": [],
+      "level": null,
+      "randomizable": true,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Załączniki, do których odsyła oryginał, są już w korpusie: afirmacje → „cwiczenia-pracuje-nad-moim-glosem\", zdania legato → materiał legato w „powtorz-i-uzupelnij-zdanie\" oraz „podaj-3-wlasne-afirmacje-zwiazane-z-mowa\". Wiersze sylab czytamy trzykrotnie: staccato, legato, następnie naprzemiennie.",
+      "headerHtml": null,
+      "contextHtml": "<p><span class=\"target\">Zasady techniki legato</span></p>\n<p>- Mówimy płynnie, melodyjnie.<br>\n- Ruch paraboliczny palca wskazującego zsynchronizowany z mową (rytmizacja mowy — jakbyśmy rysowali w powietrzu uśmiech).<br>\n- Pauzy stawiamy intuicyjnie, nie więcej niż 4–5 wyrazów na jednym wydechu.<br>\n- Każda sylaba nagłosowa delikatnie przeciągnięta.<br>\n- Szersze rozwarcie jamy ustnej, zwłaszcza na wokalizantach (samogłoskach).<br>\n- Spójniki i łączniki w zdaniu ściągamy — nigdy nie staccato.</p>",
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "mowa-legato-cwiczenia-bazowe-w1",
+          "label": "Zadanie 1 — sylaby staccato / legato",
+          "type": "items",
+          "instructionHtml": "<p>Czytamy sylaby staccato (rozdzielnie), następnie legato (melodyjnie),<br>\na na końcu naprzemiennie.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w1-p01",
+              "html": "<span class=\"target\">a</span>a <span class=\"target\">a</span>o <span class=\"target\">a</span>u <span class=\"target\">a</span>e <span class=\"target\">a</span>y"
+            },
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w1-p02",
+              "html": "<span class=\"target\">o</span>o <span class=\"target\">o</span>a <span class=\"target\">o</span>u <span class=\"target\">o</span>e <span class=\"target\">o</span>y"
+            },
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w1-p03",
+              "html": "<span class=\"target\">u</span>u <span class=\"target\">u</span>a <span class=\"target\">u</span>o <span class=\"target\">u</span>e <span class=\"target\">u</span>y"
+            },
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w1-p04",
+              "html": "<span class=\"target\">e</span>e <span class=\"target\">e</span>a <span class=\"target\">e</span>o <span class=\"target\">e</span>u <span class=\"target\">e</span>y"
+            },
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w1-p05",
+              "html": "<span class=\"target\">y</span>y <span class=\"target\">y</span>a <span class=\"target\">y</span>o <span class=\"target\">y</span>u <span class=\"target\">y</span>e"
+            }
+          ]
+        },
+        {
+          "id": "mowa-legato-cwiczenia-bazowe-w2",
+          "label": "Zadanie 2 — wyrazy legato",
+          "type": "items",
+          "instructionHtml": "<p>Wyrazy legato: dni tygodnia i miesiące — po czterech wyrazach pauza.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w2-p01",
+              "html": "poniedziałek · wtorek · środa · czwartek &lt;span class=\"uncertain\"&gt;pauza&lt;/span&gt; piątek · sobota · niedziela"
+            },
+            {
+              "id": "mowa-legato-cwiczenia-bazowe-w2-p02",
+              "html": "styczeń · luty · marzec · kwiecień &lt;span class=\"uncertain\"&gt;pauza&lt;/span&gt; maj · czerwiec · lipiec · sierpień &lt;span class=\"uncertain\"&gt;pauza&lt;/span&gt; wrzesień · październik · listopad · grudzień"
+            }
+          ]
+        },
+        {
+          "id": "mowa-legato-cwiczenia-bazowe-w3",
+          "label": "Zadanie 3 — zdania legato",
+          "type": "prompt",
+          "instructionHtml": "<p>Zdania legato — materiał w załączniku (zob. uwagi).</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        }
+      ]
+    },
+    {
       "id": "na-nietoperze-poluja-lasice",
       "title": "Na nietoperze polują łasice",
       "categoryId": "wprawki-rymowanki-treningowe",
@@ -2431,7 +2848,6 @@
         {
           "id": "na-nietoperze-poluja-lasice-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2497,7 +2913,6 @@
         {
           "id": "od-okolicznych-okolicznosci-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2555,7 +2970,6 @@
         {
           "id": "ogrod-oliwiera-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2595,7 +3009,6 @@
         {
           "id": "opozycje-c-cz-w-jednym-wyrazie-w1",
           "label": "Zadanie 1 — opozycje [c : cz] w jednym wyrazie",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2656,7 +3069,6 @@
         {
           "id": "opozycje-c-cz-w-jednym-wyrazie-w2",
           "label": "Zadanie 2 — opozycje [c : cz] w zestawieniach dwuwyrazowych",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2789,7 +3201,6 @@
         {
           "id": "opozycje-c-cz-w-jednym-wyrazie-w3",
           "label": "Zadanie 3 — opozycje [c : cz] w zdaniach",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -2894,7 +3305,6 @@
         {
           "id": "opozycje-s-sz-w-zestawieniach-dwuwyrazowych-w1",
           "label": "Zadanie 1 — opozycje [s : sz] w zestawieniach dwuwyrazowych",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3003,7 +3413,6 @@
         {
           "id": "opozycje-s-sz-w-zestawieniach-dwuwyrazowych-w2",
           "label": "Zadanie 2 — opozycje [s : sz] w zdaniach",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3092,7 +3501,6 @@
         {
           "id": "petronela-i-podpulkownik-piotr-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3100,6 +3508,59 @@
           "noteHtml": null,
           "examples": [],
           "items": []
+        }
+      ]
+    },
+    {
+      "id": "pionizacja-i-pozycja-spoczynkowa-jezyka",
+      "title": "Pionizacja i pozycja spoczynkowa języka",
+      "categoryId": "rozgrzewka",
+      "phonemes": [],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Wałek dziąsłowy = początek podniebienia twardego, tuż za górnymi jedynkami. Pozycja spoczynkowa języka jest tożsama z pozycją w prawidłowym połykaniu — zwracamy na nią uwagę także poza ćwiczeniami.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Ćwiczenia powtarzamy kilkakrotnie w trakcie sesji.</p>",
+      "variants": [
+        {
+          "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p01",
+              "html": "Unoszenie języka z pozycji poziomej do podniebienia w okolicę siekaczy — tzw. pionizacja języka. Przytrzymanie języka w tej pozycji kilka sekund i łagodne opuszczenie (przy lekko rozwartej jamie ustnej)."
+            },
+            {
+              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p02",
+              "html": "Uwrażliwienie na prawidłową pozycję spoczynkową języka: język na podniebieniu, na wałku dziąsłowym, wargi zwarte. Poza ćwiczeniami zwracamy uwagę, gdzie jest język, gdy nic nie mówimy, i czy wargi są domknięte."
+            },
+            {
+              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p03",
+              "html": "Dotykanie końca języka i części przyzębnej podniebienia przedmiotem (szpatułką lub zimną łyżeczką) — uwrażliwienie właściwego miejsca artykulacji głosek dziąsłowych, a tym samym pozycji spoczynkowej języka."
+            },
+            {
+              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p04",
+              "html": "Uwrażliwienie wałka dziąsłowego odrobiną miodu — zlizujemy końcówką języka."
+            },
+            {
+              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p05",
+              "html": "Subtelne dociskanie końcówką języka wałka dziąsłowego."
+            }
+          ]
         }
       ]
     },
@@ -3125,7 +3586,6 @@
         {
           "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w1",
           "label": "Zadanie 1 — afirmacje",
-          "order": 1,
           "type": "prompt",
           "instructionHtml": "<p>Podaj 3 własne afirmacje związane z mową.</p>",
           "syllablesHtml": null,
@@ -3141,7 +3601,6 @@
         {
           "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w2",
           "label": "Zadanie 2 — dialogizacja",
-          "order": 2,
           "type": "prompt",
           "instructionHtml": "<p>Codzienne dialogizacja (min. 5x w tyg) z jedną lub dwiema osobami.</p>",
           "syllablesHtml": null,
@@ -3153,7 +3612,6 @@
         {
           "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w3",
           "label": "Zadanie 3 — opis zdjęć",
-          "order": 3,
           "type": "prompt",
           "instructionHtml": "<p>Opis 3-5 zdjęć; np. zdj. stockowe, z czasopism (tematyka dowolna)</p>",
           "syllablesHtml": null,
@@ -3165,7 +3623,6 @@
         {
           "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4",
           "label": "Zadanie 4 — dłuższa wypowiedź",
-          "order": 4,
           "type": "items",
           "instructionHtml": "<p>Dłuższa wypowiedź / min. 5 zdań nt.:</p>",
           "syllablesHtml": null,
@@ -3198,6 +3655,49 @@
       ]
     },
     {
+      "id": "polykanie-gestych-plynow",
+      "title": "Połykanie gęstych płynów",
+      "categoryId": "terapia-miofunkcjonalna-polykanie",
+      "phonemes": [],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Ćwiczenie wykonujemy przed lustrem. Zalecane konsystencje: jogurt naturalny, gładki mus owocowy, koktajle, smoothie — tylko gładka konsystencja. Po około dwóch tygodniach dołączamy wodę i inne płyny o klarownej konsystencji.",
+      "headerHtml": null,
+      "contextHtml": "<p><span class=\"target\">Kontrola wykonania</span></p>\n<p>- Ćwiczenia przed lustrem: usta mocno rozciągnięte, górne siekacze nachodzą na dolne.<br>\n- W przestrzeni zębowej nie może być widoczny język.<br>\n- Język w trakcie połykania nie może napierać na zęby ani na przestrzeń międzyzębową.</p>",
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "polykanie-gestych-plynow-w1",
+          "label": "Zadanie 1 — ułożenie języka podczas połykania",
+          "type": "prompt",
+          "instructionHtml": "<p>Ćwiczymy połykanie z końcem języka ukierunkowanym na początek podniebienia<br>\ntwardego. Staramy się utrzymać końcówkę języka dłużej na wałku dziąsłowym —<br>\napex i nasada języka nie powinny być napięte. Język uniesiony do podniebienia,<br>\nbez towarzyszącego napięcia warg i policzków. Język tuż za górnymi siekaczami.<br>\nUsta rozciągnięte jak do <span class=\"target\">e</span>, kąciki ust lekko dociskają do linii zębów.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        },
+        {
+          "id": "polykanie-gestych-plynow-w2",
+          "label": "Zadanie 2 — progresja konsystencji",
+          "type": "prompt",
+          "instructionHtml": "<p>Na początek ćwiczymy wyłącznie na gęstych płynach. Po około dwóch tygodniach<br>\ndołączamy wodę i inne płyny o klarownej konsystencji.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        }
+      ]
+    },
+    {
       "id": "powtorz-i-uzupelnij-zdanie",
       "title": "Powtórz i uzupełnij zdanie",
       "categoryId": "automatyzacja-techniki-legato-mowa-spontaniczna-cd",
@@ -3219,7 +3719,6 @@
         {
           "id": "powtorz-i-uzupelnij-zdanie-w1",
           "label": "Zadanie 1 — uzupełnianie zdań",
-          "order": 1,
           "type": "items",
           "instructionHtml": "<p>Powtórz i uzupełnij zdanie:</p>",
           "syllablesHtml": null,
@@ -3272,7 +3771,6 @@
         {
           "id": "powtorz-i-uzupelnij-zdanie-w2",
           "label": "Zadanie 2 — dłuższe wypowiedzi",
-          "order": 2,
           "type": "items",
           "instructionHtml": "<p>Dłuższe wypowiedzi / ok 5-8 zdań</p>",
           "syllablesHtml": null,
@@ -3305,7 +3803,6 @@
         {
           "id": "powtorz-i-uzupelnij-zdanie-w3",
           "label": "Zadanie 3 — inscenizacja dialogu",
-          "order": 3,
           "type": "items",
           "instructionHtml": "<p>Inscenizacja krótkiego dialogu w:</p>",
           "syllablesHtml": null,
@@ -3358,7 +3855,6 @@
         {
           "id": "pracownicy-prokuratury-w-pruszkowie-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3366,6 +3862,81 @@
           "noteHtml": null,
           "examples": [],
           "items": []
+        }
+      ]
+    },
+    {
+      "id": "praksja-jezyka",
+      "title": "Praksja i pionizacja języka",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "l"
+      ],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Od tych ćwiczeń zaczynamy cały cykl.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "praksja-jezyka-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "praksja-jezyka-w1-p01",
+              "html": "Ssanie końcówką języka pudrowego cukierka."
+            },
+            {
+              "id": "praksja-jezyka-w1-p02",
+              "html": "„Konik\" — końcówka języka uderza o wałek dziąsłowy (usta lekko wysunięte do przodu)."
+            },
+            {
+              "id": "praksja-jezyka-w1-p03",
+              "html": "„Mlaskanie\" — luźna praca całej masy języka."
+            },
+            {
+              "id": "praksja-jezyka-w1-p04",
+              "html": "„Kapselek\" — środek języka przyklejony do sklepienia podniebienia twardego."
+            },
+            {
+              "id": "praksja-jezyka-w1-p05",
+              "html": "Dotykanie końcówką języka zębów górnego łuku."
+            },
+            {
+              "id": "praksja-jezyka-w1-p06",
+              "html": "Oblizywanie zębów od zewnętrznej i wewnętrznej strony — górny łuk zębowy."
+            },
+            {
+              "id": "praksja-jezyka-w1-p07",
+              "html": "Bardzo szybkie powtarzanie głoski <span class=\"target\">L</span>."
+            },
+            {
+              "id": "praksja-jezyka-w1-p08",
+              "html": "Sylaby: <span class=\"target\">L</span>alala… <span class=\"target\">L</span>ololo… <span class=\"target\">L</span>ululu… <span class=\"target\">L</span>elele… <span class=\"target\">L</span>ylyly…"
+            },
+            {
+              "id": "praksja-jezyka-w1-p09",
+              "html": "Zakrywanie językiem górnej i dolnej wargi."
+            },
+            {
+              "id": "praksja-jezyka-w1-p10",
+              "html": "Ruchy wahadłowe języka na zewnątrz jamy ustnej."
+            }
+          ]
         }
       ]
     },
@@ -3398,7 +3969,6 @@
         {
           "id": "prozdrowotne-plany-przemyslawa-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3441,11 +4011,143 @@
         {
           "id": "przebrzydly-przeor-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": "<p>Przeor, wlazłszy obunóż na przód poszóstnej karocy,<br>\nUniósłszy hożo bacik, do koni doskoczył.<br>\n„Naprzód, maluchy, na podbój gąszczy i chaszczy!\" –<br>\nKrzyknął, mężnie ściągłszy kare rumaki, i zastygł.<br>\nZaczerpnąwszy po hauście hebanowego powietrza,<br>\nCherlawe konie o kształtnych bicepsach<br>\nRuszyły chyżo na katorżniczą harówkę,<br>\nCiągnąc powóz z przeorem i kwestarza kadłubkiem.<br>\nLedwo tylko przebrzmiało upiorne rzężenie koni,<br>\nZ przydrożnego rowu wypełznął podstarzały adonis.<br>\nPółnagi, średnio zamożny, kucnąwszy opodal,<br>\nZaczął rżnąć piłą w trzeszczącym rżysku swój dłuższy, lewy chodak.<br>\nZ pobliskiego wzgórza, pożądliwym wzrokiem,<br>\nPrzyglądał się powyższej scenie gajowy. Było tuż przed zmrokiem.<br>\nTymczasem przeor, na przekór wrażliwemu kwestarzowi,<br>\nGnał na przełaj do wsi, by dochody klasztoru podwoić.<br>\nProwadzony przezeń zaprząg, pokonując w poprzek wyżłobienia,<br>\nChybotał się i zaliczał kolejne przechylenia.<br>\nStrach żarzył się w przerażonych i zamglonych oczach kwestarza.<br>\n„Miejże, wielebny przeorze, litość, wszak życie tylko raz się zdarza!\" –<br>\nMówił bez żenady, czekając podróży docelowej stacji.<br>\nNie w smak było przeorowi uczestniczyć w konwersacji,<br>\nWięc wyhamowując, sprawił kwestarzowi namiastkę rodeo,<br>\nWyrzucając go z karety. Bo to był przebrzydły przeor.</p>",
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        }
+      ]
+    },
+    {
+      "id": "przepona",
+      "title": "Przepona",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "s",
+        "z",
+        "ck",
+        "czk"
+      ],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Wykonywane na koniec cyklu.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "przepona-w1",
+          "label": "Zadanie 1 — powolna fonacja s / z",
+          "type": "prompt",
+          "instructionHtml": "<p>Mówimy <span class=\"target\">s</span> / <span class=\"target\">z</span> — wolne wymawianie fonemów na jednym wydechu, robiąc<br>\nkrótkie przerwy między wypowiadaniem danego dźwięku.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        },
+        {
+          "id": "przepona-w2",
+          "label": "Zadanie 2 — szybkie zbitki ck / czk",
+          "type": "prompt",
+          "instructionHtml": "<p>Szybkie wypowiadanie sylaby <span class=\"target\">ck</span> / <span class=\"target\">czk</span> na jednym wydechu. Mówimy szybko,<br>\nale wyraźnie.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        }
+      ]
+    },
+    {
+      "id": "przygotowanie-do-artykulacji-s-z-c",
+      "title": "Przygotowanie narządów artykulacyjnych do głosek s, z, c",
+      "categoryId": "sygmatyzm-miedzyzebowy-cwiczenia-ze-szpatulka",
+      "phonemes": [
+        "s",
+        "z",
+        "c"
+      ],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Materiał opisowy — wyświetlany przed serią ćwiczeń, nie do losowania.",
+      "headerHtml": null,
+      "contextHtml": "<p><strong>Opis układu artykulatorów — głoska s</strong></p>\n<p>Język leży za dolnymi zębami (pozycja jak podczas dmuchania — tworzy „rynienkę\",<br>\nbrzegi języka lekko się unoszą). Usta delikatnie się rozchylają, tworząc<br>\nłagodny uśmiech.</p>",
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "przygotowanie-do-artykulacji-s-z-c-w1",
+          "label": "Zadanie 1 — głoski szeregu syczącego",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "przygotowanie-do-artykulacji-s-z-c-w1-p01",
+              "html": "<span class=\"target\">S</span> — język za dolnymi zębami, „rynienka\", usta w łagodnym uśmiechu."
+            },
+            {
+              "id": "przygotowanie-do-artykulacji-s-z-c-w1-p02",
+              "html": "<span class=\"target\">Z</span> — układ narządów identyczny jak przy <span class=\"target\">S</span>, plus udział więzadeł głosowych; głoska dźwięczna."
+            },
+            {
+              "id": "przygotowanie-do-artykulacji-s-z-c-w1-p03",
+              "html": "<span class=\"target\">C</span> — układ narządów podobny jak przy powyższych głoskach dentalizowanych szeregu syczącego."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rezonatory-gloska-m",
+      "title": "Rezonatory — przeciąganie głoski m",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "m"
+      ],
+      "positions": [
+        "nagłos"
+      ],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Materiał wyrazowy do tego ćwiczenia znajduje się w pliku „uderz-mocnym-dzwiekiem-nosowym\" (49 wyrazów w sześciu grupach samogłoskowych) oraz „mamrotliwa-marmolada\".",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Łagodne przeciąganie głoski <span class=\"target\">m</span>. Głos idzie łukiem na podniebienie twarde.<br>\nCzytamy całą sekwencję wyrazów na jednym wydechu. Odczuwalne drganie<br>\nzatok przynosowych.</p>",
+      "variants": [
+        {
+          "id": "rezonatory-gloska-m-w1",
+          "label": null,
+          "type": "prompt",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
           "noteHtml": null,
           "examples": [],
           "items": []
@@ -3484,7 +4186,6 @@
         {
           "id": "rozczochrany-szczypiorek-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3492,6 +4193,145 @@
           "noteHtml": null,
           "examples": [],
           "items": []
+        }
+      ]
+    },
+    {
+      "id": "rozgrzewka-cwiczenia-jezyka",
+      "title": "Rozgrzewka — ćwiczenia języka",
+      "categoryId": "rozgrzewka",
+      "phonemes": [],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Scalone dwa zestawy z materiału terapeuty: przy sygmatyzmie międzyzębowym język pracuje przy dolnym łuku zębowym, przy wywoływaniu głosek dziąsłowych — przy górnym i na wałku dziąsłowym. Oba wykonuje się w tej samej rozgrzewce; pozorna sprzeczność jest celowa, bo ćwiczą przeciwstawne zakresy ruchu.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Ćwiczenia wykonujemy przed lustrem. Zestaw obejmuje pracę przy obu łukach<br>\nzębowych — dolnym i górnym.</p>",
+      "variants": [
+        {
+          "id": "rozgrzewka-cwiczenia-jezyka-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p01",
+              "html": "Liczenie dolnych zębów czubkiem języka, po wewnętrznej ich stronie."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p02",
+              "html": "Oblizywanie językiem wewnętrznej powierzchni dolnych zębów."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p03",
+              "html": "Zlizywanie czubkiem języka dżemu, czekolady lub miodu z dolnych dziąseł."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p04",
+              "html": "Dmuchanie na język — brzegi języka delikatnie unoszą się, symetryczne ułożenie brzegów w kształt „rynienki\"."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p05",
+              "html": "Szybkie wyrzucanie całej masy języka."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p06",
+              "html": "Delikatne „żucie\" brzegów języka zębami trzonowymi, a końcówki języka — siekaczami."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p07",
+              "html": "Kląskanie „konika\", mlaskanie, zasysanie całej masy języka do podniebienia („kapselek\")."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p08",
+              "html": "Dotykanie czubkiem języka górnych zębów od wewnętrznej strony."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p09",
+              "html": "Przytrzymanie przez kilka sekund czubka języka na podniebieniu, przy szeroko otwartych ustach."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p10",
+              "html": "Zlizywanie czubkiem języka odrobiny dżemu, czekolady lub miodu z wałka dziąsłowego (tuż za górnymi siekaczami)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rozgrzewka-cwiczenia-warg",
+      "title": "Rozgrzewka — ćwiczenia warg",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "e",
+        "u",
+        "s",
+        "sz"
+      ],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Scalone dwa zestawy z materiału terapeuty. Ostatnia pozycja oznaczona w oryginale jako szczególnie ważna: ustawienie U–SZ wspomaga pionizację języka, E–S wymusza płaskie rozciągnięcie warg. To ćwiczenie mięśni antagonistycznych.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "rozgrzewka-cwiczenia-warg-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p01",
+              "html": "Rozciąganie warg do uśmiechu i wymawianie głoski <span class=\"target\">E</span>."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p02",
+              "html": "Naprzemienny uśmiech z pokazywaniem zębów, a następnie z zasłanianiem ich wargami."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p03",
+              "html": "Dmuchanie na boki — szyja i głowa nie ruszają się, pracują kąciki ust."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p04",
+              "html": "Cmokanie ustami."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p05",
+              "html": "Wysuwanie zaokrąglonych warg do przodu, następnie ruchy warg w prawo i w lewo — grymasy."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p06",
+              "html": "Ustawianie warg jak do wymowy <span class=\"target\">u</span>, następnie — z uruchomieniem mięśni antagonistycznych — ustawienie warg spłaszczonych jak do <span class=\"target\">e</span>."
+            },
+            {
+              "id": "rozgrzewka-cwiczenia-warg-w1-p07",
+              "html": "Mówienie naprzemienne <span class=\"target\">E</span> / <span class=\"target\">U</span>, a następnie <span class=\"target\">S</span> / <span class=\"target\">SZ</span>: przy <span class=\"target\">E</span>–<span class=\"target\">S</span> usta mocno rozciągnięte i symetrycznie ustawione; przy <span class=\"target\">U</span>–<span class=\"target\">SZ</span> usta mocno wysunięte do przodu, co pomaga we właściwej pionizacji języka."
+            }
+          ]
         }
       ]
     },
@@ -3521,7 +4361,6 @@
         {
           "id": "samogloska-a-arogancki-aligator-w1",
           "label": "Zadanie 1 — zdania",
-          "order": 1,
           "type": "items",
           "instructionHtml": "<p>Proszę przeczytać poniższe zdania, wypowiadając w przejaskrawiony sposób<br>\nkażde pierwsze „a\" w wyrazie.</p>",
           "syllablesHtml": null,
@@ -3554,7 +4393,6 @@
         {
           "id": "samogloska-a-arogancki-aligator-w2",
           "label": "Zadanie 2 — wiersz",
-          "order": 2,
           "type": "text",
           "instructionHtml": "<p>Proszę przeczytać poniższy wiersz, starając się wyraziście wypowiedzieć każde „a\".</p>",
           "syllablesHtml": null,
@@ -3591,7 +4429,6 @@
         {
           "id": "samogloska-e-ewentualnie-ezoteryczne-w1",
           "label": "Zadanie 1 — zdania",
-          "order": 1,
           "type": "items",
           "instructionHtml": "<p>Proszę przeczytać poniższe zdania, wypowiadając w przejaskrawiony sposób<br>\nkażde pierwsze „e\" w wyrazie.</p>",
           "syllablesHtml": null,
@@ -3624,7 +4461,6 @@
         {
           "id": "samogloska-e-ewentualnie-ezoteryczne-w2",
           "label": "Zadanie 2 — wiersz",
-          "order": 2,
           "type": "text",
           "instructionHtml": "<p>Proszę przeczytać poniższy wiersz, starając się wyraziście wypowiedzieć każde „e\".</p>",
           "syllablesHtml": null,
@@ -3665,7 +4501,6 @@
         {
           "id": "sczepic-wyrazenia-przyimkowe-cz-w1",
           "label": "Zadanie 1 — wyrazy z grupą \"scz\"",
-          "order": 1,
           "type": "items",
           "instructionHtml": "<p><span class=\"uncertain\">górna linia ucięta</span> ...wyćwiczyć ich wy... <span class=\"uncertain\">nieczytelne</span></p>",
           "syllablesHtml": null,
@@ -3702,7 +4537,6 @@
         {
           "id": "sczepic-wyrazenia-przyimkowe-cz-w2",
           "label": "Zadanie 2 — wyrażenia przyimkowe i zestroje akcentowe",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3831,7 +4665,6 @@
         {
           "id": "sczepic-wyrazenia-przyimkowe-cz-w3",
           "label": "Zadanie 3 — grupy \"rosč-\", \"rossč-\"",
-          "order": 3,
           "type": "items",
           "instructionHtml": "<p>Grupy spółgłoskowe: rosč-, rossč- ulegają w wymowie potocznej daleko idącym<br>\nzniekształceniom. Prosimy o sprawne wyćwiczenie podanych wyrazów w prawidłowym brzmieniu.</p>",
           "syllablesHtml": null,
@@ -3876,6 +4709,54 @@
       ]
     },
     {
+      "id": "staw-skroniowo-zuchwowy",
+      "title": "Wzmocnienie stawu skroniowo-żuchwowego",
+      "categoryId": "rozgrzewka",
+      "phonemes": [
+        "d",
+        "a"
+      ],
+      "positions": [
+        "nagłos"
+      ],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Dokładane do ćwiczeń artykulacyjnych.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Minimum 3 powtórzenia każdego ćwiczenia. Zestaw dokładamy do ćwiczeń artykulacyjnych.</p>",
+      "variants": [
+        {
+          "id": "staw-skroniowo-zuchwowy-w1",
+          "label": "Zadanie 1 — sylaba da z oporem",
+          "type": "prompt",
+          "instructionHtml": "<p>Mówimy sylabę <span class=\"target\">d</span>&lt;span class=\"legato\"&gt;a&lt;/span&gt;… <span class=\"target\">d</span>&lt;span class=\"legato\"&gt;a&lt;/span&gt;… <span class=\"target\">d</span>&lt;span class=\"legato\"&gt;a&lt;/span&gt; w sekwencji. W trakcie realizacji szeroko otwieramy<br>\njamę ustną. Wyraźne brzmienie samogłoski, mocne odwiedzenie żuchwy.<br>\nW tym samym czasie trzymamy dłoń pod brodą, stawiając opór żuchwie.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        },
+        {
+          "id": "staw-skroniowo-zuchwowy-w2",
+          "label": "Zadanie 2 — masaż stawu",
+          "type": "prompt",
+          "instructionHtml": "<p>Rozmasowujemy staw skroniowo-żuchwowy dwoma palcami, wolnymi ruchami kolistymi<br>\nw górę. Wykonując masaż, ziewamy przy zamkniętej jamie ustnej. Ćwiczenie wzmacnia<br>\nstaw skroniowo-żuchwowy i uruchamia pierścień zwierający gardła.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": []
+        }
+      ]
+    },
+    {
       "id": "swiderki-nitki-rurki",
       "title": "świderki, nitki, rurki",
       "categoryId": "regulacja-oddechowa-zagadki-definicyjne",
@@ -3897,7 +4778,6 @@
         {
           "id": "swiderki-nitki-rurki-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3946,6 +4826,139 @@
       ]
     },
     {
+      "id": "sylaby-opozycyjne-dentalizowane",
+      "title": "Sylaby opozycyjne — dźwięki dentalizowane",
+      "categoryId": "gloski-dziaslowe-wywolanie-i-roznicowanie",
+      "phonemes": [
+        "s",
+        "sz",
+        "c",
+        "cz",
+        "dz",
+        "dż",
+        "z",
+        "ż"
+      ],
+      "positions": [
+        "śródgłos",
+        "nagłos"
+      ],
+      "level": null,
+      "randomizable": true,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "W oryginale wiersz „asa – asza\" podany jako wzorzec, pozostałe wyprowadzone. Zasady ułożenia narządów obowiązują dla wszystkich pozycji — w bloku kontekstu.",
+      "headerHtml": null,
+      "contextHtml": "<p><span class=\"target\">Ułożenie narządów przy głoskach dziąsłowych</span></p>\n<p>- Język trzymamy na wałku dziąsłowym, za górnymi zębami; nie pchamy siekaczy. Język nie powinien być napięty.<br>\n- Język w pozycji „kobry\" — pracuje apex, czyli końcówka języka.<br>\n- Strumień wydychanego powietrza kierujemy na wewnętrzną stronę górnych siekaczy.<br>\n- Powietrze powinno płynąć wzdłuż bruzdy języka, jego środkiem; policzki muszą pozostać statyczne.<br>\n- Usta delikatnie wysunięte do przodu — ułatwiona pionizacja języka.<br>\n- Zęby zbliżone do siebie.<br>\n- Szczelina między wargami, przy wysunięciu ich do przodu, powinna być jak najmniejsza.</p>",
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "sylaby-opozycyjne-dentalizowane-w1",
+          "label": "Zadanie 1 — opozycja s / sz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w1-p01",
+              "html": "a<span class=\"target\">s</span>a – a<span class=\"target\">sz</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w1-p02",
+              "html": "o<span class=\"target\">s</span>a – o<span class=\"target\">sz</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w1-p03",
+              "html": "e<span class=\"target\">s</span>a – e<span class=\"target\">sz</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w1-p04",
+              "html": "u<span class=\"target\">s</span>a – u<span class=\"target\">sz</span>a"
+            }
+          ]
+        },
+        {
+          "id": "sylaby-opozycyjne-dentalizowane-w2",
+          "label": "Zadanie 2 — opozycja c / cz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w2-p01",
+              "html": "a<span class=\"target\">c</span>a – a<span class=\"target\">cz</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w2-p02",
+              "html": "o<span class=\"target\">c</span>a – o<span class=\"target\">cz</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w2-p03",
+              "html": "e<span class=\"target\">c</span>a – e<span class=\"target\">cz</span>a"
+            }
+          ]
+        },
+        {
+          "id": "sylaby-opozycyjne-dentalizowane-w3",
+          "label": "Zadanie 3 — opozycja dz / dż",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w3-p01",
+              "html": "<span class=\"target\">dz</span>a – <span class=\"target\">dż</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w3-p02",
+              "html": "<span class=\"target\">dz</span>o – <span class=\"target\">dż</span>o"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w3-p03",
+              "html": "<span class=\"target\">dz</span>e – <span class=\"target\">dż</span>e"
+            }
+          ]
+        },
+        {
+          "id": "sylaby-opozycyjne-dentalizowane-w4",
+          "label": "Zadanie 4 — opozycja z / ż",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w4-p01",
+              "html": "<span class=\"target\">z</span>a – <span class=\"target\">ż</span>a"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w4-p02",
+              "html": "<span class=\"target\">z</span>o – <span class=\"target\">ż</span>o"
+            },
+            {
+              "id": "sylaby-opozycyjne-dentalizowane-w4-p03",
+              "html": "<span class=\"target\">z</span>u – <span class=\"target\">ż</span>u"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "szczaw-szczapa-szczep",
       "title": "szczaw szczapa szczep",
       "categoryId": "grupa-spolgloskowa-szcz",
@@ -3974,7 +4987,6 @@
         {
           "id": "szczaw-szczapa-szczep-w1",
           "label": "Zadanie 1 — wyrazy z nagłosowym szcz",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4043,7 +5055,6 @@
         {
           "id": "szczaw-szczapa-szczep-w2",
           "label": "Zadanie 2 — zdania",
-          "order": 2,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4064,7 +5075,6 @@
         {
           "id": "szczaw-szczapa-szczep-w3",
           "label": "Zadanie 3 — zestroje ze śródgłosowym szcz",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4117,7 +5127,6 @@
         {
           "id": "szczaw-szczapa-szczep-w4",
           "label": "Zadanie 4 — sylaby ść (początek, dalszy ciąg ucięty)",
-          "order": 4,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">ašč  ešč  yšč  išč  ošč  ušč</span>   <span class=\"uncertain\">oznaczenie (L)</span>",
@@ -4157,7 +5166,6 @@
         {
           "id": "tatiana-i-tomek-z-tarnowa-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4198,7 +5206,6 @@
         {
           "id": "temperamentny-teofil-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4206,6 +5213,51 @@
           "noteHtml": null,
           "examples": [],
           "items": []
+        }
+      ]
+    },
+    {
+      "id": "tor-oddechowy",
+      "title": "Kształtowanie prawidłowego toru oddechowego",
+      "categoryId": "rozgrzewka",
+      "phonemes": [],
+      "positions": [],
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Materiał dostarczony jako tekst, nie skan — brak warstwy pogrubień i legato. Wszystkie trzy fazy wykonuje się w każdej sesji; nie podlegają losowaniu.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Każde ćwiczenie wykonujemy w serii po 3 razy — to jeden cykl.</p>",
+      "variants": [
+        {
+          "id": "tor-oddechowy-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "tor-oddechowy-w1-p01",
+              "html": "Wdech nosem / wydech nosem"
+            },
+            {
+              "id": "tor-oddechowy-w1-p02",
+              "html": "Wdech nosem / wydech ustami — druga faza (wydechowa) dłuższa"
+            },
+            {
+              "id": "tor-oddechowy-w1-p03",
+              "html": "Wdech nosem / oczyść płuca, robiąc krótkie wydechy przez zaciśnięte wargi — ostatnia faza wydłużona"
+            }
+          ]
         }
       ]
     },
@@ -4240,7 +5292,6 @@
         {
           "id": "traszka-tupaszka-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4282,7 +5333,6 @@
         {
           "id": "trzy-czy-drza-dza-w1",
           "label": "Zadanie 1 — logatom wprowadzający",
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4303,7 +5353,6 @@
         {
           "id": "trzy-czy-drza-dza-w2",
           "label": "Zadanie 2 — udziąsłowienie n w sąsiedztwie cz",
-          "order": 2,
           "type": "items",
           "instructionHtml": "<p>Zapis półfonetyczny, literowy. Głoska <em>n</em> udziąsłowi się w sąsiedztwie <em>cz</em>:</p>",
           "syllablesHtml": null,
@@ -4340,7 +5389,6 @@
         {
           "id": "trzy-czy-drza-dza-w3",
           "label": "Zadanie 3 — czterosylabowce różnicujące głoski dziąsłowe",
-          "order": 3,
           "type": "items",
           "instructionHtml": "<p>W zestrojach akcentowych głoska może się upodobnić: <em>ţsza — czsza</em><br>\n(<em>ţzask — czszask</em>; w mowie potocznej — dopuszczalne).<br>\nPowtarzaj, nie za szybko, czterosylabowce, starannie różnicując głoski dziąsłowe:</p>",
           "syllablesHtml": null,
@@ -4392,7 +5440,6 @@
         {
           "id": "tsa-ca-trzy-czy-w1",
           "label": "Zadanie 1 — pary opozycyjne trz / cz",
-          "order": 1,
           "type": "items",
           "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> ...wyrazy:</p>\n<p>Sylaby: <span class=\"phonetic\">ţša-ča  ţše-če  ţšy-čy  ţšo-čo  ţšu-ču  ţšǫ-čǫ  ţšę-čę</span></p>",
           "syllablesHtml": null,
@@ -4445,7 +5492,6 @@
         {
           "id": "tsa-ca-trzy-czy-w2",
           "label": "Zadanie 2 — tekst: Tadeusz Miciński",
-          "order": 2,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4482,9 +5528,8 @@
         {
           "id": "uderz-mocnym-dzwiekiem-nosowym-w1",
           "label": "Grupa a",
-          "order": 1,
           "type": "items",
-          "instructionHtml": "<p>Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców:</p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4531,9 +5576,8 @@
         {
           "id": "uderz-mocnym-dzwiekiem-nosowym-w2",
           "label": "Grupa e",
-          "order": 2,
           "type": "items",
-          "instructionHtml": "<p>Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców:</p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4576,9 +5620,8 @@
         {
           "id": "uderz-mocnym-dzwiekiem-nosowym-w3",
           "label": "Grupa y",
-          "order": 3,
           "type": "items",
-          "instructionHtml": "<p>Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców:</p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4621,9 +5664,8 @@
         {
           "id": "uderz-mocnym-dzwiekiem-nosowym-w4",
           "label": "Grupa i",
-          "order": 4,
           "type": "items",
-          "instructionHtml": "<p>Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców:</p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4666,9 +5708,8 @@
         {
           "id": "uderz-mocnym-dzwiekiem-nosowym-w5",
           "label": "Grupa o",
-          "order": 5,
           "type": "items",
-          "instructionHtml": "<p>Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców:</p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4711,9 +5752,8 @@
         {
           "id": "uderz-mocnym-dzwiekiem-nosowym-w6",
           "label": "Grupa u",
-          "order": 6,
           "type": "items",
-          "instructionHtml": "<p>Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców:</p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4781,7 +5821,6 @@
         {
           "id": "ujmujaca-uleglosc-utrzymuje-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4839,7 +5878,6 @@
         {
           "id": "urodzinowa-uczta-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -4881,9 +5919,8 @@
         {
           "id": "urosnie-wczesnie-na-galezi-czeresni-w1",
           "label": null,
-          "order": 1,
           "type": "items",
-          "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> ...ych. Zapis części <span class=\"uncertain\">nieczytelne</span></p>",
+          "instructionHtml": null,
           "syllablesHtml": null,
           "textHtml": null,
           "noteHtml": null,
@@ -4975,7 +6012,6 @@
         {
           "id": "uzdrowisko-w-ustroniu-w1",
           "label": null,
-          "order": 1,
           "type": "text",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -5016,7 +6052,6 @@
         {
           "id": "w-trzeciej-w-trzewikach-w1",
           "label": "Zadanie 1 — bezdźwięczna głoska przyimka",
-          "order": 1,
           "type": "items",
           "instructionHtml": "<p><span class=\"uncertain\">ucięte</span> Starannie artykułujemy bezdźwięczną głoskę przyimka:</p>",
           "syllablesHtml": null,
@@ -5081,7 +6116,6 @@
         {
           "id": "w-trzeciej-w-trzewikach-w2",
           "label": "Zadanie 2 — powtarzanie szybkie",
-          "order": 2,
           "type": "items",
           "instructionHtml": "<p>Powtarzamy szybko:</p>",
           "syllablesHtml": null,
@@ -5098,7 +6132,6 @@
         {
           "id": "w-trzeciej-w-trzewikach-w3",
           "label": "Zadanie 3 — grupa \"fstsz\"",
-          "order": 3,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": "<span class=\"phonetic\">fsţša  fsţše  fsţšy  fsţšo  fsţšu  fsţšǫ</span>   <span class=\"uncertain\">oznaczenie (L) z oryginału</span>",
@@ -5151,7 +6184,6 @@
         {
           "id": "w-trzeciej-w-trzewikach-w4",
           "label": "Zadanie 4 — Ćwiczenie 27: zapis ortofoniczny → ortograficzny",
-          "order": 4,
           "type": "items",
           "instructionHtml": "<p>Wyrazy zapisane ortofonicznie należy odczytać i wyćwiczyć, po prawej stronie<br>\nkolumny natomiast zapisać je ortograficznie:</p>",
           "syllablesHtml": null,
@@ -5261,7 +6293,6 @@
         {
           "id": "wprawki-glupawki-w1",
           "label": null,
-          "order": 1,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -5300,6 +6331,172 @@
             {
               "id": "wprawki-glupawki-w1-p08",
               "html": "Tkaczka w paczce ma trzepaczkę,<br>\nTrzeba tkaczce oddać paczkę."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wyrazy-z-gloskami-dziaslowymi",
+      "title": "Wyrazy z głoskami dziąsłowymi (sz, cz, ż/rz, dż)",
+      "categoryId": "gloski-dziaslowe-wywolanie-i-roznicowanie",
+      "phonemes": [
+        "sz",
+        "cz",
+        "ż",
+        "rz",
+        "dż"
+      ],
+      "positions": [
+        "nagłos",
+        "śródgłos"
+      ],
+      "level": null,
+      "randomizable": true,
+      "readQuality": "pewny",
+      "source": {
+        "file": "materiał tekstowy terapeuty (2026)",
+        "kind": "tekst",
+        "publication": null
+      },
+      "notes": "Listy w oryginale zakończone wielokropkiem — są otwarte i można je rozszerzać. W grupie ż/rz oryginał miesza oba zapisy tej samej głoski; zachowano pisownię źródłową, bo różnica jest ortograficzna, nie fonetyczna.",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "wyrazy-z-gloskami-dziaslowymi-w1",
+          "label": "Zadanie 1 — wyrazy z sz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w1-p01",
+              "html": "<span class=\"target\">sz</span>al"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w1-p02",
+              "html": "<span class=\"target\">sz</span>op"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w1-p03",
+              "html": "<span class=\"target\">sz</span>ałas"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w1-p04",
+              "html": "<span class=\"target\">sz</span>um"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w1-p05",
+              "html": "<span class=\"target\">sz</span>orty"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w1-p06",
+              "html": "<span class=\"target\">sz</span>eść"
+            }
+          ]
+        },
+        {
+          "id": "wyrazy-z-gloskami-dziaslowymi-w2",
+          "label": "Zadanie 2 — wyrazy z cz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w2-p01",
+              "html": "<span class=\"target\">cz</span>ar"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w2-p02",
+              "html": "<span class=\"target\">cz</span>arownica"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w2-p03",
+              "html": "<span class=\"target\">cz</span>yn"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w2-p04",
+              "html": "<span class=\"target\">cz</span>ereśnie"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w2-p05",
+              "html": "<span class=\"target\">cz</span>as"
+            }
+          ]
+        },
+        {
+          "id": "wyrazy-z-gloskami-dziaslowymi-w3",
+          "label": "Zadanie 3 — wyrazy z ż / rz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p01",
+              "html": "<span class=\"target\">ż</span>ar"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p02",
+              "html": "<span class=\"target\">rz</span>eka"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p03",
+              "html": "<span class=\"target\">ż</span>aba"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p04",
+              "html": "<span class=\"target\">ż</span>uk"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p05",
+              "html": "<span class=\"target\">ż</span>ubr"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p06",
+              "html": "<span class=\"target\">ż</span>al"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w3-p07",
+              "html": "<span class=\"target\">ż</span>niwa"
+            }
+          ]
+        },
+        {
+          "id": "wyrazy-z-gloskami-dziaslowymi-w4",
+          "label": "Zadanie 4 — wyrazy z dż / drz",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "noteHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w4-p01",
+              "html": "<span class=\"target\">dż</span>em"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w4-p02",
+              "html": "<span class=\"target\">dż</span>okej"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w4-p03",
+              "html": "<span class=\"target\">drz</span>azga"
+            },
+            {
+              "id": "wyrazy-z-gloskami-dziaslowymi-w4-p04",
+              "html": "<span class=\"target\">dż</span>entelmen"
             }
           ]
         }
