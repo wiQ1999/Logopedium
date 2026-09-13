@@ -5,8 +5,9 @@ na dany dzień dobierany jest losowo z bazy przygotowanej na podstawie materiał
 a użytkownik przechodzi przez kolejne ćwiczenia, jedno po drugim.
 
 Aplikacja działa w całości po stronie przeglądarki, bez backendu i bez konta użytkownika.
-Baza ćwiczeń jest plikiem tylko do odczytu, publikowanym razem z kodem. Poza sesją dostępny
-jest tryb przeglądania całej zawartości bazy.
+Baza ćwiczeń jest plikiem tylko do odczytu, publikowanym razem z kodem. Ustawienia sesji
+zapamiętywane są lokalnie w przeglądarce, więc wracają przy kolejnej wizycie. Poza sesją
+dostępny jest tryb przeglądania całej zawartości bazy.
 
 ## Uruchomienie
 
@@ -33,9 +34,8 @@ python -m http.server 4173 --directory src/webapp
 npm test
 ```
 
-Uruchamia wbudowany `node --test`: testy jednostkowe warstwy danych, losowania, parametrów
-i doboru ćwiczeń oraz testy widoków i tras aplikacji wykonywane na `jsdom`
-(jedyna zależność deweloperska; sama aplikacja nie ma żadnych zależności).
+Wbudowany `node --test`: warstwa danych, losowanie, parametry i dobór ćwiczeń, a także widoki
+i trasy na `jsdom` — jedynej zależności deweloperskiej. Aplikacja nie ma zależności.
 
 ## Publikacja
 
@@ -45,15 +45,9 @@ deweloperskie, które nie trafiają na hosting.
 
 ## Dokumentacja
 
-- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — decyzje techniczne, struktura katalogów
-  oraz warunki uruchomienia i publikacji. Opisuje też wymagania wobec implementacji
-  i zakres pominięty w pierwszej wersji.
-
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — decyzje techniczne, struktura projektu,
+  zapis stanu, uruchomienie i publikacja.
 - **[docs/APPLICATION.md](docs/APPLICATION.md)** — wymagania funkcjonalne: parametry sesji,
-  zasady doboru i losowania ćwiczeń, przebieg sesji oraz tryb przeglądania bazy.
-
-- **[docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md)** — struktura pliku z bazą ćwiczeń, zasady
-  wersjonowania oraz notacja stosowana w treści zadań.
-
-- **[docs/DECISIONS.md](docs/DECISIONS.md)** — dziennik decyzji implementacyjnych:
-  interpretacje wymagań, rozstrzygnięcia techniczne i elementy spoza dokumentacji.
+  dobór i losowanie ćwiczeń, przebieg sesji, przeglądanie bazy.
+- **[docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md)** — struktura bazy i notacja treści zadań.
+- **[docs/DECISIONS.md](docs/DECISIONS.md)** — dziennik decyzji, chronologicznie.
