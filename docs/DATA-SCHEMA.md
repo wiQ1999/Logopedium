@@ -1,15 +1,7 @@
-# Schemat pliku `cwiczenia-logopedyczne.json`
+# Schemat pliku `database.json`
 
-Statyczna baza danych dla aplikacji SPA. Jeden plik, wczytywany raz przy starcie.
-Wersja schematu: **1.0**
-
-## Rozmiary
-
-| Plik | Rozmiar | Zastosowanie |
-|---|---|---|
-| `cwiczenia-logopedyczne.json` | ~486 kB | wersja czytelna, do przeglądania i edycji |
-| `cwiczenia-logopedyczne.min.json` | ~425 kB | produkcja |
-| po gzipie | ~53 kB | faktyczny transfer, przy `Content-Encoding: gzip` |
+Statyczna baza danych aplikacji: `src/webapp/data/database.json`, wczytywany raz przy starcie.
+Wersja schematu: **1.0**. Rozmiar ~486 kB, ~56 kB po gzipie.
 
 ## Struktura
 
@@ -33,9 +25,6 @@ nonTextMaterials[]    skany bez zadań
 | `generated` | string | data wygenerowania (ISO 8601), przydatna do cache-bustingu |
 
 ### `categories[]`
-
-Kolejność kategorii w sesji jest stała. Ćwiczenia z tej samej kategorii
-wyświetlane są obok siebie.
 
 | Pole | Typ | Opis |
 |---|---|---|
@@ -149,25 +138,36 @@ bez trzymania trzech wersji treści:
 
 ## Uwagi dla implementacji
 
-**Liczniki.** Plik nie zawiera żadnych pól z liczbą elementów — aplikacja liczy
-je sama (`variants.length`, `items.length`). Licznik zapisany w danych mógłby
-rozjechać się z rzeczywistością po ręcznej edycji.
+**Liczniki.** Plik nie zawiera pól z liczbą elementów — aplikacja liczy je sama
+(`variants.length`, `items.length`), żeby licznik nie rozjechał się po ręcznej edycji.
 
-**Dziedziczenie polecenia.** Gdy `variants[].instructionHtml` jest `null`,
-użyj `exercises[].instructionHtml`. Gdy oba są `null`, wariant nie ma polecenia.
+**Dziedziczenie polecenia.** `variants[].instructionHtml` równe `null` oznacza użycie
+`exercises[].instructionHtml`; oba `null` — wariant bez polecenia.
 
-**Rozkład kategorii jest nierówny.** Kategoria „tekst do czytania terapeutycznego"
-obejmuje 23 z 54 ćwiczeń. Przy losowaniu po jednym z kategorii zdominuje sesję —
-rozważ rozbicie jej po głosce docelowej albo ważenie.
-
-**`randomizable` a `type`.** Pole `randomizable` jest wskazówką na poziomie
-ćwiczenia; rozstrzygający jest `variants[].type` — `text` nigdy się nie dzieli,
+**`randomizable` a `type`.** `randomizable` jest wskazówką na poziomie ćwiczenia;
+rozstrzyga `variants[].type` — `text`, `syllables` i `prompt` nigdy się nie dzielą,
 `items` zawsze można ciąć.
 
-**Materiał do korekty.** 12 ćwiczeń ma `readQuality: "do_weryfikacji"` (skan
-ucięty albo gęsty zapis półfonetyczny). Dodatkowo 10 ćwiczeń ma w `notes`
-adnotację, że warstwa legato jest miejscami przybliżona — warstwa głoski
-docelowej pozostaje w nich wierna.
+**Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego" obejmuje 23 z 54
+ćwiczeń. Ważenie kategorii nie zostało wprowadzone — steruje tym liczba ćwiczeń w parametrach.
+
+**Rozkład wariantów.** 34 z 54 ćwiczeń ma jeden wariant, pozostałe od 2 do 6. Limit wariantów
+z parametrów sesji dotyczy wyłącznie tych drugich. 23 ćwiczenia nie mają w ogóle pozycji
+(same `text`, `syllables`, `prompt`), a dwa warianty mają po jednej pozycji.
+
+**Maksymalny budżet pozycji.** Kraniec parametru `P` (APPLICATION §3.3) liczony z obecnej bazy:
+
+| `W` | 1 | 2 | 3 i więcej |
+|---|---|---|---|
+| min `P` | 1 | 2 | `W` |
+| maks. `P` | 30 | 46 | 58 |
+
+Maksima pochodzą z `opozycje-c-cz-w-jednym-wyrazie` — jedynego ćwiczenia o wariantach
+30 + 16 + 12 pozycji. Warianty bez pozycji nie wchodzą do tego rachunku.
+
+**Materiał do korekty.** 12 ćwiczeń ma `readQuality: "do_weryfikacji"`. Kolejnych 10 ma
+w `notes` adnotację, że warstwa legato jest miejscami przybliżona; warstwa głoski docelowej
+pozostaje wierna.
 
 ## Prawa autorskie
 
