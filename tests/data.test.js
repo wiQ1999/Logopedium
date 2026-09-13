@@ -74,13 +74,20 @@ describe('walidacja bazy', () => {
     assert.ok(findIssue(validateDatabase(raw), '.level'));
   });
 
-  it('wykrywa powtórzoną kolejność wariantów w ćwiczeniu', () => {
+  it('wykrywa powtórzony identyfikator wariantu', () => {
     const raw = makeRawDatabase();
     raw.exercises[0].variants = [
-      makeVariant({ id: 'x-w1', order: 1, items: [{ id: 'i1', html: 'a' }] }),
-      makeVariant({ id: 'x-w2', order: 1, items: [{ id: 'i2', html: 'b' }] }),
+      makeVariant({ id: 'x-w1', items: [{ id: 'i1', html: 'a' }] }),
+      makeVariant({ id: 'x-w1', items: [{ id: 'i2', html: 'b' }] }),
     ];
-    assert.ok(findIssue(validateDatabase(raw), 'powtarza się w ćwiczeniu'));
+    assert.ok(findIssue(validateDatabase(raw), 'identyfikator "x-w1" powtarza się'));
+  });
+
+  it('nie wymaga pola pozycji w kategoriach ani wariantach', () => {
+    const raw = makeRawDatabase();
+    assert.ok(raw.categories.every((category) => category.order === undefined));
+    assert.ok(raw.exercises.every((exercise) => exercise.variants.every((variant) => variant.order === undefined)));
+    assert.deepEqual(validateDatabase(raw), []);
   });
 
   it('buildDatabase zgłasza DatabaseError z listą przyczyn', () => {
@@ -102,23 +109,27 @@ describe('normalizacja bazy', () => {
   const db = loadDatabaseFixture();
 
   it('liczy zawartość bazy', () => {
-    assert.equal(db.stats.categoryCount, 25);
-    assert.equal(db.stats.exerciseCount, 54);
-    assert.equal(db.stats.variantCount, 97);
-    assert.equal(db.stats.itemCount, 616);
+    assert.equal(db.stats.categoryCount, 30);
+    assert.equal(db.stats.exerciseCount, 70);
+    assert.equal(db.stats.variantCount, 132);
+    assert.equal(db.stats.itemCount, 735);
   });
 
-  it('porządkuje kategorie według pola order', () => {
-    const orders = db.categories.map((category) => category.order);
-    assert.deepEqual(orders, [...orders].sort((a, b) => a - b));
+  it('zachowuje kolejność kategorii z pliku', () => {
+    assert.deepEqual(
+      db.categories.map((category) => category.id),
+      loadRawDatabase().categories.map((category) => category.id),
+    );
   });
 
-  it('porządkuje ćwiczenia i warianty deterministycznie', () => {
+  it('porządkuje ćwiczenia po identyfikatorze, warianty zostawia w kolejności z pliku', () => {
     const ids = db.exercises.map((exercise) => exercise.id);
     assert.deepEqual(ids, [...ids].sort());
     db.exercises.forEach((exercise) => {
-      const orders = exercise.variants.map((variant) => variant.order);
-      assert.deepEqual(orders, [...orders].sort((a, b) => a - b));
+      assert.deepEqual(
+        exercise.variants.map((variant) => variant.id),
+        exercise.raw.variants.map((variant) => variant.id),
+      );
     });
   });
 

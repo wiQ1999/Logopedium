@@ -21,7 +21,6 @@ const isStringArray = (value) => Array.isArray(value) && value.every((entry) => 
 
 function validateCategories(raw, issues) {
   const ids = new Set();
-  const orders = new Set();
 
   if (!Array.isArray(raw.categories) || raw.categories.length === 0) {
     issues.push('categories: oczekiwano niepustej tablicy kategorii.');
@@ -43,13 +42,6 @@ function validateCategories(raw, issues) {
     }
     if (!isNonEmptyString(category.name)) {
       issues.push(`${path}.name: oczekiwano niepustego tekstu.`);
-    }
-    if (!Number.isInteger(category.order) || category.order < 1) {
-      issues.push(`${path}.order: oczekiwano liczby całkowitej od 1.`);
-    } else if (orders.has(category.order)) {
-      issues.push(`${path}.order: pozycja ${category.order} powtarza się.`);
-    } else {
-      orders.add(category.order);
     }
   });
 
@@ -89,7 +81,6 @@ function validateVariants(exercise, path, issues, ids) {
     return;
   }
 
-  const orders = new Set();
   exercise.variants.forEach((variant, index) => {
     const variantPath = `${path}.variants[${index}]`;
     if (!isPlainObject(variant)) {
@@ -105,13 +96,6 @@ function validateVariants(exercise, path, issues, ids) {
     }
     if (!isNullableString(variant.label)) {
       issues.push(`${variantPath}.label: oczekiwano tekstu albo null.`);
-    }
-    if (!Number.isInteger(variant.order) || variant.order < 1) {
-      issues.push(`${variantPath}.order: oczekiwano liczby całkowitej od 1.`);
-    } else if (orders.has(variant.order)) {
-      issues.push(`${variantPath}.order: pozycja ${variant.order} powtarza się w ćwiczeniu.`);
-    } else {
-      orders.add(variant.order);
     }
     if (!VARIANT_TYPES.includes(variant.type)) {
       issues.push(`${variantPath}.type: nieznany typ "${variant.type}"; dozwolone: ${VARIANT_TYPES.join(', ')}.`);
@@ -276,9 +260,7 @@ function exercisePlainText(exercise) {
 }
 
 function normalizeExercise(raw) {
-  const variants = [...raw.variants]
-    .sort((a, b) => a.order - b.order || (a.id === b.id ? 0 : a.id < b.id ? -1 : 1))
-    .map((variant) => ({ ...variant, items: [...variant.items], examples: [...variant.examples] }));
+  const variants = raw.variants.map((variant) => ({ ...variant, items: [...variant.items], examples: [...variant.examples] }));
 
   const exercise = { ...raw, variants, raw };
   exercise.plainText = exercisePlainText(exercise);
@@ -294,11 +276,11 @@ export function buildDatabase(raw) {
     if (issues.length > reported.length) {
       reported.push(`…oraz ${issues.length - reported.length} innych niezgodności.`);
     }
-    throw new DatabaseError('Baza ćwiczeń nie odpowiada schematowi 1.0.', reported);
+    throw new DatabaseError(`Baza ćwiczeń nie odpowiada schematowi ${SUPPORTED_SCHEMA_MAJOR}.x.`, reported);
   }
 
   const byId = (a, b) => (a.id === b.id ? 0 : a.id < b.id ? -1 : 1);
-  const categories = [...raw.categories].sort((a, b) => a.order - b.order || byId(a, b));
+  const categories = [...raw.categories];
   const exercises = raw.exercises.map(normalizeExercise).sort(byId);
 
   const categoryById = new Map(categories.map((category) => [category.id, category]));

@@ -46,7 +46,7 @@ describe('filtrowanie bazy', () => {
 
   it('wybiera ćwiczenia bez określonego poziomu', () => {
     const found = filterExercises(db, { query: '', category: '', level: 'none' });
-    assert.equal(found.length, 38);
+    assert.equal(found.length, 54);
     assert.ok(found.every((exercise) => exercise.level === null));
   });
 
