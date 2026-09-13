@@ -1,257 +1,100 @@
 # Dziennik decyzji
 
-Plik pamięci projektu. Zapisane są tu rozstrzygnięcia podjęte przy implementacji: miejsca,
-w których dokumentacja dopuszczała więcej niż jedną interpretację, oraz elementy wykraczające
-poza jej zakres, konieczne do ukończenia działającej aplikacji.
-
-Stan na: wersja 1.0 aplikacji, baza `schemaVersion 1.0` (wygenerowana 2026-09-08).
+Chronologiczny zapis rozstrzygnięć. Wymagania opisują APPLICATION i ARCHITECTURE — tutaj
+trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
-## 1. Interpretacje wymagań
+## 2026-09-13 — zmiana założeń
 
-### 1.1 Ćwiczenia bez określonego poziomu trudności
+Wymagania: APPLICATION §3.2–§3.5, §3.7, §5.2, §6.2; ARCHITECTURE §5. Zmiany nie są jeszcze
+wdrożone w kodzie.
 
-`level: null` występuje w 38 z 54 ćwiczeń. Poziom jest **górnym limitem**, więc ćwiczenie bez
-zadeklarowanego poziomu nie może go przekroczyć — takie ćwiczenia przechodzą filtr zawsze,
-niezależnie od ustawienia.
+- **Liczba wariantów staje się parametrem sesji.** Krok pokazywał wszystkie warianty ćwiczenia,
+  a te w bazie noszą etykiety „Zadanie 1…4” — przy jednym wybranym ćwiczeniu na stronie
+  wychodziły cztery zadania.
+- **Limit wariantów obejmuje każde ćwiczenie z wariantami, bez wyjątków dla typów.** Reguła
+  bez wyjątków jest sprawdzalna wzrokiem w parametrach.
+- **Limit pozycji to budżet na całe ćwiczenie, nie na wariant.** Limit per wariant przy czterech
+  wariantach dawał do 32 pozycji na stronie; zastępuje dotychczasową stałą
+  `MAX_ITEMS_PER_VARIANT = 8`.
+- **Zakres limitu pozycji zależy od limitu wariantów:** minimum `W`, maksimum równe
+  najbogatszemu ćwiczeniu przy tylu wariantach. Minimum `2 × W` odrzucone — baza zawiera
+  warianty z jedną pozycją, więc taki kraniec obiecywałby materiał, którego nie ma.
+- **Maksimum liczone po filtrze poziomu, ale niezależnie od aktywnych kategorii**, żeby kraniec
+  pola nie skakał przy każdym przełączeniu kategorii.
+- **Warianty bez pozycji pomijane przy liczeniu zakresu `P`**, zamiast liczone jako jedna pozycja.
+  Obie reguły dają w obecnej bazie te same krańce, ale pominięcie nie wprowadza pozycji, która
+  nigdy się nie wyświetli; do `W` warianty te liczą się normalnie.
+- **Dwie pozycje na wariant to preferencja algorytmu podziału, nie kraniec parametru.** Reguła
+  obowiązuje tam, gdzie wariant ma czym ją pokryć, a zaoszczędzone pozycje zasilają pozostałe warianty.
+- **Reszta budżetu dzielona losowo, nie proporcjonalnie** — równe porcje spłaszczałyby różnice
+  między krótkim a długim wariantem.
+- **Jeden przełącznik `kolejność / losowo` dla wariantów i pozycji.** Tryb `kolejność` bierze
+  N kolejnych elementów od losowego punktu startowego, więc zachowuje progresje z oryginału,
+  nie zawężając materiału do początku zbioru.
+- **Limity i tryb doboru nie wchodzą do ziarna, tylko do fazy na ziarnie pochodnym.** Inaczej
+  zmiana limitu przelosowałaby również to, które ćwiczenia trafiają do sesji.
+- **Parametry zapamiętywane w `localStorage`.** Jedyny mechanizm bez backendu, który jest
+  trwały między dniami i mieści listę 25 kategorii (ciasteczka nie mieszczą).
+- **Wartości domyślne to sesja nieograniczona.** Brak predefiniowanego zestawu startowego —
+  domyślne wynikają z zawartości bazy, co upraszcza logikę i nie faworyzuje żadnej kategorii.
+- **Data nie jest zapamiętywana ani formatowana własnym zapisem.** Data z poprzedniej wizyty
+  wskazywałaby przeszłość, a format wyświetlania zostaje po stronie ustawień przeglądarki.
+- **Tryb oznaczeń nie jest zapamiętywany trwale.**
+- **Tryb przeglądania bez zmian** — pokazuje całą zawartość bazy, bez limitów sesyjnych.
 
-Konsekwencja: przy poziomie 1 baza wciąż udostępnia materiał w każdej kategorii, a limity
-przy polach liczbowych maleją tylko tam, gdzie ćwiczenia mają przypisany poziom
-(np. „tekst do czytania terapeutycznego”: 23 → 8).
-
-### 1.2 „Wylosowany zestaw wariantów” (APPLICATION §6.2)
-
-Krok planu zawiera **wszystkie warianty ćwiczenia**, a losowanie działa na poziomie
-pozycji (`variants[].items[]`).
-
-Podstawa: APPLICATION §6.1 wymaga pokazywania wariantów razem na wspólnej karcie
-(„krótkie fragmenty należące do jednej instrukcji”), a DATA-SCHEMA jednoznacznie wskazuje
-pozycje jako jednostkę losowania (`items[]` — „pozycje do losowania”, `randomizable` —
-„wolno wybrać podzbiór pozycji”). Losowanie samych wariantów rozbiłoby spójne ćwiczenie
-(np. sześć grup samogłoskowych w jednym poleceniu).
-
-### 1.3 Liczba losowanych pozycji
-
-Stała `MAX_ITEMS_PER_VARIANT = 8` w `picker.js` (mediana liczby pozycji w bazie: 8; maksimum: 30).
-
-Dokumentacja nie przewiduje parametru użytkownika sterującego liczbą pozycji, a §5.2 wylicza
-zamknięty skład ziarna — dlatego jest to stała w kodzie, nie parametr sesji. Zmiana wartości
-zmienia zawartość planów, ale nie wymaga zmiany ziarna, bo losowanie pozycji odbywa się
-w osobnej, deterministycznej fazie.
-
-Zasady szczegółowe:
-
-- `randomizable: false` → wszystkie pozycje, niezależnie od limitu (materiał podaje się w całości).
-- `type: "text" | "syllables" | "prompt"` → treść w całości, bez losowania.
-- Liczba pozycji ≤ limit → wszystkie pozycje, bez pobierania liczb z generatora.
-- Wylosowane pozycje wyświetlane są **w kolejności z bazy**, nie w kolejności losowania —
-  zachowuje to progresje samogłoskowe (a / e / y / i / o / u) i układ oryginału.
-- Karta informuje o cięciu („Wylosowano 8 z 15 pozycji.”) tylko wtedy, gdy podzbiór jest mniejszy
-  od całości.
-
-### 1.4 Wartości początkowe parametrów
-
-- data: bieżący dzień w czasie lokalnym (nie UTC),
-- poziom: 4 (brak ograniczenia),
-- kategorie: wszystkie aktywne, po 1 ćwiczeniu, w kolejności `categories[].order` z bazy.
-
-Wariant „wszystkie po jednym” daje 25 ćwiczeń — dużo jak na jedną sesję, ale jest jedynym
-ustawieniem, które nie faworyzuje arbitralnie wybranych kategorii i pokazuje całą bazę od razu.
-Licznik „25 ćwiczeń z 25 kategorii” nad przyciskiem startu sygnalizuje rozmiar sesji, żeby
-przycięcie zestawu było oczywistym następnym krokiem.
-
-### 1.5 Polecenie wspólne a polecenia wariantów
-
-Polecenie skuteczne wariantu = `variants[].instructionHtml ?? exercises[].instructionHtml`
-(dziedziczenie z DATA-SCHEMA). Dodatkowo:
-
-- gdy wszystkie warianty mają **identyczne** polecenie skuteczne → wyświetlane jest **raz**,
-  nad wariantami,
-- gdy polecenia się różnią → każdy wariant pokazuje swoje.
-
-Bez tej reguły ćwiczenie `uderz-mocnym-dzwiekiem-nosowym` powtarzałoby to samo polecenie
-sześć razy (baza duplikuje je w każdym wariancie), czyli dokładnie to, czemu przeciwdziała
-APPLICATION §6.1.
-
-### 1.6 Uwagi redakcyjne
-
-`notes` opisane są w schemacie jako „nie do pokazywania ćwiczącemu”, więc nie pojawiają się
-w sesji. W trybie przeglądania są widoczne jako wyraźnie oznaczony blok „Uwagi redakcyjne
-(nie dla ćwiczącego)” — tryb ten służy pracy z bazą, nie ćwiczeniu.
-
-### 1.7 Filtr poziomu w trybie przeglądania
-
-W sesji poziom jest górnym limitem, w przeglądaniu — **filtrem dokładnym** (`poziom 2` pokazuje
-tylko ćwiczenia poziomu 2), z dodatkową opcją „bez określonego poziomu”. Przeglądanie ma dawać
-wgląd w całą bazę „bez filtrów sesyjnych” (APPLICATION §7), a filtr dokładny pozwala dotrzeć
-do materiału, którego limit górny by nie wyodrębnił.
+Odrzucone: zmiana opisu architektury na wielostronicową — wiele stanów pod własnymi adresami
+w jednym dokumencie HTML to definicja SPA, nie odstępstwo od niej.
 
 ---
 
-## 2. Rozstrzygnięcia techniczne
+## 2026-09-10 — wersja 1.0
 
-### 2.1 Parametry sesji w adresie
+Pierwsza działająca aplikacja. Baza `schemaVersion 1.0`, wygenerowana 2026-09-08.
 
-Adres sesji niesie komplet parametrów:
+**Interpretacje wymagań**
 
-```
-#/session/3?d=2026-09-10&l=4&c=gloska-dz:1,tekst-do-czytania-terapeutycznego:2&seed=...
-```
+- **`level: null` przechodzi filtr poziomu zawsze** (38 z 54 ćwiczeń). Poziom jest górnym
+  limitem, więc brak zadeklarowanego poziomu nie może go przekroczyć.
+- **Polecenie identyczne we wszystkich wariantach wyświetlane raz.** Baza duplikuje je
+  w każdym wariancie — bez tej reguły jedno ćwiczenie powtarzało polecenie sześć razy.
+- **Wylosowane pozycje wyświetlane w kolejności z bazy**, nie w kolejności losowania —
+  zachowuje progresje samogłoskowe i układ oryginału. *(Zastąpione 2026-09-13 przez
+  parametr `Dobór`.)*
+- **`randomizable: false` oraz typy `text`, `syllables`, `prompt` podawane w całości.**
+- **Uwagi redakcyjne ukryte w sesji, widoczne w przeglądaniu** — schemat opisuje je jako
+  nieprzeznaczone dla ćwiczącego, a przeglądanie służy pracy z bazą.
+- **Filtr poziomu w przeglądaniu jest dokładny, nie górny** — pozwala dotrzeć do materiału,
+  którego limit górny nie wyodrębnia.
 
-Powód: APPLICATION §5.1 wymaga, żeby odświeżenie strony nie podmieniło ćwiczeń, a ARCHITECTURE
-zakazuje trwałego zapisu stanu (bez `localStorage`, bez konta). Adres jest jedynym nośnikiem
-stanu, który przeżywa przeładowanie, a przy okazji spełnia zapowiedź z ARCHITECTURE §5
-o „odnośnikach do konkretnego stanu”.
+**Rozstrzygnięcia techniczne**
 
-Szczegóły:
+- **Komplet parametrów w adresie**, bo tylko adres przeżywa przeładowanie i daje się przekazać.
+- **Ziarno `logopedium|v=…|d=…|l=…|c=…`** z kategoriami posortowanymi po `id`, żeby
+  przestawienie listy nie zmieniało doboru materiału.
+- **mulberry32 z ziarnem FNV-1a, losowanie częściowym tasowaniem Fishera–Yatesa**; sortowanie
+  porównaniem kodowym, nie `localeCompare`, bo kolejność zależna od lokalizacji łamie powtarzalność.
+- **Nowe ziarno z `crypto.getRandomValues`** — nie jest elementem budowy planu, więc nie narusza
+  zakazu użycia wbudowanego generatora losowego.
+- **Walidacja zbiera wszystkie niezgodności naraz** i pokazuje je zamiast pustego interfejsu.
+- **Znaczniki inline usuwane bez wstawiania spacji** przy wydobywaniu tekstu do wyszukiwania —
+  baza wstawia `<span>` wewnątrz wyrazów, więc spacja rozbijała „aptekarzem” na sylaby.
+- **Przełączanie warstw oznaczeń w CSS**, atrybutem na karcie, bez ponownego renderowania.
+- **Motyw jasny i ciemny wg `prefers-color-scheme`** — materiał czyta się długo, a oba warianty
+  wynikają z tego samego zestawu zmiennych CSS.
 
-- `c` wymienia wyłącznie kategorie aktywne, w kolejności wyświetlania; nieaktywne wracają na swoje
-  domyślne pozycje przy odczycie adresu,
-- identyfikatory kategorii zamiast indeksów — są stabilne z definicji schematu, indeks rozjechałby
-  się po zmianie bazy,
-- adres bywa długi (25 kategorii ≈ 1,1 kB) i jest to świadomy koszt czytelności i stabilności,
-- wartości spoza zakresu (błędna data, poziom, nieznana kategoria, liczba ponad limit) są
-  przycinane przy odczycie, więc ręcznie zmodyfikowany adres nie psuje aplikacji,
-- tryb przeglądania trzyma w adresie filtry (`q`, `cat`, `level`) — wpisywanie w polu wyszukiwania
-  aktualizuje adres przez `replaceState`, żeby nie zaśmiecać historii.
+**Elementy spoza dokumentacji**
 
-### 2.2 Ziarno losowania
+- **Plik bazy nazywa się `database.json`**, wbrew nazwie `cwiczenia-logopedyczne.json`
+  z DATA-SCHEMA; wersja zminifikowana nie powstaje, bo nie ma kroku budowania.
+- **Narzędzia deweloperskie poza katalogiem aplikacji** (`package.json`, `tools/serve.js`,
+  `tests/`, `jsdom`), żeby katalog publikowany pozostał bez zależności.
+- **`assets/img/` pusty** — baza nie odwołuje się do grafiki.
 
-Postać ziarna:
+**Świadome ograniczenia**
 
-```
-logopedium|v=<schemaVersion>|d=<data>|l=<poziom>|c=<id:liczba,... posortowane rosnąco po id>
-```
-
-Zawiera dokładnie składniki z APPLICATION §5.2. Sortowanie po identyfikatorze sprawia, że
-przestawienie kategorii na liście nie zmienia ziarna — zmienia wyłącznie kolejność kroków.
-
-Nadpisanie ziarna (`§5.3`) dostępne jest w trzech miejscach: parametr `seed` w adresie, pole
-„Własne ziarno” w formularzu parametrów oraz przycisk „Wylosuj nowy zestaw na ten dzień”
-w podsumowaniu. Nowe ziarno powstaje z `crypto.getRandomValues`; nie jest to element budowy
-planu, więc nie narusza zakazu użycia wbudowanego generatora losowego.
-
-### 2.3 Determinizm budowy planu
-
-Generator: mulberry32 z ziarnem policzonym funkcją FNV-1a (32-bitową). Losowanie bez zwracania
-to częściowe tasowanie Fishera–Yatesa pobierające dokładnie tyle liczb, ile elementów wybiera.
-
-Kolejność pobierania liczb jest w pełni określona:
-
-1. kategorie aktywne posortowane po `id` (nie po kolejności wyświetlania),
-2. w kategorii — kandydaci posortowani po `id`, po odrzuceniu ćwiczeń ponad poziom,
-3. następnie, w osobnej fazie, wszystkie wylosowane ćwiczenia posortowane po `id` — dla każdego
-   losowane są pozycje w wariantach (warianty w kolejności `order`).
-
-Rozdzielenie faz gwarantuje, że dobór pozycji nie zależy od tego, ile kategorii jest aktywnych
-ani jak są ustawione. Do sortowania używane jest porównanie kodowe (`a < b`), nie `localeCompare` —
-kolejność zależna od ustawień językowych środowiska łamałaby powtarzalność.
-
-Kroki układane są dopiero na końcu, zgodnie z kolejnością kategorii z parametrów; ćwiczenia
-w obrębie kategorii zachowują kolejność losowania.
-
-### 2.4 Walidacja bazy
-
-`validateDatabase` zbiera **wszystkie** niezgodności, `buildDatabase` zgłasza je jako `DatabaseError`
-z listą przyczyn (maksymalnie 25 pozycji, reszta zliczona), a aplikacja wyświetla je zamiast
-pustego interfejsu (ARCHITECTURE §8).
-
-Twarde błędy: brak lub zły typ pól wymaganych, powtórzone identyfikatory (wspólna przestrzeń
-nazw ćwiczeń, wariantów i pozycji), odwołanie do nieistniejącej kategorii, nieznany `type` wariantu
-(decyduje o renderowaniu), pusta lista pozycji przy `type: "items"`, brak treści przy `text`
-i `syllables`, poziom spoza 1–4, powtórzona kolejność wariantów w ćwiczeniu, niezgodna wersja
-główna schematu.
-
-Świadomie **nie** są walidowane słownikowo: `readQuality`, `source.kind`, `phonemes`, `positions` —
-to pola informacyjne, ich rozszerzenie nie powinno blokować startu aplikacji. `duplicates`
-i `nonTextMaterials` są opcjonalne.
-
-### 2.5 Wydobywanie tekstu do wyszukiwania i zapowiedzi
-
-Znaczniki inline (`span`, `strong`, `em`) usuwane są **bez** wstawiania spacji, blokowe
-(`p`, `br`, `div`, `li`, `h1`–`h6`) — ze spacją. Baza wstawia `<span>` wewnątrz wyrazów
-(oznaczenia głosek i legato), więc zamiana każdego znacznika na spację rozbijałaby wyrazy —
-„aptekarzem” stawało się „a pt e k a rz e m” i nie dawało się wyszukać.
-
-Zapytanie i tekst ćwiczenia normalizowane są przez usunięcie znaków diakrytycznych (NFD +
-usunięcie znaków łączących, `ł` → `l`) i zmianę na małe litery. Wszystkie słowa zapytania muszą
-wystąpić w tekście (koniunkcja). Zapowiedź na liście budowana jest z treści bez tytułu, żeby
-nie powtarzać nagłówka pozycji.
-
-### 2.6 Przełączanie warstw oznaczeń
-
-Karta ćwiczenia ma przełącznik `pełne / głoska / czysty`, realizujący trzy tryby opisane
-w DATA-SCHEMA („Przełączanie warstw”). Tryb jest atrybutem `data-marks` na karcie, przełączanie
-odbywa się w CSS, bez ponownego renderowania treści. Wybór utrzymuje się między krokami sesji
-i między stanami interfejsu (stan w pamięci, zgodnie z ARCHITECTURE).
-
-### 2.7 Rejestr audytowy w trybie przeglądania
-
-`duplicates[]` i `nonTextMaterials[]` pokazywane są na dole listy bazy w zwiniętej sekcji
-„Rejestr audytowy bazy”. Tryb przeglądania ma dawać wgląd w **całą** zawartość bazy, a te dwie
-tablice są jej częścią; zwinięcie oddziela materiał audytowy od ćwiczeń.
-
-### 2.8 Dostępność i sterowanie
-
-- Nawigacja w sesji także strzałkami ← →, z pominięciem pól formularza.
-- Po zmianie stanu interfejsu fokus wraca na `#app-main` (poza pierwszym renderowaniem).
-- Każdy stan ma nagłówek pierwszego poziomu; w sesji i w podglądzie ćwiczenia jest on ukryty
-  wizualnie (`.visually-hidden`), żeby nie dublować tytułu karty.
-- Przestawianie kategorii przyciskami (nie „przeciągnij i upuść”) — działa z klawiatury
-  i na dotyku; po przestawieniu fokus wraca na ten sam przycisk.
-- Kolejność kategorii to lista `<ol>`; wyłączona kategoria pozostaje na swojej pozycji
-  (APPLICATION §3.1).
-
----
-
-## 3. Elementy spoza dokumentacji
-
-### 3.1 Nazwa pliku bazy
-
-DATA-SCHEMA opisuje plik `cwiczenia-logopedyczne.json`, ARCHITECTURE §3 wskazuje
-`src/webapp/data/database.json` i taki plik jest w repozytorium — aplikacja czyta
-`data/database.json`. Wersja zminifikowana (`*.min.json`) nie jest używana; nie ma kroku
-budowania, który mógłby ją wytworzyć.
-
-### 3.2 Narzędzia deweloperskie poza katalogiem aplikacji
-
-Katalog `src/webapp/` pozostaje samowystarczalny i pozbawiony zależności — publikacja to nadal
-skopiowanie go w całości. Poza nim dodane zostały:
-
-- `package.json` — `type: module` (potrzebne, by Node wykonywał moduły aplikacji w testach),
-  skrypty `start` i `test`,
-- `tools/serve.js` — lokalny serwer HTTP bez zależności (wymóg z ARCHITECTURE §4 dotyczy
-  uruchomienia, nie sposobu jego realizacji); blokuje wyjście poza katalog aplikacji,
-- `tests/` — testy uruchamiane wbudowanym `node --test`,
-- `jsdom` jako jedyna zależność deweloperska — pozwala testować warstwę widoków (formularz
-  parametrów, przebieg sesji, przeglądanie) bez przeglądarki. Aplikacja nie ma zależności
-  produkcyjnych.
-
-### 3.3 Katalogi zasobów
-
-`assets/icons/favicon.svg` — ikona strony, żeby uniknąć zapytania zakończonego błędem 404.
-`assets/img/` pozostaje pusty (poza plikiem `README.txt` wyjaśniającym przeznaczenie): baza
-w obecnej wersji nie odwołuje się do żadnej grafiki, a jedyny materiał nietekstowy figuruje
-w `nonTextMaterials[]` jako kandydat na ilustrację.
-
-### 3.4 Motyw jasny i ciemny
-
-Interfejs respektuje `prefers-color-scheme`. Dokumentacja tego nie wymaga, ale materiał czyta się
-na ekranie długo, a oba warianty kolorystyczne wynikają z tego samego zestawu zmiennych CSS —
-koszt jest jednorazowy.
-
----
-
-## 4. Świadome ograniczenia
-
-- Brak mechanizmu ograniczania powtórek między dniami — zgodnie z APPLICATION §4.
-- Brak zapamiętywania ustawień i postępu poza adresem — zgodnie z ARCHITECTURE §2 i §10.
-- Pola `phonemes` i `positions` są widoczne w metryce ćwiczenia, ale nie służą jako filtry;
-  dokumentacja przewiduje filtrowanie tylko po kategorii i poziomie.
-- Sugestia z DATA-SCHEMA, by rozbić dominującą kategorię „tekst do czytania terapeutycznego”
-  (23 z 54 ćwiczeń) albo ją ważyć, nie została zrealizowana w danych — sterowanie liczbą ćwiczeń
-  w kategorii realizuje ten sam cel po stronie parametrów, bez ingerencji w bazę.
-- Uwaga redakcyjna przy ćwiczeniu `swiderki-nitki-rurki` sugeruje tryb „odsłoń” dla miejsc na
-  odpowiedź. Miejsca te renderowane są jako linia (`.blank`), bez mechaniki odsłaniania —
-  wykracza poza opisany zakres pierwszej wersji.
+- Dominująca kategoria „tekst do czytania terapeutycznego” (23 z 54 ćwiczeń) nie została
+  rozbita w danych — ten sam cel realizuje liczba ćwiczeń w kategorii, bez ingerencji w bazę.
+- `phonemes` i `positions` są widoczne w metryce ćwiczenia, ale nie służą jako filtry.
+- Miejsca na odpowiedź renderowane jako linia, bez mechaniki odsłaniania.
