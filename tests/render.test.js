@@ -83,6 +83,16 @@ describe('karta ćwiczenia', () => {
     assert.ok(partial.includes(`Wylosowano 3 z ${variant.items.length} pozycji.`));
   });
 
+  it('informuje o pokazaniu części wariantów', () => {
+    const many = db.exercises.find((item) => item.variants.length > 2);
+    const all = many.variants.map((variant) => ({ variant, items: variant.items }));
+    assert.ok(!renderExerciseCard(many, all, {}).includes('Pokazano'));
+    assert.ok(
+      renderExerciseCard(many, all.slice(0, 2), {}).includes(`Pokazano 2 z ${many.variants.length} zadań`),
+    );
+    assert.ok(!renderExerciseCard(many, [], {}).includes('Pokazano'));
+  });
+
   it('pokazuje polecenie ćwiczenia, gdy wariant go nie nadpisuje', () => {
     const inherited = db.exercises.find(
       (item) => item.instructionHtml && item.variants.some((variant) => variant.instructionHtml === null),

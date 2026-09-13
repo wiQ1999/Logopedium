@@ -179,6 +179,11 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
   const shared = instructions.length > 0 && instructions.every((entry) => entry === instructions[0]) ? instructions[0] : null;
   const cardInstruction = variantViews.length === 0 ? exercise.instructionHtml : shared;
 
+  const trimmed =
+    variantViews.length > 0 && variantViews.length < exercise.variants.length
+      ? `<p class="items__note items__note--card">Pokazano ${variantViews.length} z ${exercise.variants.length} zadań tego ćwiczenia.</p>`
+      : '';
+
   const variants = variantViews
     .map((view, index) => renderVariant(view, shared ? null : instructions[index]))
     .join('');
@@ -197,6 +202,7 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
       </header>
       ${block('Materiał wprowadzający', exercise.contextHtml, 'block--context')}
       ${block('Polecenie', cardInstruction, 'block--instruction')}
+      ${trimmed}
       ${variants}
       ${editorial}
     </article>`;
