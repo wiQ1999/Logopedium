@@ -1,14 +1,17 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { buildSeedString, withMovedCategory } from '../src/webapp/js/params.js';
-import { MAX_ITEMS_PER_VARIANT, buildPlan } from '../src/webapp/js/picker.js';
-import { loadDatabaseFixture, makeFixtureDatabase, makeParams } from './helpers.js';
+import { buildSeedString, withItemLimit, withMovedCategory, withVariantLimit } from '../src/webapp/js/params.js';
+import { buildPlan, pickSubset, shareItemBudget } from '../src/webapp/js/picker.js';
+import { createRng } from '../src/webapp/js/rng.js';
+import { loadDatabaseFixture, makeDbParams, makeFixtureDatabase, makeParams } from './helpers.js';
 
 const db = makeFixtureDatabase();
 const realDb = loadDatabaseFixture();
 
 const exerciseIds = (plan) => plan.steps.map((step) => step.exercise.id);
 const itemIds = (plan) => plan.steps.flatMap((step) => step.variants.flatMap((view) => view.items.map((item) => item.id)));
+const stepOf = (plan, id) => plan.steps.find((step) => step.exercise.id === id);
+const countItems = (step) => step.variants.reduce((total, view) => total + view.items.length, 0);
 
 describe('budowa planu sesji', () => {
   it('plan ma tyle kroków, ile wskazują parametry', () => {
@@ -44,7 +47,7 @@ describe('budowa planu sesji', () => {
   });
 
   it('nie losuje więcej ćwiczeń, niż jest dostępnych', () => {
-    const plan = buildPlan(db, { ...makeParams([['cat-c', 99]]) });
+    const plan = buildPlan(db, makeParams([['cat-c', 99]]));
     assert.equal(plan.steps.length, 2);
   });
 
@@ -91,9 +94,9 @@ describe('powtarzalność losowania', () => {
     assert.notEqual(buildPlan(db, params).seed, buildPlan(db, other).seed);
 
     const dates = ['2026-09-11', '2026-09-12', '2026-09-13', '2026-09-14', '2026-09-15'];
-    const baseline = exerciseIds(buildPlan(realDb, makeParams([['tekst-do-czytania-terapeutycznego', 3]])));
+    const baseline = exerciseIds(buildPlan(realDb, makeDbParams(realDb, [['tekst-do-czytania-terapeutycznego', 3]])));
     const different = dates.some((date) => {
-      const plan = buildPlan(realDb, makeParams([['tekst-do-czytania-terapeutycznego', 3]], { date }));
+      const plan = buildPlan(realDb, makeDbParams(realDb, [['tekst-do-czytania-terapeutycznego', 3]], { date }));
       return JSON.stringify(exerciseIds(plan)) !== JSON.stringify(baseline);
     });
     assert.ok(different, 'zmiana daty powinna zmieniać dobór ćwiczeń');
@@ -140,41 +143,198 @@ describe('powtarzalność losowania', () => {
   });
 
   it('różne ziarna dają różne zestawy', () => {
-    const first = exerciseIds(buildPlan(realDb, makeParams([['tekst-do-czytania-terapeutycznego', 4]]), 'ziarno-1'));
-    const second = exerciseIds(buildPlan(realDb, makeParams([['tekst-do-czytania-terapeutycznego', 4]]), 'ziarno-2'));
-    assert.notDeepEqual(first, second);
+    const wide = makeDbParams(realDb, [['tekst-do-czytania-terapeutycznego', 4]]);
+    assert.notDeepEqual(exerciseIds(buildPlan(realDb, wide, 'ziarno-1')), exerciseIds(buildPlan(realDb, wide, 'ziarno-2')));
+  });
+
+  it('limity i tryb doboru nie wchodzą do ziarna ani nie zmieniają doboru ćwiczeń', () => {
+    const base = makeParams([['cat-a', 4], ['cat-b', 2], ['cat-d', 1]]);
+    const narrowed = withItemLimit(db, withVariantLimit(db, base, 'cat-d', 2), 'cat-a', 3);
+    const narrow = { ...narrowed, pick: 'losowo' };
+
+    assert.equal(buildPlan(db, base).seed, buildPlan(db, narrow).seed);
+    assert.deepEqual(exerciseIds(buildPlan(db, base)), exerciseIds(buildPlan(db, narrow)));
+  });
+
+  it('zmiana budżetu jednej kategorii nie przenosi się na pozostałe', () => {
+    const base = makeParams([['cat-a', 6], ['cat-d', 1]]);
+    const narrower = withItemLimit(db, base, 'cat-a', 7);
+
+    const first = buildPlan(db, base);
+    const second = buildPlan(db, narrower);
+    assert.deepEqual(exerciseIds(first), exerciseIds(second));
+
+    const itemsFrom = (plan, categoryId) =>
+      plan.steps
+        .filter((step) => step.exercise.categoryId === categoryId)
+        .map((step) => step.variants.flatMap((view) => view.items.map((item) => item.id)));
+
+    assert.notDeepEqual(itemsFrom(first, 'cat-a'), itemsFrom(second, 'cat-a'));
+    assert.deepEqual(itemsFrom(first, 'cat-d'), itemsFrom(second, 'cat-d'));
+  });
+});
+
+describe('dobór podzbioru', () => {
+  const list = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+  it('tryb kolejność bierze elementy kolejno od losowego punktu startowego', () => {
+    const drawn = pickSubset(list, 3, 'kolejnosc', createRng('ziarno'));
+    assert.equal(drawn.length, 3);
+    const start = list.indexOf(drawn[0]);
+    assert.ok(start >= 0 && start <= list.length - 3);
+    assert.deepEqual(drawn, list.slice(start, start + 3));
+  });
+
+  it('tryb kolejność przy pełnym limicie oddaje zbiór w kolejności z bazy', () => {
+    assert.deepEqual(pickSubset(list, list.length, 'kolejnosc', createRng('ziarno')), list);
+    assert.deepEqual(pickSubset(list, 99, 'kolejnosc', createRng('ziarno')), list);
+  });
+
+  it('tryb losowo tasuje także wtedy, gdy limit nie tnie zbioru', () => {
+    const drawn = pickSubset(list, list.length, 'losowo', createRng('ziarno'));
+    assert.deepEqual(new Set(drawn), new Set(list));
+    assert.notDeepEqual(drawn, list);
+  });
+
+  it('pusty limit daje pusty zbiór', () => {
+    assert.deepEqual(pickSubset(list, 0, 'kolejnosc', createRng('ziarno')), []);
+    assert.deepEqual(pickSubset([], 3, 'losowo', createRng('ziarno')), []);
+  });
+});
+
+describe('podział budżetu pozycji', () => {
+  const rng = () => createRng('ziarno-budzetu');
+
+  it('każdy wariant dostaje po jednej pozycji, gdy budżet równa się liczbie wariantów', () => {
+    assert.deepEqual(shareItemBudget([20, 12, 6, 1], 4, rng()), [1, 1, 1, 1]);
+  });
+
+  it('preferuje dwie pozycje na wariant, o ile wariant ma czym je pokryć', () => {
+    assert.deepEqual(shareItemBudget([20, 12, 6, 1], 7, rng()), [2, 2, 2, 1]);
+  });
+
+  it('nadwyżka ponad zasób wariantu wraca do podziału', () => {
+    assert.deepEqual(shareItemBudget([3, 2], 5, rng()), [3, 2]);
+  });
+
+  it('nie rozdaje więcej, niż wynosi budżet i zasób wariantów', () => {
+    const shares = shareItemBudget([20, 12, 6, 1], 15, rng());
+    assert.equal(shares.reduce((total, share) => total + share, 0), 15);
+    shares.forEach((share, index) => assert.ok(share <= [20, 12, 6, 1][index]));
+    assert.ok(shares.every((share) => share >= 1));
+  });
+
+  it('budżet większy od zasobu oddaje wszystkie pozycje', () => {
+    assert.deepEqual(shareItemBudget([4, 2], 99, rng()), [4, 2]);
+  });
+
+  it('zerowy budżet i pusta lista wariantów nie dostają nic', () => {
+    assert.deepEqual(shareItemBudget([], 10, rng()), []);
+    assert.deepEqual(shareItemBudget([5, 3], 0, rng()), [0, 0]);
+  });
+});
+
+describe('limit wariantów w ćwiczeniu', () => {
+  it('ogranicza liczbę pokazanych wariantów', () => {
+    const plan = buildPlan(db, makeParams([['cat-d', 1, 2]]));
+    assert.equal(stepOf(plan, 'd1').variants.length, 2);
+  });
+
+  it('ćwiczenie jednowariantowe pozostaje nietknięte', () => {
+    const plan = buildPlan(db, makeParams([['cat-a', 6]]));
+    assert.ok(plan.steps.every((step) => step.variants.length === 1));
+  });
+
+  it('limit obejmuje także warianty bez pozycji', () => {
+    const plan = buildPlan(db, makeParams([['cat-c', 2, 1]]));
+    assert.ok(plan.steps.every((step) => step.variants.length === 1));
+  });
+
+  it('limit jednej kategorii nie dotyczy ćwiczeń z innej', () => {
+    const plan = buildPlan(db, makeParams([['cat-c', 2, 1], ['cat-d', 1]]));
+    assert.equal(stepOf(plan, 'c2').variants.length, 1);
+    assert.equal(stepOf(plan, 'd1').variants.length, 5);
+  });
+
+  it('warianty w trybie kolejność zachowują kolejność z bazy', () => {
+    const plan = buildPlan(db, makeParams([['cat-c', 2]]));
+    assert.deepEqual(
+      stepOf(plan, 'c2').variants.map((view) => view.variant.id),
+      ['c2-w1', 'c2-w2'],
+    );
   });
 });
 
 describe('dobór pozycji w wariantach', () => {
   it('ćwiczenie bez zgody na losowanie zachowuje wszystkie pozycje', () => {
-    const plan = buildPlan(db, makeParams([['cat-b', 3]]));
-    const notRandomizable = plan.steps.find((step) => step.exercise.id === 'b1');
-    assert.ok(notRandomizable);
-    assert.equal(notRandomizable.variants[0].items.length, 20);
-  });
-
-  it('ćwiczenie losowalne dostaje ograniczoną liczbę pozycji', () => {
-    const plan = buildPlan(db, makeParams([['cat-a', 6]]));
-    plan.steps.forEach((step) => {
-      assert.equal(step.variants[0].items.length, MAX_ITEMS_PER_VARIANT);
-    });
+    const plan = buildPlan(db, makeParams([['cat-b', 3, 1, 5]]));
+    assert.equal(stepOf(plan, 'b1').variants[0].items.length, 20);
   });
 
   it('krótka lista pozycji pozostaje w całości', () => {
     const plan = buildPlan(db, makeParams([['cat-b', 3]]));
-    const short = plan.steps.find((step) => step.exercise.id === 'b3');
-    assert.equal(short.variants[0].items.length, 4);
+    assert.equal(stepOf(plan, 'b3').variants[0].items.length, 4);
   });
 
-  it('wylosowane pozycje zachowują kolejność z bazy', () => {
-    const plan = buildPlan(db, makeParams([['cat-a', 6]]));
+  it('budżet pozycji obowiązuje na całe ćwiczenie, nie na wariant', () => {
+    const plan = buildPlan(db, makeParams([['cat-d', 1, 5, 9]]));
+    assert.equal(countItems(stepOf(plan, 'd1')), 9);
+  });
+
+  it('budżet jednej kategorii nie dotyczy ćwiczeń z innej', () => {
+    const plan = buildPlan(db, makeParams([['cat-a', 6, 1, 3], ['cat-d', 1]]));
+    plan.steps
+      .filter((step) => step.exercise.categoryId === 'cat-a')
+      .forEach((step) => assert.equal(countItems(step), 3));
+    assert.equal(countItems(stepOf(plan, 'd1')), 39);
+  });
+
+  it('każdy wylosowany wariant z pozycjami dostaje co najmniej jedną pozycję', () => {
+    const plan = buildPlan(db, makeParams([['cat-d', 1, 5, 4]]));
+    const step = stepOf(plan, 'd1');
+    const withItems = step.variants.filter((view) => view.variant.items.length > 0);
+    assert.equal(withItems.length, 4);
+    assert.ok(withItems.every((view) => view.items.length >= 1));
+    assert.equal(countItems(step), 4);
+  });
+
+  it('warianty bez pozycji nie zużywają budżetu', () => {
+    const plan = buildPlan(db, makeParams([['cat-d', 1, 5, 7]]));
+    const step = stepOf(plan, 'd1');
+    const empty = step.variants.find((view) => view.variant.type === 'text');
+    assert.ok(empty);
+    assert.equal(empty.items.length, 0);
+    assert.equal(countItems(step), 7);
+  });
+
+  it('kategoria bez pozycji nie dostaje ich mimo limitu', () => {
+    const plan = buildPlan(db, makeParams([['cat-c', 2], ['cat-e', 1]]));
+    plan.steps.forEach((step) => assert.equal(countItems(step), 0));
+  });
+
+  it('ćwiczenie o mniejszym zasobie niż budżet podaje wszystko', () => {
+    const plan = buildPlan(db, makeParams([['cat-d', 1]]));
+    assert.equal(countItems(stepOf(plan, 'd1')), 39);
+  });
+
+  it('tryb kolejność bierze pozycje ciągiem z bazy', () => {
+    const plan = buildPlan(db, makeParams([['cat-a', 6, 1, 5]]));
     plan.steps.forEach((step) => {
       const source = step.exercise.variants[0].items.map((item) => item.id);
-      const drawn = step.variants[0].items.map((item) => item.id);
-      const positions = drawn.map((id) => source.indexOf(id));
-      assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
+      const positions = step.variants[0].items.map((item) => source.indexOf(item.id));
+      assert.deepEqual(positions, positions.map((unused, index) => positions[0] + index));
     });
+  });
+
+  it('tryb losowo zmienia kolejność pozycji', () => {
+    const plan = buildPlan(db, makeParams([['cat-a', 6]], { pick: 'losowo' }));
+    const shuffled = plan.steps.some((step) => {
+      const source = step.exercise.variants[0].items.map((item) => item.id);
+      const drawn = step.variants[0].items.map((item) => item.id);
+      assert.deepEqual(new Set(drawn), new Set(source));
+      return JSON.stringify(drawn) !== JSON.stringify(source);
+    });
+    assert.ok(shuffled, 'tryb losowo powinien zmienić kolejność co najmniej jednego ćwiczenia');
   });
 
   it('warianty bez pozycji nie dostają wylosowanej listy', () => {
@@ -186,25 +346,18 @@ describe('dobór pozycji w wariantach', () => {
       });
     });
   });
-
-  it('warianty są ułożone według pola order', () => {
-    const plan = buildPlan(db, makeParams([['cat-c', 2]]));
-    const multi = plan.steps.find((step) => step.exercise.id === 'c2');
-    assert.deepEqual(
-      multi.variants.map((view) => view.variant.id),
-      ['c2-w1', 'c2-w2'],
-    );
-  });
 });
 
 describe('plan na pełnej bazie', () => {
+  const everyCategory = ({ count = 1, ...overrides } = {}) =>
+    makeDbParams(
+      realDb,
+      realDb.categories.map((category) => [category.id, count]),
+      overrides,
+    );
+
   it('obejmuje wszystkie kategorie po jednym ćwiczeniu', () => {
-    const params = {
-      date: '2026-09-10',
-      level: 4,
-      categories: realDb.categories.map((category) => ({ id: category.id, count: 1 })),
-    };
-    const plan = buildPlan(realDb, params);
+    const plan = buildPlan(realDb, everyCategory());
     assert.equal(plan.steps.length, realDb.categories.length);
     assert.deepEqual(
       plan.steps.map((step) => step.exercise.categoryId),
@@ -214,12 +367,7 @@ describe('plan na pełnej bazie', () => {
   });
 
   it('każdy krok ma co najmniej jedną treść do wykonania', () => {
-    const params = {
-      date: '2026-09-10',
-      level: 4,
-      categories: realDb.categories.map((category) => ({ id: category.id, count: 1 })),
-    };
-    buildPlan(realDb, params).steps.forEach((step) => {
+    buildPlan(realDb, everyCategory()).steps.forEach((step) => {
       const hasContent = step.variants.some(
         (view) =>
           view.items.length > 0 ||
@@ -232,12 +380,33 @@ describe('plan na pełnej bazie', () => {
     });
   });
 
-  it('powtórzone wywołanie na pełnej bazie daje identyczny plan', () => {
-    const params = {
-      date: '2026-09-10',
-      level: 3,
-      categories: realDb.categories.map((category) => ({ id: category.id, count: 2 })),
+  it('domyślne krańce kategorii nie tną żadnego ćwiczenia', () => {
+    buildPlan(realDb, everyCategory()).steps.forEach((step) => {
+      assert.equal(step.variants.length, step.exercise.variants.length);
+      assert.equal(countItems(step), step.exercise.itemCount);
+    });
+  });
+
+  it('ostrzejsze limity mieszczą się w budżecie', () => {
+    const params = everyCategory();
+    const narrowed = {
+      ...params,
+      categories: params.categories.map((entry) => ({
+        ...entry,
+        variantLimit: Math.min(2, entry.variantLimit),
+        itemLimit: Math.min(6, entry.itemLimit),
+      })),
     };
+    buildPlan(realDb, narrowed).steps.forEach((step) => {
+      assert.ok(step.variants.length <= 2, `krok ponad limit wariantów: ${step.exercise.id}`);
+      if (step.exercise.randomizable) {
+        assert.ok(countItems(step) <= 6, `krok ponad budżet: ${step.exercise.id}`);
+      }
+    });
+  });
+
+  it('powtórzone wywołanie na pełnej bazie daje identyczny plan', () => {
+    const params = everyCategory({ level: 3, count: 2 });
     const first = buildPlan(realDb, params);
     const second = buildPlan(realDb, params);
     assert.deepEqual(exerciseIds(first), exerciseIds(second));

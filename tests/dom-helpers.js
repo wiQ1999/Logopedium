@@ -3,7 +3,7 @@ import { JSDOM, VirtualConsole } from 'jsdom';
 import { loadRawDatabase } from './helpers.js';
 
 const INDEX_HTML = readFileSync(new URL('../src/webapp/index.html', import.meta.url), 'utf8');
-const GLOBALS = ['window', 'document', 'HTMLElement', 'CSS', 'Event', 'KeyboardEvent'];
+const GLOBALS = ['window', 'document', 'HTMLElement', 'CSS', 'Event', 'KeyboardEvent', 'localStorage'];
 
 let instanceCounter = 0;
 
@@ -53,6 +53,17 @@ function installFetch(response) {
   };
 }
 
+/** Magazyn ustawień do podstawienia pod localStorage — przeżywa kolejne uruchomienia aplikacji. */
+export function makeStorage(entries = {}) {
+  const data = new Map(Object.entries(entries));
+  return {
+    data,
+    getItem: (key) => (data.has(key) ? data.get(key) : null),
+    setItem: (key, value) => data.set(key, String(value)),
+    removeItem: (key) => data.delete(key),
+  };
+}
+
 export function jsonResponse(payload) {
   return () => ({
     ok: true,
@@ -72,7 +83,7 @@ export function networkFailure(message = 'fetch failed') {
   };
 }
 
-export async function bootApp({ hash = '#/params', response } = {}) {
+export async function bootApp({ hash = '#/params', response, storage } = {}) {
   const virtualConsole = new VirtualConsole();
   const dom = new JSDOM(INDEX_HTML, {
     url: `http://localhost/${hash}`,
@@ -83,6 +94,9 @@ export async function bootApp({ hash = '#/params', response } = {}) {
   window.scrollTo = () => {};
 
   const restoreGlobals = installGlobals(window);
+  if (storage) {
+    globalThis.localStorage = storage;
+  }
   const restoreFetch = installFetch(response ?? jsonResponse(loadRawDatabase()));
 
   instanceCounter += 1;

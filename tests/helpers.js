@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { buildDatabase } from '../src/webapp/js/data.js';
+import { itemBounds, variantBounds } from '../src/webapp/js/params.js';
 
 const DATABASE_PATH = new URL('../src/webapp/data/database.json', import.meta.url);
 
@@ -22,7 +23,6 @@ export function makeVariant(overrides = {}) {
   return {
     id: 'v1',
     label: null,
-    order: 1,
     type: 'items',
     instructionHtml: null,
     syllablesHtml: null,
@@ -60,9 +60,11 @@ export function makeRawDatabase(overrides = {}) {
     schemaVersion: '1.0',
     generated: '2026-01-01',
     categories: [
-      { id: 'cat-a', name: 'Kategoria A', order: 1 },
-      { id: 'cat-b', name: 'Kategoria B', order: 2 },
-      { id: 'cat-c', name: 'Kategoria C', order: 3 },
+      { id: 'cat-a', name: 'Kategoria A' },
+      { id: 'cat-b', name: 'Kategoria B' },
+      { id: 'cat-c', name: 'Kategoria C' },
+      { id: 'cat-d', name: 'Kategoria D' },
+      { id: 'cat-e', name: 'Kategoria E' },
     ],
     exercises: [
       makeExercise({ id: 'a1', categoryId: 'cat-a', level: 1 }),
@@ -97,9 +99,25 @@ export function makeRawDatabase(overrides = {}) {
         id: 'c2',
         categoryId: 'cat-c',
         variants: [
-          makeVariant({ id: 'c2-w2', order: 2, type: 'prompt', instructionHtml: '<p>Zadanie długoterminowe</p>' }),
-          makeVariant({ id: 'c2-w1', order: 1, type: 'syllables', syllablesHtml: 'ma me my mo mu' }),
+          makeVariant({ id: 'c2-w1', type: 'syllables', syllablesHtml: 'ma me my mo mu' }),
+          makeVariant({ id: 'c2-w2', type: 'prompt', instructionHtml: '<p>Zadanie długoterminowe</p>' }),
         ],
+      }),
+      makeExercise({
+        id: 'd1',
+        categoryId: 'cat-d',
+        variants: [
+          makeVariant({ id: 'd1-w1', label: 'Zadanie 1', items: makeItems('d1-w1', 20) }),
+          makeVariant({ id: 'd1-w2', label: 'Zadanie 2', type: 'text', textHtml: '<p>Tekst bez pozycji</p>' }),
+          makeVariant({ id: 'd1-w3', label: 'Zadanie 3', items: makeItems('d1-w3', 12) }),
+          makeVariant({ id: 'd1-w4', label: 'Zadanie 4', items: makeItems('d1-w4', 6) }),
+          makeVariant({ id: 'd1-w5', label: 'Zadanie 5', items: makeItems('d1-w5', 1) }),
+        ],
+      }),
+      makeExercise({
+        id: 'e1',
+        categoryId: 'cat-e',
+        variants: [makeVariant({ id: 'e1-w1', type: 'text', textHtml: '<p>Sam tekst</p>' })],
       }),
     ],
     duplicates: [],
@@ -112,11 +130,46 @@ export function makeFixtureDatabase(overrides = {}) {
   return buildDatabase(makeRawDatabase(overrides));
 }
 
+/**
+ * Krańce `W` i `P` kategorii bazy testowej. Pokryte są wszystkie cztery układy pól
+ * z APPLICATION §3.3: oba pola (`cat-d`), samo `P` (`cat-a`, `cat-b`), samo `W` (`cat-c`),
+ * żadnego (`cat-e`).
+ */
+export const FIXTURE_BOUNDS = {
+  'cat-a': { variants: 1, items: 12 },
+  'cat-b': { variants: 1, items: 20 },
+  'cat-c': { variants: 2, items: 0 },
+  'cat-d': { variants: 5, items: 39 },
+  'cat-e': { variants: 1, items: 0 },
+};
+
+/** Wpis kategorii: `[id, ćwiczenia]` albo `[id, ćwiczenia, W, P]`; brak limitu = kraniec. */
 export function makeParams(entries, overrides = {}) {
   return {
     date: '2026-09-10',
     level: 4,
-    categories: entries.map(([id, count]) => ({ id, count })),
+    categories: entries.map(([id, count, variantLimit, itemLimit]) => ({
+      id,
+      count,
+      variantLimit: variantLimit ?? FIXTURE_BOUNDS[id].variants,
+      itemLimit: itemLimit ?? FIXTURE_BOUNDS[id].items,
+    })),
+    pick: 'kolejnosc',
+    ...overrides,
+  };
+}
+
+/** To samo dla dołączonej bazy, gdzie krańców nie da się wypisać ręcznie. */
+export function makeDbParams(db, entries, overrides = {}) {
+  const level = overrides.level ?? 4;
+  return {
+    date: '2026-09-10',
+    level,
+    categories: entries.map(([id, count]) => {
+      const variantLimit = variantBounds(db, id, level).max;
+      return { id, count, variantLimit, itemLimit: itemBounds(db, id, level, variantLimit).max };
+    }),
+    pick: 'kolejnosc',
     ...overrides,
   };
 }

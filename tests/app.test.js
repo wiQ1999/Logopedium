@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { after, describe, it } from 'node:test';
-import { bootApp, errorResponse, jsonResponse, networkFailure } from './dom-helpers.js';
+import { bootApp, errorResponse, jsonResponse, makeStorage, networkFailure } from './dom-helpers.js';
+import { STORAGE_KEY } from '../src/webapp/js/settings.js';
 import { loadRawDatabase } from './helpers.js';
 
 const apps = [];
@@ -15,15 +16,16 @@ after(() => {
   apps.forEach((app) => app.teardown());
 });
 
-const SESSION_QUERY = 'd=2026-09-10&l=4&c=samogloski-wyrazista-wymowa:1,gloska-dz:1,wprawki-rymowanki-treningowe:2';
+const SELECTION = 'samogloski-wyrazista-wymowa:1:2:5,gloska-dz:1:4:29,wprawki-rymowanki-treningowe:2:1:8';
+const SESSION_QUERY = `d=2026-09-10&l=4&c=${SELECTION}&o=kolejnosc`;
 
 describe('start aplikacji', () => {
   it('wczytuje bazę i pokazuje parametry sesji', async () => {
     const app = await boot();
     assert.match(app.text(), /Parametry sesji/);
-    assert.equal(app.queryAll('.params-row').length, 25);
-    assert.equal(app.query('#params-total').textContent.trim(), '25 ćwiczeń z 25 kategorii');
-    assert.match(app.query('#app-footer-info').textContent, /schemat 1\.0/);
+    assert.equal(app.queryAll('.params-row').length, 30);
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 kategorii');
+    assert.match(app.query('#app-footer-info').textContent, /schemat 1\.1/);
   });
 
   it('nieznany adres wraca do parametrów', async () => {
@@ -60,7 +62,7 @@ describe('przebieg sesji', () => {
     await app.click('#params-submit');
     assert.match(app.hash(), /^#\/session\/1\?/);
     assert.match(app.hash(), /d=2026-09-10|d=\d{4}-\d{2}-\d{2}/);
-    assert.match(app.text(), /Ćwiczenie 1 z 25/);
+    assert.match(app.text(), /Ćwiczenie 1 z 70/);
   });
 
   it('przechodzi kolejno przez ćwiczenia i kończy podsumowaniem', async () => {
@@ -137,7 +139,7 @@ describe('przebieg sesji', () => {
   });
 
   it('ziarno z adresu zmienia zestaw, a jego brak przywraca zestaw dnia', async () => {
-    const query = 'd=2026-09-10&l=4&c=tekst-do-czytania-terapeutycznego:3';
+    const query = 'd=2026-09-10&l=4&c=tekst-do-czytania-terapeutycznego:3:1:0&o=kolejnosc';
     const titles = async (app, suffix) => {
       const result = [];
       for (let step = 1; step <= 3; step += 1) {
@@ -198,7 +200,7 @@ describe('parametry sesji', () => {
 
     assert.equal(row.dataset.active, 'false');
     assert.equal(row.querySelector('[data-role="count"]').value, '0');
-    assert.equal(app.query('#params-total').textContent.trim(), '24 ćwiczenia z 24 kategorii');
+    assert.equal(app.query('#params-total').textContent.trim(), '60 ćwiczeń z 29 kategorii');
     assert.deepEqual(app.queryAll('.params-row').map((item) => item.dataset.category), before);
   });
 
@@ -238,14 +240,149 @@ describe('parametry sesji', () => {
     await app.click('#params-submit');
     assert.match(app.hash(), /seed=moje-ziarno/);
   });
+
+  it('wiersz pokazuje tylko te pola zakresu, które mają co ograniczać', async () => {
+    const app = await boot();
+    const field = (category, role) => app.query(`#param-${role}-${category}`);
+
+    assert.ok(field('opozycje-fonologiczne', 'variants'), 'kategoria wielowariantowa z pozycjami');
+    assert.ok(field('opozycje-fonologiczne', 'items'));
+
+    assert.ok(field('terapia-miofunkcjonalna-polykanie', 'variants'), 'warianty bez pozycji');
+    assert.equal(field('terapia-miofunkcjonalna-polykanie', 'items'), null);
+
+    assert.equal(field('wprawki-rymowanki-treningowe', 'variants'), null, 'jeden wariant, są pozycje');
+    assert.ok(field('wprawki-rymowanki-treningowe', 'items'));
+
+    assert.equal(field('tekst-do-czytania-terapeutycznego', 'variants'), null, 'nie ma czego ograniczać');
+    assert.equal(field('tekst-do-czytania-terapeutycznego', 'items'), null);
+  });
+
+  it('pola zakresu startują na krańcach swojej kategorii', async () => {
+    const app = await boot();
+    const variants = app.query('#param-variants-opozycje-fonologiczne');
+    const items = app.query('#param-items-opozycje-fonologiczne');
+    assert.deepEqual([variants.value, variants.min, variants.max], ['3', '1', '3']);
+    assert.deepEqual([items.value, items.max], ['58', '58']);
+    assert.equal(app.query('#param-items-wprawki-rymowanki-treningowe').max, '8');
+    assert.equal(app.query('#param-pick').value, 'kolejnosc');
+  });
+
+  it('zmniejszenie liczby wariantów dociąga pozycje tylko w swoim wierszu', async () => {
+    const app = await boot();
+    const variants = app.query('#param-variants-opozycje-fonologiczne');
+    variants.value = '1';
+    variants.dispatchEvent(new app.window.Event('input', { bubbles: true }));
+
+    const items = app.query('#param-items-opozycje-fonologiczne');
+    assert.equal(items.max, '30');
+    assert.equal(items.value, '30');
+    assert.equal(
+      app.query('[data-category="opozycje-fonologiczne"] [data-role="item-limit-range"]').textContent,
+      '1–30',
+    );
+    assert.equal(app.query('#param-items-gloska-dz').value, '29');
+  });
+
+  it('limity kategorii i tryb doboru trafiają do adresu sesji', async () => {
+    const app = await boot();
+    const variants = app.query('#param-variants-opozycje-fonologiczne');
+    variants.value = '2';
+    variants.dispatchEvent(new app.window.Event('input', { bubbles: true }));
+    const items = app.query('#param-items-opozycje-fonologiczne');
+    items.value = '5';
+    items.dispatchEvent(new app.window.Event('input', { bubbles: true }));
+    const pick = app.query('#param-pick');
+    pick.value = 'losowo';
+    pick.dispatchEvent(new app.window.Event('change', { bubbles: true }));
+
+    await app.click('#params-submit');
+    assert.match(app.hash(), /opozycje-fonologiczne:2:2:5/);
+    assert.match(app.hash(), /tekst-do-czytania-terapeutycznego:23:1:0/);
+    assert.match(app.hash(), /o=losowo/);
+  });
+});
+
+describe('zapamiętywanie ustawień', () => {
+  it('zatwierdzenie parametrów zapisuje ustawienia w przeglądarce', async () => {
+    const storage = makeStorage();
+    const app = await boot({ storage });
+    assert.equal(storage.data.has(STORAGE_KEY), false);
+
+    await app.click('#params-submit');
+    assert.ok(storage.data.has(STORAGE_KEY));
+    const stored = JSON.parse(storage.data.get(STORAGE_KEY));
+    assert.equal(stored.level, 4);
+    assert.deepEqual(stored.categories.find((entry) => entry.id === 'opozycje-fonologiczne'), {
+      id: 'opozycje-fonologiczne',
+      count: 2,
+      variantLimit: 3,
+      itemLimit: 58,
+    });
+  });
+
+  it('ustawienia wracają przy kolejnym otwarciu aplikacji', async () => {
+    const storage = makeStorage();
+    const first = await boot({ storage });
+    const level = first.query('#param-level');
+    level.value = '2';
+    level.dispatchEvent(new first.window.Event('change', { bubbles: true }));
+    const variants = first.query('#param-variants-opozycje-fonologiczne');
+    variants.value = '1';
+    variants.dispatchEvent(new first.window.Event('input', { bubbles: true }));
+    await first.click('#params-submit');
+
+    const second = await boot({ storage });
+    assert.equal(second.query('#param-level').value, '2');
+    assert.equal(second.query('#param-variants-opozycje-fonologiczne').value, '1');
+    assert.equal(second.query('#param-items-opozycje-fonologiczne').value, '30');
+  });
+
+  it('parametry z adresu mają pierwszeństwo przed zapisem', async () => {
+    const storage = makeStorage();
+    const first = await boot({ storage });
+    const variants = first.query('#param-variants-gloska-dz');
+    variants.value = '1';
+    variants.dispatchEvent(new first.window.Event('input', { bubbles: true }));
+    await first.click('#params-submit');
+    assert.match(first.hash(), /gloska-dz:1:1:/);
+
+    const second = await boot({ storage, hash: `#/session/2?${SESSION_QUERY}` });
+    assert.match(second.text(), /Ćwiczenie 2 z 4/);
+    assert.equal(second.queryAll('.exercise-card .variant').length, 4);
+  });
+
+  it('przywrócenie domyślnych czyści zapis i formularz', async () => {
+    const storage = makeStorage();
+    const app = await boot({ storage });
+    const level = app.query('#param-level');
+    level.value = '1';
+    level.dispatchEvent(new app.window.Event('change', { bubbles: true }));
+    await app.click('#params-submit');
+    assert.ok(storage.data.has(STORAGE_KEY));
+
+    await app.goto('#/params');
+    await app.click('[data-role="reset"]');
+    assert.equal(storage.data.has(STORAGE_KEY), false);
+    assert.equal(app.query('#param-level').value, '4');
+    assert.equal(app.query('#param-items-opozycje-fonologiczne').value, '58');
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 kategorii');
+  });
+
+  it('uszkodzony zapis jest pomijany bez komunikatu', async () => {
+    const storage = makeStorage({ [STORAGE_KEY]: 'to nie jest JSON' });
+    const app = await boot({ storage });
+    assert.match(app.text(), /Parametry sesji/);
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 kategorii');
+  });
 });
 
 describe('przeglądanie bazy', () => {
   it('pokazuje całą bazę pogrupowaną po kategoriach', async () => {
     const app = await boot({ hash: '#/browse' });
-    assert.equal(app.queryAll('.browse-item').length, 54);
-    assert.equal(app.queryAll('.browse-group').length, 25);
-    assert.match(app.text(), /Znaleziono 54 ćwiczenia/);
+    assert.equal(app.queryAll('.browse-item').length, 70);
+    assert.equal(app.queryAll('.browse-group').length, 30);
+    assert.match(app.text(), /Znaleziono 70 ćwiczeń/);
   });
 
   it('wyszukiwanie zawęża listę i zapisuje się w adresie', async () => {

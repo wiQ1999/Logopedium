@@ -4,6 +4,7 @@ import {
   createDefaultParams,
   decodeParams,
   encodeParams,
+  loadStoredParams,
   mount as mountParams,
   paramsSignature,
   totalExercises,
@@ -40,7 +41,7 @@ const app = {
 
   sessionQuery() {
     const encoded = encodeParams(app.plan.params);
-    const parts = [`d=${encoded.d}`, `l=${encoded.l}`, `c=${encoded.c}`];
+    const parts = [`d=${encoded.d}`, `l=${encoded.l}`, `c=${encoded.c}`, `o=${encoded.o}`];
     if (app.plan.seedOverride) {
       parts.push(`seed=${encodeURIComponent(app.plan.seedOverride)}`);
     }
@@ -189,11 +190,12 @@ async function start() {
     return;
   }
 
-  app.params = createDefaultParams(app.db);
-  if (totalExercises(app.params) === 0) {
+  const defaults = createDefaultParams(app.db);
+  if (totalExercises(defaults) === 0) {
     renderLoadError(new DatabaseError('Baza nie zawiera ćwiczeń możliwych do wylosowania.', []));
     return;
   }
+  app.params = loadStoredParams(app.db) ?? defaults;
 
   renderFooter();
   window.addEventListener('hashchange', render);
