@@ -28,8 +28,8 @@ Każdy stan ma własny adres.
 
 ### 3.1 Kategorie
 
-Jedna lista obsługująca aktywność kategorii, zakres pobieranego z niej materiału oraz kolejność
-w sesji wyznaczaną pozycją na liście. Wiersz kategorii niesie do trzech liczb:
+Jedna lista: aktywność kategorii, zakres pobieranego z niej materiału oraz kolejność w sesji,
+wyznaczona pozycją wiersza. Wiersz niesie do trzech liczb:
 
 | Pole | Znaczenie |
 |---|---|
@@ -43,8 +43,8 @@ Pola `W` i `P` pojawiają się tylko tam, gdzie mają co ograniczać (§3.3).
   a jej `W` i `P` pozostają zapamiętane.
 - Maksimum liczby ćwiczeń to liczba dostępnych w kategorii przy ustawionym poziomie, widoczna przy polu.
 - Sterowanie liczbą ćwiczeń, nie czasem sesji — czasu wykonania ćwiczenia nie da się oszacować.
-- `W` i `P` obowiązują wyłącznie ćwiczenia z własnej kategorii. Ta sama liczba w dwóch
-  kategoriach znaczy co innego, bo krańce wynikają z ich zawartości (§3.3).
+- `W` i `P` obowiązują wyłącznie ćwiczenia z własnej kategorii, a ich krańce wynikają z jej
+  zawartości — ta sama liczba w dwóch kategoriach znaczy co innego (§3.3).
 
 ### 3.2 Pozostałe parametry
 
@@ -77,7 +77,8 @@ zmienia niczego.
 `P` zależy od `W` tej samej kategorii i przelicza się przy każdej jego zmianie; wartość spoza
 zakresu jest dociągana do krańca.
 
-- **minimum** — `W`, czyli jedna pozycja na każdy wskazany wariant.
+- **minimum** — `W`, czyli jedna pozycja na każdy wskazany wariant; w kategorii uboższej
+  w pozycje niż w warianty minimum schodzi do jej maksimum.
 - **maksimum** — największa suma pozycji, jaką da się złożyć z `W` najbogatszych wariantów
   jednego ćwiczenia tej kategorii.
 
@@ -86,20 +87,17 @@ pozycji, a one żadnej nie wnoszą. Do `W` liczą się normalnie, jak każdy inn
 
 #### Kategorie bez materiału do ograniczania
 
-Pole pojawia się w wierszu tylko wtedy, gdy jest z czego wybierać:
+Pole pojawia się tylko wtedy, gdy jest z czego wybierać:
 
-- Kategoria, w której każde ćwiczenie ma jeden wariant, nie dostaje pola `W`. W obecnej bazie
-  7 kategorii z 30.
-- Kategoria złożona wyłącznie z wariantów bez pozycji nie dostaje pola `P`; jej materiał
-  podawany jest w całości. W obecnej bazie: „tekst do czytania terapeutycznego” (23 ćwiczenia)
-  oraz „terapia miofunkcjonalna — połykanie”.
+- kategoria o samych ćwiczeniach jednowariantowych nie dostaje pola `W` — w obecnej bazie 7 z 30;
+- kategoria bez pozycji nie dostaje pola `P`, a jej materiał podawany jest w całości —
+  w obecnej bazie „tekst do czytania terapeutycznego” (23 ćwiczenia) oraz „terapia
+  miofunkcjonalna — połykanie”.
 
-Oba przypadki są niezależne: kategoria jednowariantowa miewa pozycje do ograniczania, a kategoria
-bez pozycji — kilka wariantów. Wiersz niesie więc od jednego do trzech pól. Ukrycie pola nie
-zmienia wartości wchodzącej do planu sesji — pozostaje nią jedyny możliwy kraniec, `W` = 1
-albo `P` = 0.
+Przypadki są niezależne, więc wiersz niesie od jednej do trzech liczb. Ukryte pole zachowuje
+swoją jedyną możliwą wartość — `W` = 1 albo `P` = 0 — i tyle wchodzi do planu sesji.
 
-Krańce w obecnej bazie sięgają `W` = 6 i `P` = 58 („opozycje fonologiczne”); najuboższe
+Krańce w obecnej bazie sięgają `W` = 6 i `P` = 58 („opozycje fonologiczne”), a najuboższe
 kategorie z pozycjami zatrzymują się na `P` = 5.
 
 #### Podział `P` między warianty
@@ -110,7 +108,8 @@ wylosowane warianty **mające pozycje**. Kolejno:
 1. Każdy taki wariant dostaje 2 pozycje, o ile budżet starcza i wariant tyle ma. Wariant
    z jedną pozycją dostaje jedną, a zaoszczędzona pozycja zasila pozostałe.
 2. Gdy budżet nie pokrywa dwóch pozycji na wariant, każdy dostaje po jednej, a reszta trafia
-   tam, gdzie starczy. Ponieważ `P ≥ W`, żaden wylosowany wariant nie zostaje pusty.
+   tam, gdzie starczy. Minimum `P` nie schodzi poniżej liczby wariantów z pozycjami, więc żaden
+   z nich nie zostaje pusty.
 3. Pozostały budżet rozdzielany jest losowo, nie proporcjonalnie — krótki i długi wariant mogą
    stanąć obok siebie zamiast równych porcji.
 4. Przydział większy niż zasób wariantu jest przycinany, a nadwyżka wraca do podziału.
@@ -145,9 +144,8 @@ poprzedniej sesji nie jest przenoszony.
 ### 3.7 Zapamiętywanie między wizytami
 
 Ustawienia przeżywają zamknięcie przeglądarki i wracają przy kolejnym otwarciu, także po
-kilku dniach. Zapamiętywane są wszystkie parametry z §3.1 i §3.2 poza datą.
-
-Nie są zapamiętywane: data sesji, ziarno, postęp w sesji, tryb oznaczeń (§6.4).
+kilku dniach. Zapamiętywane są wszystkie parametry z §3.1 i §3.2 poza datą; poza zapisem
+zostają także ziarno, postęp w sesji i tryb oznaczeń (§6.4).
 
 - Zapis następuje przy zatwierdzeniu parametrów, nie przy każdej zmianie pola.
 - Odczyt podlega tej samej walidacji co parametry z adresu: wartości spoza zakresu są

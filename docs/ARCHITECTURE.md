@@ -87,7 +87,7 @@ Wybrany mechanizm: **`localStorage`**, klucz `logopedium.params`, wartość JSON
 |---|---|
 | `localStorage` | **wybrany** — trwały, pojemny, synchroniczny, nie obciąża zapytań |
 | `sessionStorage` | odrzucony — znika przy zamknięciu karty |
-| ciasteczka | odrzucone — limit ~4 kB nie mieści listy 30 kategorii, doklejane do każdego zapytania |
+| ciasteczka | odrzucone — zapis po zakodowaniu ma ~3,8 kB przy limicie ~4 kB na ciasteczko, a doklejałby się do każdego zapytania |
 | IndexedDB | odrzucony — asynchroniczne API nieproporcjonalne do kilkuset bajtów ustawień |
 
 Zasady:
@@ -106,16 +106,17 @@ Zasady:
 Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 
 ```
-#/session/3?d=2026-09-10&l=4&c=gloska-dz:1:2:12,tekst-do-czytania:2:1:0&o=kolejnosc&seed=...
+#/session/3?d=2026-09-10&l=4&c=gloska-dz:1:2:12,wprawki-rymowanki-treningowe:2:1:8&o=kolejnosc&seed=...
 ```
 
 - Adres jest jedynym nośnikiem stanu konkretnej sesji, który przeżywa przeładowanie
   i daje się przekazać dalej; `localStorage` niesie wyłącznie wartości początkowe formularza.
 - Kategorie identyfikowane po `id`, nie po indeksie — indeks rozjechałby się po zmianie bazy.
 - `c` wymienia tylko kategorie aktywne, w kolejności wyświetlania; nieaktywne wracają
-  na pozycje domyślne. Każdy wpis to `id:ćwiczenia:W:P` — komplet, także gdy formularz ukrył
-  pole `W` albo `P` (APPLICATION §3.3); adres niesie wartości obowiązujące, nie stan interfejsu.
-  Składniki urwane przy ręcznej edycji przyjmują krańce swojej kategorii.
+  na pozycje domyślne.
+- Wpis w `c` to `id:ćwiczenia:W:P`, zawsze komplet — także gdy formularz ukrył pole `W` albo `P`
+  (APPLICATION §3.3), bo adres niesie wartości obowiązujące, nie stan interfejsu. Składniki
+  urwane przy ręcznej edycji przyjmują krańce swojej kategorii.
 - Wartości spoza zakresu są przycinane przy odczycie — ręcznie zmieniony adres nie psuje aplikacji.
 - Tryb przeglądania trzyma w adresie filtry i aktualizuje je przez `replaceState`,
   żeby nie zaśmiecać historii.
@@ -154,9 +155,10 @@ Wprowadzenie edycji bazy lub importu danych wymaga przeprojektowania mechanizmu 
 
 **Powtarzalność losowania.** Generator z ziarnem zwraca tę samą sekwencję tylko przy tej samej
 kolejności pobierania liczb. Kod budujący plan musi przetwarzać dane w porządku w pełni
-określonym: sortowanie po jednoznacznym kryterium przed każdą iteracją, porównanie kodowe
-zamiast zależnego od ustawień językowych, brak odwołań do wbudowanego generatora losowego,
-brak polegania na kolejności wstawiania do struktur pomocniczych.
+określonym: kolejność z tablicy tam, gdzie niesie ją plik, sortowanie po identyfikatorze
+wszędzie indziej, porównanie kodowe zamiast zależnego od ustawień językowych, brak odwołań
+do wbudowanego generatora losowego, brak polegania na kolejności wstawiania do struktur
+pomocniczych.
 
 **Rozdzielenie faz.** Dobór ćwiczeń, dobór wariantów i dobór pozycji to osobne fazy
 (APPLICATION §5.2). Faza wariantów i pozycji korzysta z ziarna pochodnego liczonego

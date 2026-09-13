@@ -34,8 +34,8 @@ python -m http.server 4173 --directory src/webapp
 npm test
 ```
 
-Wbudowany `node --test`: warstwa danych, losowanie, parametry i dobór ćwiczeń, a także widoki
-i trasy na `jsdom` — jedynej zależności deweloperskiej. Aplikacja nie ma zależności.
+Wbudowany `node --test`: warstwa danych, losowanie, parametry, dobór ćwiczeń i zapis ustawień,
+a także widoki i trasy na `jsdom` — jedynej zależności deweloperskiej. Aplikacja nie ma zależności.
 
 ## Publikacja
 

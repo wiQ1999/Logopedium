@@ -153,13 +153,12 @@ rozjechać się z rzeczywistością po ręcznej edycji.
 rozstrzyga `variants[].type` — `text`, `syllables` i `prompt` nigdy się nie dzielą,
 `items` zawsze można ciąć.
 
-**Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego" obejmuje 23 z 70
-ćwiczeń, „rozgrzewka" kolejnych 10. Ważenie kategorii nie zostało wprowadzone — steruje tym
+**Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego” obejmuje 23 z 70
+ćwiczeń, „rozgrzewka” kolejnych 10. Ważenie kategorii nie zostało wprowadzone — steruje tym
 liczba ćwiczeń w parametrach.
 
-**Rozkład wariantów.** 42 z 70 ćwiczeń ma jeden wariant, pozostałe 2, 3, 4 albo 6. Limit
-wariantów z parametrów sesji dotyczy wyłącznie tych drugich. 27 ćwiczeń nie ma w ogóle pozycji
-(same `text`, `syllables`, `prompt`), a 6 wariantów ma po jednej pozycji.
+**Rozkład wariantów.** 42 z 70 ćwiczeń ma jeden wariant, pozostałe 2, 3, 4 albo 6. 27 ćwiczeń
+nie ma w ogóle pozycji (same `text`, `syllables`, `prompt`), a 6 wariantów ma po jednej pozycji.
 
 **Poziom trudności bywa nieokreślony.** 54 z 70 ćwiczeń ma `level: null`; poziomy 1–4 mają
 kolejno 1, 3, 4 i 8 ćwiczeń. 35 ćwiczeń ma `randomizable: false`.
@@ -187,7 +186,7 @@ pozostaje wierna.
 ## Prawa autorskie
 
 Materiał pochodzi z publikacji chronionych prawem autorskim: Wydawnictwo Harmonia /
-SCTJ Wodzisław Śląski (seria „Teksty do czytania terapeutycznego"),
-A. Walencik-Topiłko „Głos jako narzędzie", ćwiczenia w konwencji B. Toczyskiej,
+SCTJ Wodzisław Śląski (seria „Teksty do czytania terapeutycznego”),
+A. Walencik-Topiłko „Głos jako narzędzie”, ćwiczenia w konwencji B. Toczyskiej,
 oraz materiał autorski terapeuty. Pliki są transkrypcją skanów właściciela projektu.
 Przed udostępnieniem aplikacji poza użytek własny należy uregulować licencje.
