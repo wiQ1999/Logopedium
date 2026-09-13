@@ -164,16 +164,21 @@ wariantów z parametrów sesji dotyczy wyłącznie tych drugich. 27 ćwiczeń ni
 **Poziom trudności bywa nieokreślony.** 54 z 70 ćwiczeń ma `level: null`; poziomy 1–4 mają
 kolejno 1, 3, 4 i 8 ćwiczeń. 35 ćwiczeń ma `randomizable: false`.
 
-**Maksymalny budżet pozycji.** Kraniec parametru `P` (APPLICATION §3.3) liczony z obecnej bazy:
+**Krańce parametrów sesji.** `W` i `P` (APPLICATION §3.3) liczone są osobno dla każdej
+kategorii, z jej własnych ćwiczeń. Rozpiętość w obecnej bazie:
 
-| `W` | 1 | 2 | 3 i więcej |
-|---|---|---|---|
-| min `P` | 1 | 2 | `W` |
-| maks. `P` | 30 | 46 | 58 |
+| | najwyżej | najniżej |
+|---|---|---|
+| maks. `W` | 6 — `sygmatyzm-miedzyzebowy-cwiczenia-ze-szpatulka`, `gloski-nosowe-wzmocnienie-naglosu` | 1 — 7 kategorii jednowariantowych |
+| maks. `P` | 58 — `opozycje-fonologiczne` | 0 — 2 kategorie bez pozycji |
 
-Maksima pochodzą z `opozycje-c-cz-w-jednym-wyrazie` — jedynego ćwiczenia o wariantach
-30 + 16 + 12 pozycji. Warianty bez pozycji nie wchodzą do tego rachunku. Ćwiczenie to ma
-`level: null`, więc krańce nie zmieniają się wraz z filtrem poziomu.
+Maksimum 58 pochodzi z `opozycje-c-cz-w-jednym-wyrazie` (warianty 30 + 16 + 12 pozycji);
+warianty bez pozycji nie wchodzą do rachunku `P`.
+
+Kraniec równy 1 dla `W` albo 0 dla `P` oznacza kategorię, w której nie ma czego ograniczać —
+formularz nie pokazuje wtedy tego pola (APPLICATION §3.3). Bez pozycji są
+`tekst-do-czytania-terapeutycznego` (23 ćwiczenia, same `text`) oraz
+`terapia-miofunkcjonalna-polykanie` (`prompt`); ich materiał podawany jest w całości.
 
 **Materiał do korekty.** 9 ćwiczeń ma `readQuality: "do_weryfikacji"`. Kolejnych 20 ma
 w `notes` adnotację, że warstwa legato jest miejscami przybliżona; warstwa głoski docelowej

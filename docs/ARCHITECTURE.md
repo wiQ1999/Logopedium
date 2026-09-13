@@ -52,6 +52,7 @@ logopedium/
       │  ├─ picker.js         # budowa planu sesji
       │  ├─ session.js        # przechodzenie przez ćwiczenia
       │  ├─ browse.js         # przeglądanie bazy
+      │  ├─ settings.js       # trwały zapis ustawień w przeglądarce
       │  └─ render.js         # wyświetlanie treści
       │
       ├─ data/database.json   # kompletna baza ćwiczeń
@@ -79,7 +80,8 @@ z dysku blokuje pobranie bazy. Ograniczenie dotyczy wyłącznie pracy lokalnej.
 Aplikacja zapamiętuje parametry sesji między wizytami (APPLICATION §3.7), wyłącznie po
 stronie przeglądarki: bez backendu, bazy scentralizowanej i konta użytkownika.
 
-Wybrany mechanizm: **`localStorage`**, jeden klucz, wartość JSON z numerem wersji kształtu zapisu.
+Wybrany mechanizm: **`localStorage`**, klucz `logopedium.params`, wartość JSON z polem `version`
+(kształt zapisu, niezależny od wersji bazy).
 
 | Mechanizm | Ocena |
 |---|---|
@@ -104,14 +106,16 @@ Zasady:
 Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 
 ```
-#/session/3?d=2026-09-10&l=4&c=gloska-dz:1,tekst-do-czytania:2&w=2&p=12&o=kolejnosc&seed=...
+#/session/3?d=2026-09-10&l=4&c=gloska-dz:1:2:12,tekst-do-czytania:2:1:0&o=kolejnosc&seed=...
 ```
 
 - Adres jest jedynym nośnikiem stanu konkretnej sesji, który przeżywa przeładowanie
   i daje się przekazać dalej; `localStorage` niesie wyłącznie wartości początkowe formularza.
 - Kategorie identyfikowane po `id`, nie po indeksie — indeks rozjechałby się po zmianie bazy.
 - `c` wymienia tylko kategorie aktywne, w kolejności wyświetlania; nieaktywne wracają
-  na pozycje domyślne.
+  na pozycje domyślne. Każdy wpis to `id:ćwiczenia:W:P` — komplet, także gdy formularz ukrył
+  pole `W` albo `P` (APPLICATION §3.3); adres niesie wartości obowiązujące, nie stan interfejsu.
+  Składniki urwane przy ręcznej edycji przyjmują krańce swojej kategorii.
 - Wartości spoza zakresu są przycinane przy odczycie — ręcznie zmieniony adres nie psuje aplikacji.
 - Tryb przeglądania trzyma w adresie filtry i aktualizuje je przez `replaceState`,
   żeby nie zaśmiecać historii.

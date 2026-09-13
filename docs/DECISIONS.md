@@ -5,6 +5,55 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-13 — limity `W` i `P` per kategoria
+
+Korekta decyzji z tego samego dnia: limity przestają być wspólne dla sesji i stają się polami
+wiersza kategorii. Wymagania: APPLICATION §3.1–§3.3, §3.5; ARCHITECTURE §6.
+
+- **`W` i `P` ustawiane osobno w każdej kategorii.** Jedna para liczb dla całej sesji zrównywała
+  materiał nieporównywalny: 23 jednowariantowe teksty do czytania z trzywariantowymi opozycjami
+  fonologicznymi.
+- **Krańce liczone z zawartości samej kategorii**, nie z całej bazy. Argument za niezależnością
+  od aktywnych kategorii odpada — kraniec należy teraz do kategorii, więc zmienia go wyłącznie poziom.
+- **Pole `W` albo `P` znika z wiersza, gdy nie ma czego ograniczać**, zamiast być nieaktywne:
+  licznik o jednej możliwej wartości niczym nie steruje, a zajmuje miejsce i sugeruje wybór.
+  W obecnej bazie 7 kategorii traci `W`, a 2 tracą `P`.
+- **`Dobór` zostaje jeden na sesję** — rozstrzyga sposób brania podzbioru, nie jego rozmiar,
+  więc nie ma czego różnicować między kategoriami.
+- **Limity wędrują do parametru `c` jako `id:ćwiczenia:W:P`** zamiast osobnych `w` i `p`.
+  Trzymane przy identyfikatorze kategorii nie rozjadą się z listą po zmianie bazy. Adres zawsze
+  niesie obie liczby, także ukryte: skracanie wpisu wymagałoby rozstrzygania, którego pola
+  zabrakło, bo `W` i `P` znikają niezależnie od siebie.
+- **Formularz rośnie do trzech pól w wierszu**, mniej tam, gdzie nie ma czego ograniczać.
+  Przyjęte świadomie: wartości domyślne wypełniają je same, a zmienia się tylko te kategorie,
+  które tego wymagają. Adres domyślnej sesji ma przy tym ~1,2 kB.
+- **Wersja zapisu ustawień podniesiona do 2.** Limity zeszły z korzenia zapisu do wpisów
+  kategorii, więc stare zapisy są odrzucane w całości, zgodnie z ARCHITECTURE §5.
+
+---
+
+## 2026-09-13 — wdrożenie zmian założeń
+
+Kod dogoniony do APPLICATION §3 i §5 oraz ARCHITECTURE §5. Walidator i sortowanie w `data.js`
+nie wymagają już pola `order`, więc baza 1.1 się wczytuje.
+
+- **Ziarno pochodne to `<ziarno sesji>|<id ćwiczenia>`.** Każdy krok dostaje własny generator,
+  więc zmiana `W`, `P` albo trybu doboru nie przesuwa sekwencji w pozostałych krokach.
+- **Reszta budżetu rozdawana losowymi porcjami**, nie po jednej pozycji: przydzielanie
+  pojedynczo zbiegałoby do równych porcji, czyli do rozkładu, który został odrzucony.
+- **Włączenie kategorii przełącznikiem ustawia wszystkie dostępne ćwiczenia**, tak samo jak
+  wartości początkowe — przełącznik przywraca stan domyślny kategorii, nie wymyśla własnego.
+- **Brak limitu albo trybu doboru w adresie oznacza kraniec, nie zapis z przeglądarki.** Adres
+  pozostaje jedynym nośnikiem stanu konkretnej sesji. *(Parametry `w` i `p` zastąpione tego
+  samego dnia przez składniki wpisu `c`.)*
+- **Kategoria w adresie bez dwukropka i liczby oznacza wszystkie dostępne ćwiczenia.**
+- **Adres domyślnej sesji wymienia wszystkie 30 aktywnych kategorii.** Skracanie go odrzucone:
+  indeksy zamiast identyfikatorów rozjechałyby się po zmianie bazy.
+- **Przycisk „Przywróć domyślne” czyści zapis i formularz naraz** — jedno działanie, zgodnie
+  z APPLICATION §3.7.
+
+---
+
 ## 2026-09-13 — baza `schemaVersion` 1.1
 
 Wgrana nowa zawartość `database.json`: 30 kategorii i 70 ćwiczeń wobec 25 i 54, nic nie usunięto.
@@ -40,7 +89,8 @@ wdrożone w kodzie.
   najbogatszemu ćwiczeniu przy tylu wariantach. Minimum `2 × W` odrzucone — baza zawiera
   warianty z jedną pozycją, więc taki kraniec obiecywałby materiał, którego nie ma.
 - **Maksimum liczone po filtrze poziomu, ale niezależnie od aktywnych kategorii**, żeby kraniec
-  pola nie skakał przy każdym przełączeniu kategorii.
+  pola nie skakał przy każdym przełączeniu kategorii. *(Zastąpione tego samego dnia przez krańce
+  liczone z zawartości pojedynczej kategorii.)*
 - **Warianty bez pozycji pomijane przy liczeniu zakresu `P`**, zamiast liczone jako jedna pozycja.
   Obie reguły dają w obecnej bazie te same krańce, ale pominięcie nie wprowadza pozycji, która
   nigdy się nie wyświetli; do `W` warianty te liczą się normalnie.
