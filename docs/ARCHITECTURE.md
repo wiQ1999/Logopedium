@@ -85,7 +85,7 @@ Wybrany mechanizm: **`localStorage`**, jeden klucz, wartość JSON z numerem wer
 |---|---|
 | `localStorage` | **wybrany** — trwały, pojemny, synchroniczny, nie obciąża zapytań |
 | `sessionStorage` | odrzucony — znika przy zamknięciu karty |
-| ciasteczka | odrzucone — limit ~4 kB nie mieści listy 25 kategorii, doklejane do każdego zapytania |
+| ciasteczka | odrzucone — limit ~4 kB nie mieści listy 30 kategorii, doklejane do każdego zapytania |
 | IndexedDB | odrzucony — asynchroniczne API nieproporcjonalne do kilkuset bajtów ustawień |
 
 Zasady:

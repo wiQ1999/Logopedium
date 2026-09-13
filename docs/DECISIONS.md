@@ -5,6 +5,24 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-13 — baza `schemaVersion` 1.1
+
+Wgrana nowa zawartość `database.json`: 30 kategorii i 70 ćwiczeń wobec 25 i 54, nic nie usunięto.
+Nowe kategorie to `rozgrzewka`, `terapia-miofunkcjonalna-polykanie`,
+`technika-legato-cwiczenia-bazowe`, `sygmatyzm-miedzyzebowy-cwiczenia-ze-szpatulka`
+i `gloski-dziaslowe-wywolanie-i-roznicowanie`.
+
+- **Pole `order` usunięte z `categories[]` i z `variants[]`; kolejność niesie tablica.** Pozycja
+  zapisana obok kolejności w tablicy mogła się z nią rozjechać przy ręcznej edycji.
+- **`schemaVersion` podniesiona do 1.1** — to zmiana kształtu struktury, a wersja wchodzi
+  do ziarna losowania, więc sesje sprzed aktualizacji nie odtworzą się z tym samym zestawem.
+- **Walidator i sortowanie w `data.js` wymagają zmiany**, zanim baza się wczyta: dziś twardo
+  wymagają `order` i zgłaszają 162 niezgodności (30 kategorii + 132 warianty).
+- **Krańce `W` i `P` bez zmian** (6 i 58) — nowe ćwiczenia są krótsze od dotychczasowego
+  rekordzisty, więc parametry sesji nie wymagają korekty.
+
+---
+
 ## 2026-09-13 — zmiana założeń
 
 Wymagania: APPLICATION §3.2–§3.5, §3.7, §5.2, §6.2; ARCHITECTURE §5. Zmiany nie są jeszcze
@@ -36,7 +54,7 @@ wdrożone w kodzie.
 - **Limity i tryb doboru nie wchodzą do ziarna, tylko do fazy na ziarnie pochodnym.** Inaczej
   zmiana limitu przelosowałaby również to, które ćwiczenia trafiają do sesji.
 - **Parametry zapamiętywane w `localStorage`.** Jedyny mechanizm bez backendu, który jest
-  trwały między dniami i mieści listę 25 kategorii (ciasteczka nie mieszczą).
+  trwały między dniami i mieści listę kategorii (ciasteczka nie mieszczą).
 - **Wartości domyślne to sesja nieograniczona.** Brak predefiniowanego zestawu startowego —
   domyślne wynikają z zawartości bazy, co upraszcza logikę i nie faworyzuje żadnej kategorii.
 - **Data nie jest zapamiętywana ani formatowana własnym zapisem.** Data z poprzedniej wizyty
@@ -55,7 +73,7 @@ Pierwsza działająca aplikacja. Baza `schemaVersion 1.0`, wygenerowana 2026-09-
 
 **Interpretacje wymagań**
 
-- **`level: null` przechodzi filtr poziomu zawsze** (38 z 54 ćwiczeń). Poziom jest górnym
+- **`level: null` przechodzi filtr poziomu zawsze** (wtedy 38 z 54 ćwiczeń). Poziom jest górnym
   limitem, więc brak zadeklarowanego poziomu nie może go przekroczyć.
 - **Polecenie identyczne we wszystkich wariantach wyświetlane raz.** Baza duplikuje je
   w każdym wariancie — bez tej reguły jedno ćwiczenie powtarzało polecenie sześć razy.
@@ -94,7 +112,7 @@ Pierwsza działająca aplikacja. Baza `schemaVersion 1.0`, wygenerowana 2026-09-
 
 **Świadome ograniczenia**
 
-- Dominująca kategoria „tekst do czytania terapeutycznego” (23 z 54 ćwiczeń) nie została
+- Dominująca kategoria „tekst do czytania terapeutycznego” (23 ćwiczenia) nie została
   rozbita w danych — ten sam cel realizuje liczba ćwiczeń w kategorii, bez ingerencji w bazę.
 - `phonemes` i `positions` są widoczne w metryce ćwiczenia, ale nie służą jako filtry.
 - Miejsca na odpowiedź renderowane jako linia, bez mechaniki odsłaniania.

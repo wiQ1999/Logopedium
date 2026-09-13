@@ -1,13 +1,15 @@
 # Schemat pliku `database.json`
 
 Statyczna baza danych aplikacji: `src/webapp/data/database.json`, wczytywany raz przy starcie.
-Wersja schematu: **1.0**. Rozmiar ~486 kB, ~56 kB po gzipie.
+Wersja schematu: **1.1**. Rozmiar ~535 kB, ~64 kB po gzipie.
+
+Zawartość: 30 kategorii, 70 ćwiczeń, 132 warianty, 735 pozycji.
 
 ## Struktura
 
 ```
 schemaVersion, generated
-categories[]          kolejność wyświetlania (order)
+categories[]          kolejność wyświetlania = kolejność w tablicy
 exercises[]           jeden skan = jedno ćwiczenie
   variants[]          zadania w obrębie ćwiczenia
     items[]           pojedyncze pozycje do losowania
@@ -30,7 +32,8 @@ nonTextMaterials[]    skany bez zadań
 |---|---|---|
 | `id` | string | klucz techniczny, referowany przez `exercises[].categoryId` |
 | `name` | string | nazwa czytelna dla użytkownika |
-| `order` | number | pozycja w sesji, unikalna, od 1; niższa = wcześniej |
+
+Kolejność kategorii wynika z ich kolejności w tablicy — nie ma osobnego pola pozycji.
 
 ### `exercises[]`
 
@@ -60,7 +63,6 @@ nonTextMaterials[]    skany bez zadań
 |---|---|---|
 | `id` | string | unikalny w pliku, stabilny |
 | `label` | string \| null | nagłówek wariantu; `null` gdy ćwiczenie jest jednowariantowe |
-| `order` | number | kolejność w obrębie ćwiczenia, od 1 |
 | `type` | string | decyduje o renderowaniu, patrz niżej |
 | `instructionHtml` | string \| null | polecenie wariantu; `null` → użyj `exercises[].instructionHtml` |
 | `syllablesHtml` | string \| null | wiersz sylab treningowych przed pozycjami; wyświetlany raz, nie losowany |
@@ -69,14 +71,16 @@ nonTextMaterials[]    skany bez zadań
 | `examples` | string[] | przykłady wzorcowe z oryginału — podpowiedź, **nie** losowane |
 | `items` | object[] | pozycje do losowania; puste dla `text`, `syllables`, `prompt` |
 
+Kolejność wariantów w ćwiczeniu wynika z ich kolejności w tablicy — nie ma osobnego pola pozycji.
+
 #### wartości `type`
 
 | Wartość | Ile | Renderowanie |
 |---|---|---|
-| `items` | 64 | lista niezależnych pozycji, z niej aplikacja losuje |
+| `items` | 91 | lista niezależnych pozycji, z niej aplikacja losuje |
 | `text` | 28 | tekst ciągły lub wierszowany, czytany w całości |
+| `prompt` | 11 | samo polecenie, bez materiału do losowania (zadanie długoterminowe) |
 | `syllables` | 2 | wiersz sylab treningowych |
-| `prompt` | 3 | samo polecenie, bez materiału do losowania (zadanie długoterminowe) |
 
 ### `exercises[].variants[].items[]`
 
@@ -138,8 +142,9 @@ bez trzymania trzech wersji treści:
 
 ## Uwagi dla implementacji
 
-**Liczniki.** Plik nie zawiera pól z liczbą elementów — aplikacja liczy je sama
-(`variants.length`, `items.length`), żeby licznik nie rozjechał się po ręcznej edycji.
+**Brak pól redundantnych.** Plik nie zawiera ani liczników (`variants.length`, `items.length`
+liczy aplikacja), ani pól pozycji — kolejność niesie sama tablica. Jedno i drugie mogłoby
+rozjechać się z rzeczywistością po ręcznej edycji.
 
 **Dziedziczenie polecenia.** `variants[].instructionHtml` równe `null` oznacza użycie
 `exercises[].instructionHtml`; oba `null` — wariant bez polecenia.
@@ -148,12 +153,16 @@ bez trzymania trzech wersji treści:
 rozstrzyga `variants[].type` — `text`, `syllables` i `prompt` nigdy się nie dzielą,
 `items` zawsze można ciąć.
 
-**Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego" obejmuje 23 z 54
-ćwiczeń. Ważenie kategorii nie zostało wprowadzone — steruje tym liczba ćwiczeń w parametrach.
+**Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego" obejmuje 23 z 70
+ćwiczeń, „rozgrzewka" kolejnych 10. Ważenie kategorii nie zostało wprowadzone — steruje tym
+liczba ćwiczeń w parametrach.
 
-**Rozkład wariantów.** 34 z 54 ćwiczeń ma jeden wariant, pozostałe od 2 do 6. Limit wariantów
-z parametrów sesji dotyczy wyłącznie tych drugich. 23 ćwiczenia nie mają w ogóle pozycji
-(same `text`, `syllables`, `prompt`), a dwa warianty mają po jednej pozycji.
+**Rozkład wariantów.** 42 z 70 ćwiczeń ma jeden wariant, pozostałe 2, 3, 4 albo 6. Limit
+wariantów z parametrów sesji dotyczy wyłącznie tych drugich. 27 ćwiczeń nie ma w ogóle pozycji
+(same `text`, `syllables`, `prompt`), a 6 wariantów ma po jednej pozycji.
+
+**Poziom trudności bywa nieokreślony.** 54 z 70 ćwiczeń ma `level: null`; poziomy 1–4 mają
+kolejno 1, 3, 4 i 8 ćwiczeń. 35 ćwiczeń ma `randomizable: false`.
 
 **Maksymalny budżet pozycji.** Kraniec parametru `P` (APPLICATION §3.3) liczony z obecnej bazy:
 
@@ -163,9 +172,10 @@ z parametrów sesji dotyczy wyłącznie tych drugich. 23 ćwiczenia nie mają w 
 | maks. `P` | 30 | 46 | 58 |
 
 Maksima pochodzą z `opozycje-c-cz-w-jednym-wyrazie` — jedynego ćwiczenia o wariantach
-30 + 16 + 12 pozycji. Warianty bez pozycji nie wchodzą do tego rachunku.
+30 + 16 + 12 pozycji. Warianty bez pozycji nie wchodzą do tego rachunku. Ćwiczenie to ma
+`level: null`, więc krańce nie zmieniają się wraz z filtrem poziomu.
 
-**Materiał do korekty.** 12 ćwiczeń ma `readQuality: "do_weryfikacji"`. Kolejnych 10 ma
+**Materiał do korekty.** 9 ćwiczeń ma `readQuality: "do_weryfikacji"`. Kolejnych 20 ma
 w `notes` adnotację, że warstwa legato jest miejscami przybliżona; warstwa głoski docelowej
 pozostaje wierna.
 
