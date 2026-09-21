@@ -5,6 +5,23 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-21 — edycja bazy w podglądzie
+
+Podgląd ćwiczenia dostaje tryb edycji ćwiczenia lub wariantu. Wymagania: APPLICATION §7;
+ARCHITECTURE §2, §8–§10; DATA-SCHEMA „Znaczniki w treści HTML”.
+
+- **Edycja działa na kopii bazy w pamięci, a zapis eksportuje cały `database.json`.** Statyczny
+  hosting nie pozwala nadpisać wdrożonego pliku bez backendu; eksport zachowuje dotychczasową
+  architekturę i daje artefakt gotowy do ponownej publikacji.
+- **Pasek formatowania operuje na znaczeniu, nie na wyglądzie.** Przyciski nakładają istniejące
+  klasy semantyczne na zaznaczony tekst, więc autor nie musi pisać HTML ani znać stylów CSS.
+- **Podgląd aktualizuje się przy każdej zmianie i używa renderera karty ćwiczenia.** Autor widzi
+  wynik przed zapisem, bez utrzymywania drugiej interpretacji znaczników.
+- **Dowolny HTML pozostaje niedostępny.** Dozwolona lista tagów i klas oraz walidacja całej bazy
+  przed eksportem ograniczają błędy struktury i wstrzyknięcie kodu.
+
+---
+
 ## 2026-09-15 — bloki zamiast kategorii w parametrach
 
 Wiersz parametrów przestaje być kategorią, a staje się blokiem: kategorią z wybranym podzbiorem

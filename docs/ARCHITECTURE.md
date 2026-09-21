@@ -13,7 +13,7 @@ Decyzje techniczne, struktura projektu oraz warunki uruchomienia i publikacji.
 | Typ aplikacji | statyczna SPA, jeden dokument HTML, routing na fragmencie adresu, bez backendu |
 | Technologie | HTML, CSS i JavaScript w modułach, bez zależności produkcyjnych |
 | Proces budowania | brak — kod publikowany w postaci, w jakiej jest pisany |
-| Baza danych | jeden plik JSON, tylko do odczytu |
+| Baza danych | jeden plik JSON; odczyt przy starcie, edycja kopii w pamięci i eksport całości |
 | Stan sesji | w pamięci przeglądarki i w adresie; plan sesji nie jest zapisywany trwale |
 | Ustawienia użytkownika | trwały zapis po stronie przeglądarki, bez backendu i bez konta |
 | Hosting | statyczny, bez konfiguracji serwera |
@@ -22,7 +22,7 @@ Konsekwencje:
 
 - Brak gotowych mechanizmów zarządzania stanem i komponentami — ograniczające przy rozbudowie
   o widoki współdzielące złożony stan.
-- Aktualizacja treści wymaga ponownej publikacji całości.
+- Aktualizacja wdrożonej treści wymaga zastąpienia pliku bazy i ponownej publikacji.
 - Trwały zapis ustawień jest lokalny dla przeglądarki i urządzenia (§5).
 
 ---
@@ -52,6 +52,7 @@ logopedium/
       │  ├─ picker.js         # budowa planu sesji
       │  ├─ session.js        # przechodzenie przez ćwiczenia
       │  ├─ browse.js         # przeglądanie bazy
+      │  ├─ editor.js         # edycja, podgląd i eksport bazy
       │  ├─ settings.js       # trwały zapis ustawień w przeglądarce
       │  └─ render.js         # wyświetlanie treści
       │
@@ -147,14 +148,16 @@ Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 | Brak synchronizacji | stan i ustawienia nie przenoszą się między urządzeniami |
 | Zapis tylko lokalny | wyczyszczenie danych witryny kasuje ustawienia bezpowrotnie |
 | Baza po stronie klienta | cała zawartość dostępna dla każdego, kto otworzy adres |
+| Brak zapisu na serwerze | edytor pobiera nowy `database.json`; wdrożenie wymaga zastąpienia pliku |
 
 ---
 
 ## 9. Zaufanie do treści
 
 Treść ćwiczeń zawiera znaczniki formatujące i jest renderowana jako kod, a nie czysty tekst.
-Dopuszczalne wyłącznie dlatego, że źródło jest w pełni kontrolowane przez autora bazy.
-Wprowadzenie edycji bazy lub importu danych wymaga przeprojektowania mechanizmu wyświetlania.
+Edytor nie przyjmuje dowolnego HTML: wpisana treść jest traktowana jak tekst, a pasek tworzy tylko
+dozwolone tagi i klasy z DATA-SCHEMA. Podgląd i eksport korzystają z tej samej sanitacji;
+niepoprawna treść blokuje zapis zamiast trafiać do renderera.
 
 ---
 
@@ -176,12 +179,14 @@ niezgodności naraz, a aplikacja pokazuje ich listę zamiast pustego interfejsu.
 pola wymagane, unikalność identyfikatorów, odwołania do kategorii, znane typy wariantów,
 obecność treści i zakres poziomu. Pola informacyjne (`readQuality`, `source.kind`, `phonemes`,
 `positions`) nie są sprawdzane słownikowo — ich rozszerzenie nie powinno blokować startu.
+Ta sama walidacja obejmuje roboczą kopię po edycji i musi przejść przed eksportem.
 
 **Dostępność.** Nawigacja w sesji także strzałkami, fokus wracający na główny obszar po zmianie
 stanu, nagłówek pierwszego poziomu w każdym stanie. Lista parametrów porządkowana jest
 przeciąganiem, więc uchwyt wiersza musi działać także z klawiatury — przejęcie wiersza,
 przesunięcie strzałkami, upuszczenie lub wycofanie — a każdy ruch musi być zapowiadany
-komunikatem dla czytnika ekranu.
+komunikatem dla czytnika ekranu. Pasek edytora musi zachowywać zaznaczenie przy obsłudze
+klawiaturą, a nazwa przycisku ma opisywać znaczenie nakładanej klasy.
 
 ---
 
@@ -190,7 +195,6 @@ komunikatem dla czytnika ekranu.
 - konta użytkowników i synchronizacja między urządzeniami,
 - trwały zapis postępu w sesji oraz historia sesji,
 - ograniczanie powtórek między dniami,
-- edycja bazy z poziomu aplikacji,
 - statystyki historyczne,
 - nagrywanie dźwięku i ocena wykonania,
 - tryb offline.

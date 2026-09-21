@@ -129,6 +129,13 @@ Sześć z ośmiu nie ma odpowiednika wśród standardowych tagów HTML.
 Poza tym w treści występują `<p>`, `<br>`, `<strong>` (wyróżnienie typograficzne
 w nagłówkach — **nie** głoska docelowa) oraz `<em>` (kursywa z oryginału).
 
+### Zasady edytora
+
+Pasek formatowania w podglądzie odwzorowuje każdą klasę z tabeli na przycisk i zapisuje
+zaznaczenie jako `<span class="nazwa-klasy">…</span>`. Edytor dopuszcza wyłącznie wymienione
+tagi i klasy, usuwa puste znaczniki oraz nie zmienia tekstu poza zaznaczeniem. Te same reguły
+obowiązują podgląd na żywo i eksport pliku.
+
 ### Przełączanie warstw
 
 Rozdzielenie `target` i `legato` daje trzy tryby wyświetlania jednego tekstu

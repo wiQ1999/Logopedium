@@ -18,7 +18,7 @@ Dwa niezależne tryby pracy:
 | Ćwiczenie | jedno ćwiczenie z instrukcją i nawigacją |
 | Podsumowanie | zakończenie sesji |
 | Lista bazy | wszystkie ćwiczenia, z wyszukiwaniem i filtrami |
-| Podgląd ćwiczenia | pełna zawartość jednego ćwiczenia poza sesją |
+| Podgląd ćwiczenia | pełna zawartość jednego ćwiczenia poza sesją, z trybem edycji |
 
 Każdy stan ma własny adres.
 
@@ -267,7 +267,7 @@ parametrów unieważnia postęp.
 
 ---
 
-## 7. Przeglądanie bazy
+## 7. Przeglądanie i edycja bazy
 
 Tryb niezależny od sesji, obejmujący całą zawartość bazy — bez losowania i bez limitów
 sesyjnych. Ćwiczenia pokazywane są ze wszystkimi wariantami i pozycjami.
@@ -279,3 +279,17 @@ sesyjnych. Ćwiczenia pokazywane są ze wszystkimi wariantami i pozycjami.
   z dodatkową opcją „bez określonego poziomu”,
 - uwagi redakcyjne widoczne jako osobny blok oznaczony jako nieprzeznaczony dla ćwiczącego,
 - rejestr audytowy bazy (`duplicates`, `nonTextMaterials`) w zwiniętej sekcji na końcu listy.
+
+### 7.1 Tryb edycji
+
+Z podglądu można przejść do edycji całego ćwiczenia albo wybranego wariantu. Formularz
+udostępnia odpowiadające im pola z `database.json`; identyfikatory pozostają niezmienne.
+
+Pola z treścią HTML mają pasek formatowania. Przycisk nakłada na zaznaczenie właściwą klasę
+semantyczną opisaną w DATA-SCHEMA, bez ręcznego wpisywania znaczników. Każda zmiana tekstu
+lub formatowania jest od razu widoczna w podglądzie renderowanym tak samo jak karta ćwiczenia.
+
+Edycja zmienia roboczą kopię bazy w pamięci przeglądarki. Zapis jest dostępny dopiero po
+walidacji całości i eksportuje kompletny plik `database.json`; opublikowana baza zmienia się
+po zastąpieniu nim pliku aplikacji i ponownym wdrożeniu. Wyjście z niezapisanymi zmianami
+wymaga potwierdzenia.
