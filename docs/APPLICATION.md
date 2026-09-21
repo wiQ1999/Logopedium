@@ -26,83 +26,105 @@ Każdy stan ma własny adres.
 
 ## 3. Parametry sesji
 
-### 3.1 Kategorie
+### 3.1 Bloki
 
-Jedna lista: aktywność kategorii, zakres pobieranego z niej materiału oraz kolejność w sesji,
-wyznaczona pozycją wiersza. Wiersz niesie do trzech liczb:
+Parametry sesji to lista **bloków**. Blok to kategoria wraz z należącymi do niej ćwiczeniami
+i własnym kompletem ustawień. Na starcie każda kategoria ma jeden blok obejmujący całą swoją
+zawartość; kategorię można rozdzielić na kilka bloków (§3.2). Kolejność bloków na liście
+wyznacza kolejność kroków w sesji.
 
 | Pole | Znaczenie |
 |---|---|
-| Liczba ćwiczeń | ile ćwiczeń z tej kategorii trafia do sesji; zero wyłącza kategorię |
-| Liczba wariantów (`W`) | górny limit wariantów pokazywanych w jednym ćwiczeniu tej kategorii |
-| Liczba pozycji (`P`) | budżet pozycji na całe ćwiczenie tej kategorii, dzielony między pokazane warianty |
+| Liczba ćwiczeń | ile ćwiczeń z bloku trafia do sesji; zero wyłącza blok |
+| Liczba wariantów (`W`) | górny limit wariantów pokazywanych w jednym ćwiczeniu bloku |
+| Liczba pozycji (`P`) | budżet pozycji na całe ćwiczenie, dzielony między pokazane warianty |
+| Dobór | `kolejność` albo `losowo` — sposób brania wariantów i pozycji (§3.5) |
 
-Pola `W` i `P` pojawiają się tylko tam, gdzie mają co ograniczać (§3.3).
+Pola `W` i `P` pojawiają się tylko tam, gdzie mają co ograniczać (§3.4).
 
-- Liczba ćwiczeń równa zero oznacza kategorię nieaktywną; kategoria zachowuje pozycję na liście,
-  a jej `W` i `P` pozostają zapamiętane.
-- Maksimum liczby ćwiczeń to liczba dostępnych w kategorii przy ustawionym poziomie, widoczna przy polu.
+- Liczba ćwiczeń równa zero oznacza blok nieaktywny; blok zachowuje pozycję na liście,
+  a jego ustawienia pozostają zapamiętane.
+- Maksimum liczby ćwiczeń to liczba aktywnych ćwiczeń bloku przy ustawionym poziomie,
+  widoczna przy polu.
 - Sterowanie liczbą ćwiczeń, nie czasem sesji — czasu wykonania ćwiczenia nie da się oszacować.
-- `W` i `P` obowiązują wyłącznie ćwiczenia z własnej kategorii, a ich krańce wynikają z jej
-  zawartości — ta sama liczba w dwóch kategoriach znaczy co innego (§3.3).
+- Ustawienia bloku obowiązują wyłącznie jego ćwiczenia, a krańce `W` i `P` wynikają z jego
+  zawartości — ta sama liczba w dwóch blokach znaczy co innego (§3.4).
 
-### 3.2 Pozostałe parametry
+### 3.2 Rozwinięcie bloku i podział kategorii
+
+Blok daje się rozwinąć: pokazuje wtedy wszystkie swoje ćwiczenia, po jednym w wierszu. Każde
+ćwiczenie ma własny przełącznik aktywności — wyłączone nie bierze udziału w losowaniu i nie
+liczy się do krańców bloku. Blok bez aktywnych ćwiczeń zachowuje się jak wyłączony.
+
+Wiersze — bloki i ćwiczenia — przestawia się przeciągnięciem; nie ma przycisków „góra”
+i „dół”. Ćwiczenie wyciągnięte poza swój blok tworzy nowy blok tej samej kategorii,
+zawierający tylko to ćwiczenie. Tak dzieli się jedną kategorię na kilka bloków o różnych
+ustawieniach: część ćwiczeń z pełnym materiałem, część przycięta, każda część w swoim miejscu
+sesji i we własnym trybie doboru.
+
+- Ćwiczenie należy do dokładnie jednego bloku — przeciągnięcie przenosi je, nie kopiuje.
+- Nowy blok staje pod źródłowym i dziedziczy jego tryb doboru; liczby wracają na krańce
+  własnej zawartości.
+- Blok przyjmuje wyłącznie ćwiczenia swojej kategorii; opróżniony ze wszystkich znika z listy.
+- Podział ma sens w 8 kategoriach z 30 — pozostałe mają po jednym ćwiczeniu.
+
+### 3.3 Pozostałe parametry
 
 | Parametr | Zachowanie |
 |---|---|
 | Poziom trudności | górny limit; ćwiczenia bez zadeklarowanego poziomu przechodzą zawsze |
 | Data | domyślnie bieżący dzień; podstawa losowania |
-| Dobór | `kolejność` albo `losowo`, wspólnie dla wariantów i pozycji (§3.4) |
 
-Te trzy parametry są wspólne dla całej sesji. `Dobór` rozstrzyga sposób brania podzbioru,
-nie jego rozmiar, więc nie ma czego różnicować między kategoriami.
+Te dwa parametry są wspólne dla całej sesji; wszystko pozostałe należy do bloku.
 
 Daty wyświetlane są w formacie wynikającym z ustawień przeglądarki: pole daty korzysta
 z kontrolki natywnej, pozostałe miejsca z ustawień regionalnych. `rrrr-mm-dd` pozostaje
 formatem wewnętrznym — w adresie, ziarnie i zapisie ustawień.
 
-### 3.3 Zakres materiału w kategorii
+### 3.4 Zakres materiału w bloku
 
-Krańce `W` i `P` liczone są osobno dla każdej kategorii, z jej własnej zawartości po filtrze
-poziomu. Zmiana poziomu przelicza je wszystkie; przełączanie i przestawianie kategorii nie
-zmienia niczego.
+Krańce `W` i `P` liczone są osobno dla każdego bloku, z jego aktywnych ćwiczeń po filtrze
+poziomu. Przeliczają je: zmiana poziomu, przełączenie ćwiczenia i przeniesienie ćwiczenia
+między blokami. Samo przestawianie wierszy nie zmienia niczego.
 
 #### Zakres `W`
 
 - **minimum** — 1.
-- **maksimum** — najwyższa liczba wariantów wśród ćwiczeń tej kategorii.
+- **maksimum** — najwyższa liczba wariantów wśród ćwiczeń bloku.
 
 #### Zakres `P`
 
-`P` zależy od `W` tej samej kategorii i przelicza się przy każdej jego zmianie; wartość spoza
+`P` zależy od `W` tego samego bloku i przelicza się przy każdej jego zmianie; wartość spoza
 zakresu jest dociągana do krańca.
 
-- **minimum** — `W`, czyli jedna pozycja na każdy wskazany wariant; w kategorii uboższej
-  w pozycje niż w warianty minimum schodzi do jej maksimum.
+- **minimum** — `W`, czyli jedna pozycja na każdy wskazany wariant; w bloku uboższym
+  w pozycje niż w warianty minimum schodzi do jego maksimum.
 - **maksimum** — największa suma pozycji, jaką da się złożyć z `W` najbogatszych wariantów
-  jednego ćwiczenia tej kategorii.
+  jednego ćwiczenia bloku.
 
 Warianty bez pozycji (`text`, `syllables`, `prompt`) są w tym rachunku pomijane: `P` jest budżetem
 pozycji, a one żadnej nie wnoszą. Do `W` liczą się normalnie, jak każdy inny wariant.
 
-#### Kategorie bez materiału do ograniczania
+#### Bloki bez materiału do ograniczania
 
 Pole pojawia się tylko wtedy, gdy jest z czego wybierać:
 
-- kategoria o samych ćwiczeniach jednowariantowych nie dostaje pola `W` — w obecnej bazie 7 z 30;
-- kategoria bez pozycji nie dostaje pola `P`, a jej materiał podawany jest w całości —
-  w obecnej bazie „tekst do czytania terapeutycznego” (23 ćwiczenia) oraz „terapia
+- blok o samych ćwiczeniach jednowariantowych nie dostaje pola `W` — przy blokach domyślnych
+  7 kategorii z 30;
+- blok bez pozycji nie dostaje pola `P`, a jego materiał podawany jest w całości — przy blokach
+  domyślnych „tekst do czytania terapeutycznego” (23 ćwiczenia) oraz „terapia
   miofunkcjonalna — połykanie”.
 
 Przypadki są niezależne, więc wiersz niesie od jednej do trzech liczb. Ukryte pole zachowuje
-swoją jedyną możliwą wartość — `W` = 1 albo `P` = 0 — i tyle wchodzi do planu sesji.
+swoją jedyną możliwą wartość — `W` = 1 albo `P` = 0 — i tyle wchodzi do planu sesji. Wyłączenie
+ćwiczenia i podział kategorii mogą pole ukryć albo przywrócić, bo zmieniają zawartość bloku.
 
-Krańce w obecnej bazie sięgają `W` = 6 i `P` = 58 („opozycje fonologiczne”), a najuboższe
-kategorie z pozycjami zatrzymują się na `P` = 5.
+Krańce przy blokach domyślnych sięgają `W` = 6 i `P` = 58 („opozycje fonologiczne”), a najuboższe
+bloki z pozycjami zatrzymują się na `P` = 5.
 
 #### Podział `P` między warianty
 
-Budżet dzielony jest po zatwierdzeniu parametrów — wartością `P` z kategorii ćwiczenia, między
+Budżet dzielony jest po zatwierdzeniu parametrów — wartością `P` z bloku ćwiczenia, między
 wylosowane warianty **mające pozycje**. Kolejno:
 
 1. Każdy taki wariant dostaje 2 pozycje, o ile budżet starcza i wariant tyle ma. Wariant
@@ -117,7 +139,7 @@ wylosowane warianty **mające pozycje**. Kolejno:
 Ćwiczenie mające łącznie mniej pozycji niż `P` podaje je w całości. `randomizable: false`
 oznacza wszystkie pozycje, bez podziału budżetu.
 
-### 3.4 Dobór podzbioru
+### 3.5 Dobór podzbioru
 
 Parametr `Dobór` rozstrzyga, **które** elementy trafiają do kroku, gdy brany jest podzbiór —
 wariantów z ćwiczenia i pozycji z wariantu:
@@ -129,27 +151,33 @@ wariantów z ćwiczenia i pozycji z wariantu:
 Tryb `losowo` tasuje kolejność także wtedy, gdy limit nie tnie zbioru. Tryb `kolejność`
 przy limicie ustawionym na maksimum oddaje zbiór w kolejności z bazy.
 
-### 3.5 Wartości początkowe
+Tryb należy do bloku: tekst czytany po kolei i zestaw wyrazów do przetasowania mogą wtedy
+trafić do jednej sesji, każdy we właściwym sobie porządku.
 
-Brak zapisu w przeglądarce (§3.7) oznacza sesję nieograniczoną: najwyższy poziom, w każdej
-kategorii tyle ćwiczeń, ile jest dostępnych, a `W` i `P` na maksimach tej kategorii, więc nic
-nie zostaje przycięte. Dobór `kolejność`, data bieżąca. Aplikacja nie ma predefiniowanego
-zestawu startowego — wartości domyślne wynikają wprost z zawartości bazy.
+### 3.6 Wartości początkowe
 
-### 3.6 Zmiana parametrów
+Brak zapisu w przeglądarce (§3.8) oznacza sesję nieograniczoną: jeden blok na kategorię,
+wszystkie ćwiczenia aktywne, najwyższy poziom, w każdym bloku tyle ćwiczeń, ile jest
+dostępnych, a `W` i `P` na maksimach bloku, więc nic nie zostaje przycięte. Dobór `kolejność`,
+data bieżąca. Aplikacja nie ma predefiniowanego zestawu startowego — wartości domyślne wynikają
+wprost z zawartości bazy.
+
+### 3.7 Zmiana parametrów
 
 Zatwierdzenie parametrów tworzy nowy plan sesji i rozpoczyna ją od początku. Postęp
 poprzedniej sesji nie jest przenoszony.
 
-### 3.7 Zapamiętywanie między wizytami
+### 3.8 Zapamiętywanie między wizytami
 
 Ustawienia przeżywają zamknięcie przeglądarki i wracają przy kolejnym otwarciu, także po
-kilku dniach. Zapamiętywane są wszystkie parametry z §3.1 i §3.2 poza datą; poza zapisem
-zostają także ziarno, postęp w sesji i tryb oznaczeń (§6.4).
+kilku dniach. Zapamiętywane są wszystkie parametry z §3.1–§3.3 poza datą, wraz z podziałem
+kategorii na bloki i aktywnością poszczególnych ćwiczeń; poza zapisem zostają ziarno, postęp
+w sesji i tryb oznaczeń (§6.4).
 
 - Zapis następuje przy zatwierdzeniu parametrów, nie przy każdej zmianie pola.
 - Odczyt podlega tej samej walidacji co parametry z adresu: wartości spoza zakresu są
-  przycinane, nieznane kategorie pomijane, nowe kategorie dopisywane z wartością domyślną.
+  przycinane, nieznane kategorie i ćwiczenia pomijane, nowe dopisywane z wartością domyślną —
+  nowe ćwiczenie trafia do pierwszego bloku swojej kategorii.
 - Zapis uszkodzony lub w niezgodnej wersji jest odrzucany w całości; skutek jest ten sam
   co brak zapisu i nie jest zgłaszany jako błąd.
 - Parametry z adresu mają pierwszeństwo przed zapisem.
@@ -161,14 +189,17 @@ Mechanizm zapisu opisuje ARCHITECTURE §5.
 
 ## 4. Dobór ćwiczeń
 
-1. Odrzucenie ćwiczeń z kategorii nieaktywnych i przekraczających ustawiony poziom.
-2. Losowanie z każdej aktywnej kategorii tylu ćwiczeń, ile wskazano w parametrach.
-3. Pobranie wariantów i pozycji według `W` i `P` kategorii, z której pochodzi ćwiczenie (§3.3),
-   oraz trybu doboru (§3.4).
-4. Ułożenie kroków zgodnie z kolejnością kategorii z listy parametrów.
+1. Odrzucenie ćwiczeń wyłączonych, należących do bloków nieaktywnych oraz przekraczających
+   ustawiony poziom.
+2. Losowanie z każdego aktywnego bloku tylu ćwiczeń, ile wskazano w parametrach.
+3. Pobranie wariantów i pozycji według `W`, `P` i trybu doboru bloku, z którego pochodzi
+   ćwiczenie (§3.4, §3.5).
+4. Ułożenie kroków zgodnie z kolejnością bloków; ćwiczenia z jednego bloku zachowują jego
+   kolejność.
 
-W obrębie sesji ćwiczenia nie powtarzają się — losowanie bez zwracania. Między dniami brak
-ograniczania powtórek: to samo ćwiczenie może wystąpić w kolejnych sesjach.
+W obrębie sesji ćwiczenia nie powtarzają się — każde należy do jednego bloku, a losowanie
+odbywa się bez zwracania. Między dniami brak ograniczania powtórek: to samo ćwiczenie może
+wystąpić w kolejnych sesjach.
 
 ---
 
@@ -182,10 +213,11 @@ zawsze ten sam plan.
 
 ### 5.2 Składniki ziarna
 
-Data, wersja bazy, poziom trudności oraz zestaw aktywnych kategorii wraz z liczbą ćwiczeń.
+Data, wersja bazy, poziom trudności oraz zestaw aktywnych bloków: kategoria bloku, jego
+aktywne ćwiczenia i liczba ćwiczeń do wylosowania.
 
-Do ziarna nie wchodzą: kolejność kategorii, limity `W` i `P` oraz tryb doboru.
-Kolejność kategorii zmienia tylko układ kroków. Pozostałe działają w osobnej fazie na
+Do ziarna nie wchodzą: kolejność bloków, limity `W` i `P` oraz tryb doboru.
+Kolejność bloków zmienia tylko układ kroków. Pozostałe działają w osobnej fazie na
 ziarnie pochodnym, liczonym z ziarna sesji i identyfikatora ćwiczenia — dzięki temu zmiana
 limitu przekształca zawartość kroku, ale nie podmienia wylosowanych ćwiczeń.
 

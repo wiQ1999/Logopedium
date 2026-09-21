@@ -154,8 +154,9 @@ rozstrzyga `variants[].type` — `text`, `syllables` i `prompt` nigdy się nie d
 `items` zawsze można ciąć.
 
 **Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego” obejmuje 23 z 70
-ćwiczeń, „rozgrzewka” kolejnych 10. Ważenie kategorii nie zostało wprowadzone — steruje tym
-liczba ćwiczeń w parametrach.
+ćwiczeń, „rozgrzewka” kolejnych 10, a 22 kategorie mają po jednym ćwiczeniu. Ważenie kategorii
+nie zostało wprowadzone — steruje tym liczba ćwiczeń w parametrach, a w kategoriach obszerniejszych
+także wybór i podział ćwiczeń na bloki (APPLICATION §3.2).
 
 **Rozkład wariantów.** 42 z 70 ćwiczeń ma jeden wariant, pozostałe 2, 3, 4 albo 6. 27 ćwiczeń
 nie ma w ogóle pozycji (same `text`, `syllables`, `prompt`), a 6 wariantów ma po jednej pozycji.
@@ -163,8 +164,8 @@ nie ma w ogóle pozycji (same `text`, `syllables`, `prompt`), a 6 wariantów ma 
 **Poziom trudności bywa nieokreślony.** 54 z 70 ćwiczeń ma `level: null`; poziomy 1–4 mają
 kolejno 1, 3, 4 i 8 ćwiczeń. 35 ćwiczeń ma `randomizable: false`.
 
-**Krańce parametrów sesji.** `W` i `P` (APPLICATION §3.3) liczone są osobno dla każdej
-kategorii, z jej własnych ćwiczeń. Rozpiętość w obecnej bazie:
+**Krańce parametrów sesji.** `W` i `P` (APPLICATION §3.4) liczone są osobno dla każdego
+bloku, z jego własnych ćwiczeń. Rozpiętość przy blokach domyślnych, czyli po jednym na kategorię:
 
 | | najwyżej | najniżej |
 |---|---|---|
@@ -174,8 +175,8 @@ kategorii, z jej własnych ćwiczeń. Rozpiętość w obecnej bazie:
 Maksimum 58 pochodzi z `opozycje-c-cz-w-jednym-wyrazie` (warianty 30 + 16 + 12 pozycji);
 warianty bez pozycji nie wchodzą do rachunku `P`.
 
-Kraniec równy 1 dla `W` albo 0 dla `P` oznacza kategorię, w której nie ma czego ograniczać —
-formularz nie pokazuje wtedy tego pola (APPLICATION §3.3). Bez pozycji są
+Kraniec równy 1 dla `W` albo 0 dla `P` oznacza blok, w którym nie ma czego ograniczać —
+formularz nie pokazuje wtedy tego pola (APPLICATION §3.4). Bez pozycji są
 `tekst-do-czytania-terapeutycznego` (23 ćwiczenia, same `text`) oraz
 `terapia-miofunkcjonalna-polykanie` (`prompt`); ich materiał podawany jest w całości.
 

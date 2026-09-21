@@ -77,17 +77,18 @@ z dysku blokuje pobranie bazy. Ograniczenie dotyczy wyłącznie pracy lokalnej.
 
 ## 5. Trwały zapis ustawień w przeglądarce
 
-Aplikacja zapamiętuje parametry sesji między wizytami (APPLICATION §3.7), wyłącznie po
+Aplikacja zapamiętuje parametry sesji między wizytami (APPLICATION §3.8), wyłącznie po
 stronie przeglądarki: bez backendu, bazy scentralizowanej i konta użytkownika.
 
 Wybrany mechanizm: **`localStorage`**, klucz `logopedium.params`, wartość JSON z polem `version`
-(kształt zapisu, niezależny od wersji bazy).
+(kształt zapisu, niezależny od wersji bazy). Zapisywana jest lista bloków; blok obejmujący całą
+swoją kategorię pomija listę ćwiczeń, więc układ domyślny zajmuje ~2,3 kB.
 
 | Mechanizm | Ocena |
 |---|---|
 | `localStorage` | **wybrany** — trwały, pojemny, synchroniczny, nie obciąża zapytań |
 | `sessionStorage` | odrzucony — znika przy zamknięciu karty |
-| ciasteczka | odrzucone — zapis po zakodowaniu ma ~3,8 kB przy limicie ~4 kB na ciasteczko, a doklejałby się do każdego zapytania |
+| ciasteczka | odrzucone — układ domyślny ma po zakodowaniu ~3,9 kB przy limicie ~4 kB na ciasteczko, a po podziale kategorii przekracza go wielokrotnie |
 | IndexedDB | odrzucony — asynchroniczne API nieproporcjonalne do kilkuset bajtów ustawień |
 
 Zasady:
@@ -97,7 +98,7 @@ Zasady:
 - Odczyt i zapis obudowane obsługą wyjątku — magazyn bywa niedostępny (tryb prywatny,
   blokada witryny, wyczerpany limit). Niedostępność nie przerywa startu i nie daje komunikatu.
 - Odczytana wartość jest danymi z zewnątrz: podlega walidacji i przycięciu jak parametry z adresu.
-- Zapis nie zawiera danych osobowych — wyłącznie identyfikatory kategorii i liczby.
+- Zapis nie zawiera danych osobowych — wyłącznie identyfikatory kategorii i ćwiczeń oraz liczby.
 
 ---
 
@@ -106,18 +107,24 @@ Zasady:
 Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 
 ```
-#/session/3?d=2026-09-10&l=4&c=gloska-dz:1:2:12,wprawki-rymowanki-treningowe:2:1:8&o=kolejnosc&seed=...
+#/session/3?d=2026-09-10&l=4&c=gloska-dz:1:2:12:kolejnosc,opozycje-fonologiczne:1:2:7:losowo:opozycje-c-cz-w-jednym-wyrazie&seed=...
 ```
 
 - Adres jest jedynym nośnikiem stanu konkretnej sesji, który przeżywa przeładowanie
   i daje się przekazać dalej; `localStorage` niesie wyłącznie wartości początkowe formularza.
-- Kategorie identyfikowane po `id`, nie po indeksie — indeks rozjechałby się po zmianie bazy.
-- `c` wymienia tylko kategorie aktywne, w kolejności wyświetlania; nieaktywne wracają
-  na pozycje domyślne.
-- Wpis w `c` to `id:ćwiczenia:W:P`, zawsze komplet — także gdy formularz ukrył pole `W` albo `P`
-  (APPLICATION §3.3), bo adres niesie wartości obowiązujące, nie stan interfejsu. Składniki
-  urwane przy ręcznej edycji przyjmują krańce swojej kategorii.
-- Wartości spoza zakresu są przycinane przy odczycie — ręcznie zmieniony adres nie psuje aplikacji.
+- Kategorie i ćwiczenia identyfikowane po `id`, nie po indeksie — indeks rozjechałby się
+  po zmianie bazy.
+- `c` wymienia bloki aktywne, w kolejności wyświetlania; kategoria bez aktywnego bloku wraca
+  na pozycję domyślną.
+- Wpis to `id:ćwiczenia:W:P:tryb`, zawsze komplet — także gdy formularz ukrył pole `W` albo `P`
+  (APPLICATION §3.4), bo adres niesie wartości obowiązujące, nie stan interfejsu. Składniki
+  urwane przy ręcznej edycji przyjmują krańce swojego bloku.
+- Blok węższy od swojej kategorii — po podziale albo wyłączeniu ćwiczeń — dopisuje szósty
+  składnik: identyfikatory swoich ćwiczeń złączone `+`, w kolejności bloku. Blok obejmujący
+  kategorię w całości listę pomija, więc adres domyślnej sesji ma ~1,5 kB.
+- Dwa bloki tej samej kategorii różnią się listą ćwiczeń, bo ćwiczenie należy do jednego bloku.
+- Wartości spoza zakresu są przycinane przy odczycie, ćwiczenia nieznane i powtórzone pomijane —
+  ręcznie zmieniony adres nie psuje aplikacji.
 - Tryb przeglądania trzyma w adresie filtry i aktualizuje je przez `replaceState`,
   żeby nie zaśmiecać historii.
 
@@ -171,8 +178,10 @@ obecność treści i zakres poziomu. Pola informacyjne (`readQuality`, `source.k
 `positions`) nie są sprawdzane słownikowo — ich rozszerzenie nie powinno blokować startu.
 
 **Dostępność.** Nawigacja w sesji także strzałkami, fokus wracający na główny obszar po zmianie
-stanu, nagłówek pierwszego poziomu w każdym stanie, przestawianie kategorii przyciskami
-zamiast przeciągania.
+stanu, nagłówek pierwszego poziomu w każdym stanie. Lista parametrów porządkowana jest
+przeciąganiem, więc uchwyt wiersza musi działać także z klawiatury — przejęcie wiersza,
+przesunięcie strzałkami, upuszczenie lub wycofanie — a każdy ruch musi być zapowiadany
+komunikatem dla czytnika ekranu.
 
 ---
 

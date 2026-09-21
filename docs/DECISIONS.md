@@ -5,6 +5,35 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-15 — bloki zamiast kategorii w parametrach
+
+Wiersz parametrów przestaje być kategorią, a staje się blokiem: kategorią z wybranym podzbiorem
+jej ćwiczeń i własnym kompletem ustawień. Wymagania: APPLICATION §3.1–§3.5, §3.8, §4, §5.2;
+ARCHITECTURE §5, §6, §10.
+
+- **Ćwiczenia przełączane pojedynczo, w rozwiniętym bloku.** Liczba ćwiczeń mówi, ile ich wejdzie
+  do sesji, ale nie które — w kategorii liczącej 23 teksty to za mało, żeby pokierować ćwiczeniem.
+- **Wyciągnięcie ćwiczenia poza blok tworzy nowy blok tej samej kategorii.** Różne części jednej
+  kategorii dostają wtedy różne ustawienia i różne miejsca w sesji, bez rozbijania kategorii
+  w bazie — podział jest sprawą sesji, nie danych. Dotyczy 8 kategorii z 30; reszta ma po jednym
+  ćwiczeniu.
+- **Tryb doboru schodzi z sesji do bloku.** Odwrócenie decyzji z 2026-09-13: rozmiar podzbioru
+  istotnie nie zależy od trybu, ale sposób brania już tak, a tekst czytany po kolei i wyrazy
+  do przetasowania trafiają do jednej sesji.
+- **Przeciąganie zastępuje przyciski „góra” i „dół”.** Dwa poziomy listy i przenoszenie ćwiczeń
+  między blokami wymagają wskazania celu, czego para przycisków nie wyraża. Uchwyt musi działać
+  także z klawiatury, bo przyciski były dotąd jedyną dostępną drogą porządkowania (ARCHITECTURE §10).
+- **Blok w adresie to `id:ćwiczenia:W:P:tryb`, a lista ćwiczeń jest szóstym składnikiem.**
+  Dopisuje ją tylko blok węższy od swojej kategorii — inaczej adres domyślnej sesji urósłby
+  o komplet 70 identyfikatorów zamiast zatrzymać się na ~1,5 kB. Identyfikatory, nie indeksy,
+  zgodnie z regułą z 2026-09-13.
+- **Aktywne ćwiczenia bloku wchodzą do ziarna, jego kolejność i tryb nie.** Wyłączenie ćwiczenia
+  zmienia pulę, więc musi przetasować losowanie; przestawienie wiersza zmienia tylko układ kroków.
+- **Wersja zapisu ustawień podniesiona do 3.** Wpisy kategorii ustąpiły blokom, więc stare zapisy
+  są odrzucane w całości, zgodnie z ARCHITECTURE §5.
+
+---
+
 ## 2026-09-13 — limity `W` i `P` per kategoria
 
 Korekta decyzji z tego samego dnia: limity przestają być wspólne dla sesji i stają się polami
