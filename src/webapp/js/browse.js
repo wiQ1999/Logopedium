@@ -1,4 +1,5 @@
 import { normalizeText } from './data.js';
+import { mountEditor } from './editor.js';
 import {
   attachMarkModeControl,
   escapeHtml,
@@ -183,7 +184,7 @@ function renderLevelOptions(selected) {
 
 export function mountList(root, app, query) {
   const filters = readFilters(query);
-  const { db } = app;
+  const db = app.editedDb ?? app.db;
 
   root.innerHTML = `
     <section class="view-head">
@@ -252,7 +253,7 @@ export function mountList(root, app, query) {
 }
 
 export function mountDetail(root, app, exerciseId, query) {
-  const { db } = app;
+  const db = app.editedDb ?? app.db;
   const exercise = db.exerciseById.get(exerciseId);
   const filters = readFilters(query);
   const backHref = browseHref(filters);
@@ -266,6 +267,10 @@ export function mountDetail(root, app, exerciseId, query) {
     return undefined;
   }
 
+  const detailHref = browseHref(filters, exerciseId);
+  if (query.get('edit') === '1') return mountEditor(root, app, exerciseId, query.get('variant'), detailHref);
+  const editHref = `${detailHref}${detailHref.includes('?') ? '&' : '?'}edit=1`;
+
   const category = db.categoryById.get(exercise.categoryId);
   const variantViews = exercise.variants.map((variant) => ({ variant, items: variant.items }));
 
@@ -273,6 +278,7 @@ export function mountDetail(root, app, exerciseId, query) {
     <h1 class="visually-hidden">Podgląd ćwiczenia</h1>
     <div class="btn-row" style="margin-bottom: var(--space-4)">
       <a class="btn btn--ghost" href="${backHref}">&#9664; Wróć do listy</a>
+      <a class="btn" href="${escapeHtml(editHref)}">Edytuj ćwiczenie</a>
     </div>
 
     ${renderMarksToolbar(app.markMode)}
@@ -282,6 +288,7 @@ export function mountDetail(root, app, exerciseId, query) {
       markMode: app.markMode,
       headingId: 'browse-exercise-title',
       showEditorial: true,
+      editVariantHref: (id) => `${editHref}&variant=${encodeURIComponent(id)}`,
     })}
 
     <div class="panel">

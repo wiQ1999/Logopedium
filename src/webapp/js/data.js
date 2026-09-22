@@ -1,3 +1,5 @@
+import { sanitizeHtml, visitHtml } from './html.js';
+
 const DATABASE_URL = 'data/database.json';
 const SUPPORTED_SCHEMA_MAJOR = '1';
 const VARIANT_TYPES = ['items', 'text', 'syllables', 'prompt'];
@@ -18,6 +20,12 @@ const isPlainObject = (value) => typeof value === 'object' && value !== null && 
 const isNonEmptyString = (value) => typeof value === 'string' && value.trim() !== '';
 const isNullableString = (value) => value === null || typeof value === 'string';
 const isStringArray = (value) => Array.isArray(value) && value.every((entry) => typeof entry === 'string');
+const hasHtmlContent = (value) => {
+  if (typeof value !== 'string') return false;
+  const html = sanitizeHtml(value).html;
+  return html.replace(/<[^>]*>/g, '').replace(/&(?:nbsp|#0*160|#x0*a0);/gi, ' ').trim() !== '' ||
+    /<span class="[^"]*\b(?:blank|exhale)\b/.test(html);
+};
 
 function validateCategories(raw, issues) {
   const ids = new Set();
@@ -69,8 +77,8 @@ function validateItems(variant, path, issues, ids) {
     } else {
       ids.add(item.id);
     }
-    if (typeof item.html !== 'string') {
-      issues.push(`${itemPath}.html: oczekiwano tekstu.`);
+    if (!hasHtmlContent(item.html)) {
+      issues.push(`${itemPath}.html: oczekiwano niepustej treści.`);
     }
   });
 }
@@ -108,10 +116,10 @@ function validateVariants(exercise, path, issues, ids) {
     if (!isStringArray(variant.examples)) {
       issues.push(`${variantPath}.examples: oczekiwano tablicy tekstów.`);
     }
-    if (variant.type === 'text' && !isNonEmptyString(variant.textHtml)) {
+    if (variant.type === 'text' && !hasHtmlContent(variant.textHtml)) {
       issues.push(`${variantPath}.textHtml: wariant typu "text" wymaga treści.`);
     }
-    if (variant.type === 'syllables' && !isNonEmptyString(variant.syllablesHtml)) {
+    if (variant.type === 'syllables' && !hasHtmlContent(variant.syllablesHtml)) {
       issues.push(`${variantPath}.syllablesHtml: wariant typu "syllables" wymaga treści.`);
     }
     validateItems(variant, variantPath, issues, ids);
@@ -203,6 +211,9 @@ export function validateDatabase(raw) {
 
   const categoryIds = validateCategories(raw, issues);
   validateExercises(raw, categoryIds, issues);
+  if (Array.isArray(raw.exercises)) visitHtml(raw, (object, key, path) => {
+    sanitizeHtml(object[key]).issues.forEach((message) => issues.push(`${path}: ${message}`));
+  });
 
   ['duplicates', 'nonTextMaterials'].forEach((field) => {
     if (raw[field] !== undefined && !Array.isArray(raw[field])) {

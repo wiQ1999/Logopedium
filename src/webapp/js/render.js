@@ -1,17 +1,5 @@
-const MONTHS_GENITIVE = [
-  'stycznia',
-  'lutego',
-  'marca',
-  'kwietnia',
-  'maja',
-  'czerwca',
-  'lipca',
-  'sierpnia',
-  'września',
-  'października',
-  'listopada',
-  'grudnia',
-];
+import { sanitizeHtml } from './html.js';
+const safeHtml = (value) => sanitizeHtml(value).html;
 
 const MARK_MODES = [
   { id: 'full', label: 'pełne', description: 'głoska docelowa i przedłużenia legato' },
@@ -50,9 +38,9 @@ export function formatDate(isoDate) {
   if (!match) {
     return String(isoDate);
   }
-  const [, year, month, day] = match;
-  const monthName = MONTHS_GENITIVE[Number(month) - 1] ?? month;
-  return `${Number(day)} ${monthName} ${year}`;
+  const date = new Date(`${isoDate}T12:00:00Z`);
+  if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== isoDate) return String(isoDate);
+  return new Intl.DateTimeFormat(undefined, { dateStyle: 'long', timeZone: 'UTC' }).format(date);
 }
 
 export function levelLabel(level) {
@@ -64,7 +52,7 @@ function block(labelText, contentHtml, modifier = '', contentClass = 'content co
     return '';
   }
   const label = labelText ? `<span class="block__label">${escapeHtml(labelText)}</span>` : '';
-  return `<div class="block ${modifier}">${label}<div class="${contentClass}">${contentHtml}</div></div>`;
+  return `<div class="block ${modifier}">${label}<div class="${contentClass}">${safeHtml(contentHtml)}</div></div>`;
 }
 
 export function renderMarksToolbar(activeMode) {
@@ -123,7 +111,7 @@ function renderItems(variantView) {
   if (items.length === 0) {
     return '';
   }
-  const list = items.map((item) => `<li class="items__item">${item.html}</li>`).join('');
+  const list = items.map((item) => `<li class="items__item">${safeHtml(item.html)}</li>`).join('');
   const total = variant.items.length;
   const note = items.length < total ? `<p class="items__note">Wylosowano ${items.length} z ${total} pozycji.</p>` : '';
   return `<ol class="items">${list}</ol>${note}`;
@@ -133,19 +121,20 @@ function renderExamples(variant) {
   if (variant.examples.length === 0) {
     return '';
   }
-  const list = variant.examples.map((example) => `<li>${example}</li>`).join('');
+  const list = variant.examples.map((example) => `<li>${safeHtml(example)}</li>`).join('');
   return `<div class="block"><span class="block__label">Przykłady z oryginału</span><ul class="examples content content--small">${list}</ul></div>`;
 }
 
-function renderVariant(variantView, instructionHtml) {
+function renderVariant(variantView, instructionHtml, editHref) {
   const { variant } = variantView;
   const heading = variant.label ? `<h3 class="variant__label">${escapeHtml(variant.label)}</h3>` : '';
   const instruction = instructionHtml;
-  const syllables = variant.syllablesHtml ? `<div class="syllables content content--small">${variant.syllablesHtml}</div>` : '';
-  const text = variant.textHtml ? `<div class="content">${variant.textHtml}</div>` : '';
+  const syllables = variant.syllablesHtml ? `<div class="syllables content content--small">${safeHtml(variant.syllablesHtml)}</div>` : '';
+  const text = variant.textHtml ? `<div class="content">${safeHtml(variant.textHtml)}</div>` : '';
 
   return `<section class="variant">
       ${heading}
+      ${editHref ? `<a class="btn btn--ghost" href="${escapeHtml(editHref)}">Edytuj wariant</a>` : ''}
       ${block('Polecenie', instruction, 'block--instruction')}
       ${syllables}
       ${text}
@@ -172,7 +161,7 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
     .join('');
 
   const header = exercise.headerHtml
-    ? `<div class="exercise-card__header-note">${exercise.headerHtml}</div>`
+    ? `<div class="exercise-card__header-note">${safeHtml(exercise.headerHtml)}</div>`
     : '';
 
   const instructions = variantViews.map((view) => view.variant.instructionHtml ?? exercise.instructionHtml ?? null);
@@ -185,7 +174,7 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
       : '';
 
   const variants = variantViews
-    .map((view, index) => renderVariant(view, shared ? null : instructions[index]))
+    .map((view, index) => renderVariant(view, shared ? null : instructions[index], options.editVariantHref?.(view.variant.id)))
     .join('');
 
   const editorial = showEditorial && exercise.notes

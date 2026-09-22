@@ -20,6 +20,7 @@ const footer = document.querySelector('#app-footer-info');
 
 let cleanup = null;
 let firstRender = true;
+let acceptedHash = window.location.hash;
 
 const app = {
   db: null,
@@ -131,6 +132,10 @@ function renderSessionRoute(segments, query) {
 }
 
 function render() {
+  if (app.beforeLeave && !app.beforeLeave()) {
+    app.replaceHash(acceptedHash);
+    return;
+  }
   if (cleanup) {
     cleanup();
     cleanup = null;
@@ -171,9 +176,10 @@ function render() {
 
   window.scrollTo({ top: 0, behavior: 'auto' });
   if (!firstRender) {
-    root.focus();
+    root.focus({ preventScroll: true });
   }
   firstRender = false;
+  acceptedHash = window.location.hash;
 }
 
 function renderLoadError(error) {

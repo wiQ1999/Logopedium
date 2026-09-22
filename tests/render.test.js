@@ -37,9 +37,11 @@ describe('formatowanie tekstu', () => {
     assert.equal(formatCount(3, forms), '3 ćwiczenia');
   });
 
-  it('formatDate zapisuje datę po polsku', () => {
-    assert.equal(formatDate('2026-09-10'), '10 września 2026');
-    assert.equal(formatDate('2026-01-01'), '1 stycznia 2026');
+  it('formatDate używa ustawień regionalnych bez przesunięcia dnia', () => {
+    const formatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'long', timeZone: 'UTC' });
+    assert.equal(formatDate('2026-09-10'), formatter.format(new Date('2026-09-10T12:00:00Z')));
+    assert.equal(formatDate('2026-01-01'), formatter.format(new Date('2026-01-01T12:00:00Z')));
+    assert.equal(formatDate('2026-02-30'), '2026-02-30');
     assert.equal(formatDate('nieznana'), 'nieznana');
   });
 

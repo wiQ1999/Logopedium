@@ -352,9 +352,20 @@
 .drag-handle { cursor: grab; min-width: 40px; padding: var(--space-2); }
 .drag-handle[aria-pressed="true"] { background: var(--accent-soft); outline: 2px solid var(--accent); }
 .split-target { padding: var(--space-3); margin: var(--space-2); border: 1px dashed var(--border-strong); border-radius: var(--radius); color: var(--text-muted); font-size: .875rem; }
+.editor-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+.editor-fields { display: grid; gap: var(--space-3); min-width: 0; }
+.editor-fields .input, .editor-fields .select { width: 100%; min-width: 0; }
+.editor-fields textarea { resize: vertical; }
+.editor-toolbar { position: sticky; top: 4.5rem; z-index: 2; display: flex; flex-wrap: wrap; gap: var(--space-2); padding: var(--space-3); margin-bottom: var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.editor-toolbar .btn { font-size: .8125rem; padding: var(--space-1) var(--space-2); }
+.editor-preview { min-width: 0; position: sticky; top: 13rem; max-height: calc(100vh - 14rem); overflow: auto; }
+.rich-input { min-height: 5rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rich-input:focus { outline: 2px solid var(--accent); }
 @media (max-width: 900px) {
   .params-row { grid-template-columns: auto auto minmax(0, 1fr); }
   .params-row__numbers { grid-column: 1 / -1; flex-wrap: wrap; }
+  .editor-layout { grid-template-columns: minmax(0, 1fr); }
+  .editor-preview { position: static; max-height: none; }
 }
 
 .params-row__meta {
@@ -877,6 +888,10 @@
 }
 
 @media (max-width: 640px) {
+  .editor-toolbar {
+    top: 6.5rem;
+  }
+
   .app-main {
     padding: var(--space-4) var(--space-3) var(--space-6);
   }
