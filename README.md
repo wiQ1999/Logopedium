@@ -5,9 +5,9 @@ na dany dzień dobierany jest losowo z bazy przygotowanej na podstawie materiał
 a użytkownik przechodzi przez kolejne ćwiczenia, jedno po drugim.
 
 Aplikacja działa w całości po stronie przeglądarki, bez backendu i bez konta użytkownika.
-Baza ćwiczeń jest plikiem tylko do odczytu, publikowanym razem z kodem. Ustawienia sesji
-zapamiętywane są lokalnie w przeglądarce, więc wracają przy kolejnej wizycie. Poza sesją
-dostępny jest tryb przeglądania całej zawartości bazy.
+Baza ćwiczeń jest plikiem JSON publikowanym razem z kodem. Sesję układa się z bloków
+o niezależnych ustawieniach, zapamiętywanych lokalnie między wizytami. Poza sesją można
+przeglądać i edytować ćwiczenia oraz warianty z podglądem na żywo i eksportem całej bazy.
 
 ## Uruchomienie
 
@@ -34,8 +34,9 @@ python -m http.server 4173 --directory src/webapp
 npm test
 ```
 
-Wbudowany `node --test`: warstwa danych, losowanie, parametry, dobór ćwiczeń i zapis ustawień,
-a także widoki i trasy na `jsdom` — jedynej zależności deweloperskiej. Aplikacja nie ma zależności.
+Wbudowany `node --test`: dane, losowanie, bloki, zapis ustawień, bezpieczny HTML i eksport JSON,
+a także widoki, edytor i trasy na `jsdom` — jedynej zależności deweloperskiej. Przed pierwszym
+uruchomieniem testów wykonaj `npm ci`. Aplikacja nie ma zależności produkcyjnych.
 
 ## Publikacja
 

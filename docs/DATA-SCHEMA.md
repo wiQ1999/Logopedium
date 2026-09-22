@@ -24,7 +24,7 @@ nonTextMaterials[]    skany bez zadań
 | Pole | Typ | Opis |
 |---|---|---|
 | `schemaVersion` | string | wersja schematu; podbijana przy zmianie kształtu struktury |
-| `generated` | string | data wygenerowania (ISO 8601), przydatna do cache-bustingu |
+| `generated` | string | rewizja treści: data wygenerowania lub eksportu (ISO 8601), uwzględniana w ziarnie |
 
 ### `categories[]`
 
@@ -133,8 +133,9 @@ w nagłówkach — **nie** głoska docelowa) oraz `<em>` (kursywa z oryginału).
 
 Pasek formatowania w podglądzie odwzorowuje każdą klasę z tabeli na przycisk i zapisuje
 zaznaczenie jako `<span class="nazwa-klasy">…</span>`. Edytor dopuszcza wyłącznie wymienione
-tagi i klasy, usuwa puste znaczniki oraz nie zmienia tekstu poza zaznaczeniem. Te same reguły
-obowiązują podgląd na żywo i eksport pliku.
+tagi i klasy oraz opisowy atrybut `title` na `span`. Usuwa puste znaczniki z wyjątkiem
+samodzielnych oznaczeń `blank` i `exhale`; nie zmienia tekstu poza zaznaczeniem. Te same
+reguły obowiązują podgląd na żywo i eksport pliku.
 
 ### Przełączanie warstw
 

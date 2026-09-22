@@ -47,12 +47,14 @@ logopedium/
       ├─ js/
       │  ├─ main.js           # start aplikacji, routing, przełączanie stanów
       │  ├─ data.js           # wczytanie i walidacja bazy
-      │  ├─ params.js         # obsługa parametrów
+      │  ├─ params.js         # formularz parametrów i przeciąganie
+      │  ├─ blocks.js         # model bloków, limity, adres i zapis parametrów
       │  ├─ rng.js            # losowanie z ziarnem
       │  ├─ picker.js         # budowa planu sesji
       │  ├─ session.js        # przechodzenie przez ćwiczenia
       │  ├─ browse.js         # przeglądanie bazy
       │  ├─ editor.js         # edycja, podgląd i eksport bazy
+      │  ├─ html.js           # dozwolone znaczniki i sanitacja treści
       │  ├─ settings.js       # trwały zapis ustawień w przeglądarce
       │  └─ render.js         # wyświetlanie treści
       │
@@ -83,7 +85,7 @@ stronie przeglądarki: bez backendu, bazy scentralizowanej i konta użytkownika.
 
 Wybrany mechanizm: **`localStorage`**, klucz `logopedium.params`, wartość JSON z polem `version`
 (kształt zapisu, niezależny od wersji bazy). Zapisywana jest lista bloków; blok obejmujący całą
-swoją kategorię pomija listę ćwiczeń, więc układ domyślny zajmuje ~2,3 kB.
+swoją kategorię w kolejności domyślnej pomija listę ćwiczeń, więc układ domyślny zajmuje ~2,3 kB.
 
 | Mechanizm | Ocena |
 |---|---|
@@ -122,7 +124,8 @@ Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
   urwane przy ręcznej edycji przyjmują krańce swojego bloku.
 - Blok węższy od swojej kategorii — po podziale albo wyłączeniu ćwiczeń — dopisuje szósty
   składnik: identyfikatory swoich ćwiczeń złączone `+`, w kolejności bloku. Blok obejmujący
-  kategorię w całości listę pomija, więc adres domyślnej sesji ma ~1,5 kB.
+  kategorię w całości listę pomija, o ile nie zmieniono kolejności ćwiczeń; adres domyślnej
+  sesji ma więc ~1,5 kB.
 - Dwa bloki tej samej kategorii różnią się listą ćwiczeń, bo ćwiczenie należy do jednego bloku.
 - Wartości spoza zakresu są przycinane przy odczycie, ćwiczenia nieznane i powtórzone pomijane —
   ręcznie zmieniony adres nie psuje aplikacji.
@@ -136,7 +139,8 @@ Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 - Katalog aplikacji kopiowany na hosting statyczny w całości.
 - Brak kroku budowania, zmiennych środowiskowych i konfiguracji serwera.
 - Routing na fragmencie adresu nie wymaga przekierowań po stronie serwera.
-- Każda zmiana zawartości bazy musi podnieść jej numer wersji.
+- Każda publikowana zmiana treści aktualizuje rewizję `generated` (eksport robi to automatycznie).
+  `schemaVersion` zmienia się przy zmianie struktury. Oba pola wchodzą do ziarna losowania.
 
 ---
 

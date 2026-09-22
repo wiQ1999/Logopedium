@@ -213,8 +213,8 @@ zawsze ten sam plan.
 
 ### 5.2 Składniki ziarna
 
-Data, wersja bazy, poziom trudności oraz zestaw aktywnych bloków: kategoria bloku, jego
-aktywne ćwiczenia i liczba ćwiczeń do wylosowania.
+Data, wersja schematu i rewizja treści bazy (`generated`), poziom trudności oraz zestaw
+aktywnych bloków: kategoria bloku, jego aktywne ćwiczenia i liczba ćwiczeń do wylosowania.
 
 Do ziarna nie wchodzą: kolejność bloków, limity `W` i `P` oraz tryb doboru.
 Kolejność bloków zmienia tylko układ kroków. Pozostałe działają w osobnej fazie na
@@ -293,3 +293,6 @@ Edycja zmienia roboczą kopię bazy w pamięci przeglądarki. Zapis jest dostęp
 walidacji całości i eksportuje kompletny plik `database.json`; opublikowana baza zmienia się
 po zastąpieniu nim pliku aplikacji i ponownym wdrożeniu. Wyjście z niezapisanymi zmianami
 wymaga potwierdzenia.
+
+Wyeksportowana kopia pozostaje dostępna w przeglądaniu do odświeżenia strony. Nie zmienia
+planu sesji ani bazy używanej do losowania przed ponowną publikacją.

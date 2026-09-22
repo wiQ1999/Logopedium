@@ -20,6 +20,9 @@ ARCHITECTURE §2, §8–§10; DATA-SCHEMA „Znaczniki w treści HTML”.
 - **Dowolny HTML pozostaje niedostępny.** Dozwolona lista tagów i klas oraz walidacja całej bazy
   przed eksportem ograniczają błędy struktury i wstrzyknięcie kodu.
 
+Uściślenie implementacyjne (2026-09-22): eksport aktualizuje `generated` jako rewizję treści
+uwzględnianą w ziarnie; `schemaVersion` nadal opisuje wyłącznie kształt struktury.
+
 ---
 
 ## 2026-09-15 — bloki zamiast kategorii w parametrach
