@@ -41,7 +41,7 @@ const app = {
 
   sessionQuery() {
     const encoded = encodeParams(app.plan.params);
-    const parts = [`d=${encoded.d}`, `l=${encoded.l}`, `c=${encoded.c}`, `o=${encoded.o}`];
+    const parts = [`d=${encoded.d}`, `l=${encoded.l}`, `c=${encoded.c}`];
     if (app.plan.seedOverride) {
       parts.push(`seed=${encodeURIComponent(app.plan.seedOverride)}`);
     }
@@ -73,7 +73,9 @@ function parseHash() {
   const path = separator === -1 ? raw : raw.slice(0, separator);
   const queryString = separator === -1 ? '' : raw.slice(separator + 1);
   return {
-    segments: path.split('/').filter(Boolean).map(decodeURIComponent),
+    segments: path.split('/').filter(Boolean).map((part) => {
+      try { return decodeURIComponent(part); } catch { return part; }
+    }),
     query: new URLSearchParams(queryString),
   };
 }

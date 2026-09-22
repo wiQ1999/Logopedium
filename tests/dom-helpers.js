@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { loadRawDatabase } from './helpers.js';
 
@@ -85,6 +86,8 @@ export function networkFailure(message = 'fetch failed') {
 
 export async function bootApp({ hash = '#/params', response, storage } = {}) {
   const virtualConsole = new VirtualConsole();
+  const runtimeErrors = [];
+  virtualConsole.on('jsdomError', (error) => runtimeErrors.push(error.message));
   const dom = new JSDOM(INDEX_HTML, {
     url: `http://localhost/${hash}`,
     pretendToBeVisual: true,
@@ -131,6 +134,7 @@ export async function bootApp({ hash = '#/params', response, storage } = {}) {
       restoreFetch();
       restoreGlobals();
       window.close();
+      assert.deepEqual(runtimeErrors, [], 'Nieobsłużone błędy przeglądarki');
     },
   };
 }

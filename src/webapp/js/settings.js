@@ -1,6 +1,6 @@
 export const STORAGE_KEY = 'logopedium.params';
 
-export const SETTINGS_VERSION = 2;
+export const SETTINGS_VERSION = 3;
 
 function storage() {
   try {

@@ -24,7 +24,7 @@ describe('start aplikacji', () => {
     const app = await boot();
     assert.match(app.text(), /Parametry sesji/);
     assert.equal(app.queryAll('.params-row').length, 30);
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 kategorii');
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 bloków');
     assert.match(app.query('#app-footer-info').textContent, /schemat 1\.1/);
   });
 
@@ -200,7 +200,7 @@ describe('parametry sesji', () => {
 
     assert.equal(row.dataset.active, 'false');
     assert.equal(row.querySelector('[data-role="count"]').value, '0');
-    assert.equal(app.query('#params-total').textContent.trim(), '60 ćwiczeń z 29 kategorii');
+    assert.equal(app.query('#params-total').textContent.trim(), '60 ćwiczeń z 29 bloków');
     assert.deepEqual(app.queryAll('.params-row').map((item) => item.dataset.category), before);
   });
 
@@ -214,10 +214,11 @@ describe('parametry sesji', () => {
     assert.equal(input.value, '2');
   });
 
-  it('strzałki zmieniają kolejność kategorii', async () => {
+  it('uchwyt pozwala przenieść blok klawiaturą', async () => {
     const app = await boot();
     const before = app.queryAll('.params-row').map((row) => row.dataset.category);
-    app.queryAll('.params-row')[1].querySelector('[data-role="move"][data-offset="-1"]').click();
+    const handle = () => app.query('[data-drag="block"][data-id="terapia-miofunkcjonalna-polykanie"]');
+    for (const key of [' ', 'ArrowUp', ' ']) handle().dispatchEvent(new app.window.KeyboardEvent('keydown', { key, bubbles:true }));
     const after = app.queryAll('.params-row').map((row) => row.dataset.category);
     assert.deepEqual(after.slice(0, 2), [before[1], before[0]]);
   });
@@ -265,7 +266,7 @@ describe('parametry sesji', () => {
     assert.deepEqual([variants.value, variants.min, variants.max], ['3', '1', '3']);
     assert.deepEqual([items.value, items.max], ['58', '58']);
     assert.equal(app.query('#param-items-wprawki-rymowanki-treningowe').max, '8');
-    assert.equal(app.query('#param-pick').value, 'kolejnosc');
+    assert.equal(app.query('#pick-opozycje-fonologiczne').value, 'kolejnosc');
   });
 
   it('zmniejszenie liczby wariantów dociąga pozycje tylko w swoim wierszu', async () => {
@@ -292,14 +293,14 @@ describe('parametry sesji', () => {
     const items = app.query('#param-items-opozycje-fonologiczne');
     items.value = '5';
     items.dispatchEvent(new app.window.Event('input', { bubbles: true }));
-    const pick = app.query('#param-pick');
+    const pick = app.query('#pick-opozycje-fonologiczne');
     pick.value = 'losowo';
     pick.dispatchEvent(new app.window.Event('change', { bubbles: true }));
 
     await app.click('#params-submit');
     assert.match(app.hash(), /opozycje-fonologiczne:2:2:5/);
     assert.match(app.hash(), /tekst-do-czytania-terapeutycznego:23:1:0/);
-    assert.match(app.hash(), /o=losowo/);
+    assert.match(app.hash(), /opozycje-fonologiczne:2:2:5:losowo/);
   });
 });
 
@@ -313,11 +314,12 @@ describe('zapamiętywanie ustawień', () => {
     assert.ok(storage.data.has(STORAGE_KEY));
     const stored = JSON.parse(storage.data.get(STORAGE_KEY));
     assert.equal(stored.level, 4);
-    assert.deepEqual(stored.categories.find((entry) => entry.id === 'opozycje-fonologiczne'), {
+    assert.deepEqual(stored.blocks.find((entry) => entry.id === 'opozycje-fonologiczne'), {
       id: 'opozycje-fonologiczne',
       count: 2,
       variantLimit: 3,
       itemLimit: 58,
+      pick: 'kolejnosc',
     });
   });
 
@@ -366,14 +368,14 @@ describe('zapamiętywanie ustawień', () => {
     assert.equal(storage.data.has(STORAGE_KEY), false);
     assert.equal(app.query('#param-level').value, '4');
     assert.equal(app.query('#param-items-opozycje-fonologiczne').value, '58');
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 kategorii');
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 bloków');
   });
 
   it('uszkodzony zapis jest pomijany bez komunikatu', async () => {
     const storage = makeStorage({ [STORAGE_KEY]: 'to nie jest JSON' });
     const app = await boot({ storage });
     assert.match(app.text(), /Parametry sesji/);
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 kategorii');
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 bloków');
   });
 });
 

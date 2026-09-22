@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { buildSeedString, withItemLimit, withMovedCategory, withVariantLimit } from '../src/webapp/js/params.js';
+import { buildSeedString, withItemLimit, withMovedBlock, withPick, withVariantLimit } from '../src/webapp/js/params.js';
 import { buildPlan, pickSubset, shareItemBudget } from '../src/webapp/js/picker.js';
 import { createRng } from '../src/webapp/js/rng.js';
 import { loadDatabaseFixture, makeDbParams, makeFixtureDatabase, makeParams } from './helpers.js';
@@ -86,7 +86,11 @@ describe('powtarzalność losowania', () => {
   });
 
   it('ziarno planu odpowiada parametrom', () => {
-    assert.equal(buildPlan(db, params).seed, buildSeedString(params, db.schemaVersion));
+    assert.equal(buildPlan(db, params).seed, buildSeedString(params, db.schemaVersion, db.generated));
+  });
+
+  it('rewizja treści zmienia ziarno bez zmiany schematu', () => {
+    assert.notEqual(buildPlan(db, params).seed, buildPlan({ ...db, generated: '2026-09-22' }, params).seed);
   });
 
   it('inna data zmienia ziarno i dobór ćwiczeń', () => {
@@ -108,7 +112,7 @@ describe('powtarzalność losowania', () => {
       ['cat-b', 2],
       ['cat-c', 1],
     ]);
-    const reordered = withMovedCategory(withMovedCategory(base, 'cat-c', -1), 'cat-c', -1);
+    const reordered = withMovedBlock(base, 'cat-c', 0);
 
     const basePlan = buildPlan(db, base);
     const reorderedPlan = buildPlan(db, reordered);
@@ -150,7 +154,7 @@ describe('powtarzalność losowania', () => {
   it('limity i tryb doboru nie wchodzą do ziarna ani nie zmieniają doboru ćwiczeń', () => {
     const base = makeParams([['cat-a', 4], ['cat-b', 2], ['cat-d', 1]]);
     const narrowed = withItemLimit(db, withVariantLimit(db, base, 'cat-d', 2), 'cat-a', 3);
-    const narrow = { ...narrowed, pick: 'losowo' };
+    const narrow = withPick(narrowed, 'cat-a', 'losowo');
 
     assert.equal(buildPlan(db, base).seed, buildPlan(db, narrow).seed);
     assert.deepEqual(exerciseIds(buildPlan(db, base)), exerciseIds(buildPlan(db, narrow)));
@@ -290,12 +294,12 @@ describe('dobór pozycji w wariantach', () => {
   });
 
   it('każdy wylosowany wariant z pozycjami dostaje co najmniej jedną pozycję', () => {
-    const plan = buildPlan(db, makeParams([['cat-d', 1, 5, 4]]));
+    const plan = buildPlan(db, makeParams([['cat-d', 1, 5, 5]]));
     const step = stepOf(plan, 'd1');
     const withItems = step.variants.filter((view) => view.variant.items.length > 0);
     assert.equal(withItems.length, 4);
     assert.ok(withItems.every((view) => view.items.length >= 1));
-    assert.equal(countItems(step), 4);
+    assert.equal(countItems(step), 5);
   });
 
   it('warianty bez pozycji nie zużywają budżetu', () => {
@@ -391,7 +395,7 @@ describe('plan na pełnej bazie', () => {
     const params = everyCategory();
     const narrowed = {
       ...params,
-      categories: params.categories.map((entry) => ({
+      blocks: params.blocks.map((entry) => ({
         ...entry,
         variantLimit: Math.min(2, entry.variantLimit),
         itemLimit: Math.min(6, entry.itemLimit),

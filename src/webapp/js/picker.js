@@ -1,4 +1,4 @@
-import { activeSelections, buildSeedString, isExerciseEligible, paramsSignature } from './params.js';
+import { activeSelections, blockExercises, blockSeedKey, buildSeedString, paramsSignature } from './blocks.js';
 import { createRng } from './rng.js';
 
 export const PREFERRED_ITEMS_PER_VARIANT = 2;
@@ -10,14 +10,8 @@ const compareIds = (a, b) => {
   return a < b ? -1 : 1;
 };
 
-function eligibleExercises(db, categoryId, level) {
-  return (db.exercisesByCategory.get(categoryId) ?? [])
-    .filter((exercise) => isExerciseEligible(exercise, level))
-    .sort((a, b) => compareIds(a.id, b.id));
-}
-
 /**
- * Podzbiór N elementów zgodnie z trybem doboru (APPLICATION §3.4).
+ * Podzbiór N elementów zgodnie z trybem doboru (APPLICATION §3.5).
  * `kolejnosc` — N kolejnych elementów od losowego punktu startowego, w kolejności z bazy.
  * `losowo` — N wylosowanych elementów, w kolejności losowania.
  */
@@ -34,7 +28,7 @@ export function pickSubset(list, count, pick, rng) {
 }
 
 /**
- * Podział budżetu pozycji między warianty mające pozycje (APPLICATION §3.3).
+ * Podział budżetu pozycji między warianty mające pozycje (APPLICATION §3.4).
  * Najpierw po jednej pozycji na wariant, potem druga tam, gdzie wariant ma czym ją pokryć,
  * a reszta losowymi porcjami — nie proporcjonalnie do zasobu wariantu.
  */
@@ -67,7 +61,7 @@ export function shareItemBudget(capacities, budget, rng) {
   return shares;
 }
 
-/** `limits` to wpis kategorii, z której pochodzi ćwiczenie (APPLICATION §3.1). */
+/** `limits` to blok, z którego pochodzi ćwiczenie (APPLICATION §3.1). */
 function buildVariantViews(exercise, limits, pick, rng) {
   const chosen = pickSubset(exercise.variants, limits.variantLimit, pick, rng);
 
@@ -76,7 +70,7 @@ function buildVariantViews(exercise, limits, pick, rng) {
   }
 
   const views = chosen.map((variant) => ({ variant, items: [] }));
-  const withItems = views.filter((view) => view.variant.items.length > 0);
+  const withItems = views.filter((view) => view.variant.type === 'items' && view.variant.items.length > 0);
   const shares = shareItemBudget(
     withItems.map((view) => view.variant.items.length),
     limits.itemLimit,
@@ -90,41 +84,26 @@ function buildVariantViews(exercise, limits, pick, rng) {
 }
 
 export function buildPlan(db, params, seedOverride = null) {
-  const seed = seedOverride ?? buildSeedString(params, db.schemaVersion);
+  const seed = seedOverride ?? buildSeedString(params, db.schemaVersion, db.generated);
   const rng = createRng(seed);
   const selections = activeSelections(params);
 
-  const limitsByCategory = new Map(selections.map((selection) => [selection.id, selection]));
-
-  const drawnByCategory = new Map();
+  const drawnByBlock = new Map();
   [...selections]
-    .sort((a, b) => compareIds(a.id, b.id))
+    .sort((a, b) => compareIds(blockSeedKey(a), blockSeedKey(b)))
     .forEach((selection) => {
-      const candidates = eligibleExercises(db, selection.id, params.level);
-      drawnByCategory.set(selection.id, rng.sample(candidates, selection.count));
-    });
-
-  const variantViews = new Map();
-  [...drawnByCategory.values()]
-    .flat()
-    .sort((a, b) => compareIds(a.id, b.id))
-    .forEach((exercise) => {
-      // Ziarno pochodne: limity i tryb doboru działają w osobnej fazie, więc ich zmiana
-      // przekształca zawartość kroku, ale nie przesuwa sekwencji w pozostałych krokach.
-      const limits = limitsByCategory.get(exercise.categoryId);
-      variantViews.set(
-        exercise.id,
-        buildVariantViews(exercise, limits, params.pick, createRng(`${seed}|${exercise.id}`)),
-      );
+      const ordered = blockExercises(db, selection, params.level);
+      const drawn = new Set(rng.sample([...ordered].sort((a, b) => compareIds(a.id, b.id)), selection.count).map((e) => e.id));
+      drawnByBlock.set(selection.key, ordered.filter((e) => drawn.has(e.id)));
     });
 
   const steps = [];
   selections.forEach((selection) => {
-    (drawnByCategory.get(selection.id) ?? []).forEach((exercise) => {
+    (drawnByBlock.get(selection.key) ?? []).forEach((exercise) => {
       steps.push({
         exercise,
         category: db.categoryById.get(exercise.categoryId),
-        variants: variantViews.get(exercise.id),
+        variants: buildVariantViews(exercise, selection, selection.pick, createRng(`${seed}|${exercise.id}`)),
       });
     });
   });

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { buildDatabase } from '../src/webapp/js/data.js';
-import { itemBounds, variantBounds } from '../src/webapp/js/params.js';
+import { clampParams } from '../src/webapp/js/blocks.js';
 
 const DATABASE_PATH = new URL('../src/webapp/data/database.json', import.meta.url);
 
@@ -145,31 +145,15 @@ export const FIXTURE_BOUNDS = {
 
 /** Wpis kategorii: `[id, ćwiczenia]` albo `[id, ćwiczenia, W, P]`; brak limitu = kraniec. */
 export function makeParams(entries, overrides = {}) {
-  return {
-    date: '2026-09-10',
-    level: 4,
-    categories: entries.map(([id, count, variantLimit, itemLimit]) => ({
-      id,
-      count,
-      variantLimit: variantLimit ?? FIXTURE_BOUNDS[id].variants,
-      itemLimit: itemLimit ?? FIXTURE_BOUNDS[id].items,
-    })),
-    pick: 'kolejnosc',
-    ...overrides,
-  };
+  return makeDbParams(makeFixtureDatabase(), entries, overrides);
 }
 
 /** To samo dla dołączonej bazy, gdzie krańców nie da się wypisać ręcznie. */
 export function makeDbParams(db, entries, overrides = {}) {
-  const level = overrides.level ?? 4;
-  return {
+  return clampParams(db, {
     date: '2026-09-10',
-    level,
-    categories: entries.map(([id, count]) => {
-      const variantLimit = variantBounds(db, id, level).max;
-      return { id, count, variantLimit, itemLimit: itemBounds(db, id, level, variantLimit).max };
-    }),
-    pick: 'kolejnosc',
+    level: 4,
+    blocks: entries.map(([id, count, variantLimit, itemLimit]) => ({ id, count, variantLimit, itemLimit, pick: overrides.pick })),
     ...overrides,
-  };
+  });
 }

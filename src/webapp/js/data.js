@@ -294,6 +294,7 @@ export function buildDatabase(raw) {
   const itemCount = exercises.reduce((total, exercise) => total + exercise.itemCount, 0);
 
   return {
+    raw,
     schemaVersion: raw.schemaVersion,
     generated: raw.generated,
     categories,
