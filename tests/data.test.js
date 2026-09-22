@@ -22,7 +22,7 @@ describe('walidacja bazy', () => {
   });
 
   it('wskazuje nieobsługiwaną wersję schematu', () => {
-    const issues = validateDatabase(makeRawDatabase({ schemaVersion: '2.0' }));
+    const issues = validateDatabase(makeRawDatabase({ schemaVersion: '3.0' }));
     assert.ok(findIssue(issues, 'schemaVersion'), issues.join('\n'));
     assert.ok(findIssue(issues, 'nie jest obsługiwana'));
   });
@@ -109,7 +109,7 @@ describe('normalizacja bazy', () => {
   const db = loadDatabaseFixture();
 
   it('liczy zawartość bazy', () => {
-    assert.equal(db.stats.categoryCount, 30);
+    assert.equal(db.stats.categoryCount, 7);
     assert.equal(db.stats.exerciseCount, 70);
     assert.equal(db.stats.variantCount, 132);
     assert.equal(db.stats.itemCount, 735);

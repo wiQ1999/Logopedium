@@ -49,7 +49,7 @@ export function visitHtml(raw, visit) {
     for (const field of ['headerHtml', 'contextHtml', 'instructionHtml']) if (typeof e?.[field] === 'string') visit(e, field, `exercises[${ei}].${field}`);
     for (const [vi, v] of (Array.isArray(e?.variants) ? e.variants : []).entries()) {
       const path = `exercises[${ei}].variants[${vi}]`;
-      for (const field of ['instructionHtml', 'syllablesHtml', 'textHtml', 'noteHtml']) if (typeof v?.[field] === 'string') visit(v, field, `${path}.${field}`);
+      for (const field of ['instructionHtml', 'syllablesHtml', 'textHtml']) if (typeof v?.[field] === 'string') visit(v, field, `${path}.${field}`);
       for (const [i, item] of (Array.isArray(v?.items) ? v.items : []).entries()) if (typeof item?.html === 'string') visit(item, 'html', `${path}.items[${i}].html`);
       if (Array.isArray(v?.examples)) v.examples.forEach((s, i) => { if (typeof s === 'string') visit(v.examples, i, `${path}.examples[${i}]`); });
     }

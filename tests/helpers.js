@@ -27,7 +27,6 @@ export function makeVariant(overrides = {}) {
     instructionHtml: null,
     syllablesHtml: null,
     textHtml: null,
-    noteHtml: null,
     examples: [],
     items: [],
     ...overrides,
@@ -40,13 +39,9 @@ export function makeExercise(overrides = {}) {
     id,
     title: `Ćwiczenie ${id}`,
     categoryId: 'cat-a',
-    phonemes: [],
-    positions: [],
     level: null,
     randomizable: true,
     readQuality: 'pewny',
-    source: { file: `${id}.jpg`, kind: 'zdjecie', publication: null },
-    notes: null,
     headerHtml: null,
     contextHtml: null,
     instructionHtml: null,
@@ -57,7 +52,7 @@ export function makeExercise(overrides = {}) {
 
 export function makeRawDatabase(overrides = {}) {
   return {
-    schemaVersion: '1.0',
+    schemaVersion: '2.0',
     generated: '2026-01-01',
     categories: [
       { id: 'cat-a', name: 'Kategoria A' },
@@ -120,8 +115,6 @@ export function makeRawDatabase(overrides = {}) {
         variants: [makeVariant({ id: 'e1-w1', type: 'text', textHtml: '<p>Sam tekst</p>' })],
       }),
     ],
-    duplicates: [],
-    nonTextMaterials: [],
     ...overrides,
   };
 }

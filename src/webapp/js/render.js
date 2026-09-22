@@ -140,7 +140,6 @@ function renderVariant(variantView, instructionHtml, editHref) {
       ${text}
       ${renderItems(variantView)}
       ${renderExamples(variant)}
-      ${block('Uwaga', variant.noteHtml, 'block--note')}
     </section>`;
 }
 
@@ -149,7 +148,6 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
     categoryName = '',
     markMode = 'full',
     headingId = 'exercise-title',
-    showEditorial = false,
   } = options;
 
   const badges = [
@@ -177,10 +175,6 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
     .map((view, index) => renderVariant(view, shared ? null : instructions[index], options.editVariantHref?.(view.variant.id)))
     .join('');
 
-  const editorial = showEditorial && exercise.notes
-    ? block('Uwagi redakcyjne (nie dla ćwiczącego)', `<p>${escapeHtml(exercise.notes)}</p>`, 'block--editorial')
-    : '';
-
   return `<article class="exercise-card" data-marks="${escapeHtml(markMode)}" aria-labelledby="${escapeHtml(headingId)}">
       <header class="exercise-card__head">
         <div>
@@ -193,7 +187,6 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
       ${block('Polecenie', cardInstruction, 'block--instruction')}
       ${trimmed}
       ${variants}
-      ${editorial}
     </article>`;
 }
 

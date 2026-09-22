@@ -68,14 +68,6 @@ describe('karta ćwiczenia', () => {
     assert.ok(renderExerciseCard(exercise, views, { markMode: 'plain' }).includes('data-marks="plain"'));
   });
 
-  it('nie pokazuje uwag redakcyjnych w sesji', () => {
-    const inSession = renderExerciseCard(exercise, views, { showEditorial: false });
-    const inBrowse = renderExerciseCard(exercise, views, { showEditorial: true });
-    assert.ok(!inSession.includes('Uwagi redakcyjne'));
-    assert.ok(inBrowse.includes('Uwagi redakcyjne'));
-    assert.ok(inBrowse.includes('Wydawnictwo Harmonia'));
-  });
-
   it('informuje o wylosowaniu podzbioru pozycji', () => {
     const withItems = db.exercises.find((item) => item.variants.some((variant) => variant.items.length > 5));
     const variant = withItems.variants.find((entry) => entry.items.length > 5);

@@ -87,7 +87,7 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     ${textField(v, 'label', 'Nazwa wariantu', 'text', true)}
     ${selectField(v, 'type', 'Typ wariantu', [['items','Pozycje'],['text','Tekst'],['syllables','Sylaby'],['prompt','Polecenie']])}
     ${richField(v, 'instructionHtml', 'Polecenie wariantu (puste = polecenie ćwiczenia)')}
-    ${richField(v, 'syllablesHtml', 'Sylaby')}${richField(v, 'textHtml', 'Tekst')}${richField(v, 'noteHtml', 'Uwaga metodyczna')}
+    ${richField(v, 'syllablesHtml', 'Sylaby')}${richField(v, 'textHtml', 'Tekst')}
     ${v.examples.map((s, i) => richField(v.examples, i, `Przykład ${i + 1}`, false)).join('')}
     ${v.items.map((item, i) => richField(item, 'html', `Pozycja ${i + 1} — ${item.id}`, false)).join('')}
   </div></details>`;
@@ -97,10 +97,7 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     ${selectField(exercise, 'categoryId', 'Kategoria', state.raw.categories.map((c) => [c.id,c.name]))}
     ${selectField(exercise, 'level', 'Poziom', [['','Nieokreślony'], ...[1,2,3,4].map((n) => [n,String(n)])], (s) => s === '' ? null : Number(s))}
     ${selectField(exercise, 'randomizable', 'Losowanie pozycji', [['true','Dozwolone'],['false','Materiał w całości']], (s) => s === 'true')}
-    ${textField(exercise, 'phonemes', 'Głoski (jedna w wierszu)', 'array')}${textField(exercise, 'positions', 'Pozycje w wyrazie (jedna w wierszu)', 'array')}
     ${textField(exercise, 'readQuality', 'Jakość odczytu')}
-    ${textField(exercise.source, 'file', 'Plik źródłowy')}${textField(exercise.source, 'kind', 'Rodzaj źródła')}${textField(exercise.source, 'publication', 'Publikacja', 'text', true)}
-    ${textField(exercise, 'notes', 'Uwagi redakcyjne', 'text', true)}
     ${richField(exercise, 'headerHtml', 'Nagłówek')}${richField(exercise, 'contextHtml', 'Materiał wprowadzający')}${richField(exercise, 'instructionHtml', 'Polecenie ćwiczenia')}
     </div>${exercise.variants.map(variantFields).join('')}`;
   root.innerHTML = `<section class="view-head"><h1>${variant ? 'Edycja wariantu' : 'Edycja ćwiczenia'}</h1><p>${escapeHtml(exercise.title)}</p>
@@ -119,7 +116,7 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     errors.innerHTML = issues.length ? renderNotice('Popraw dane przed zapisem', 'Baza zawiera niezgodności:', 'notice--error', issues) : '';
     if (issues.length) preview.innerHTML = '<p class="notice">Podgląd będzie dostępny po poprawieniu danych.</p>';
     else preview.innerHTML = renderExerciseCard(exercise, exercise.variants.map((v) => ({ variant: v, items: v.items })), {
-      categoryName: state.raw.categories.find((c) => c.id === exercise.categoryId)?.name, showEditorial: true, markMode: 'full' });
+      categoryName: state.raw.categories.find((c) => c.id === exercise.categoryId)?.name, markMode: 'full' });
     root.querySelector('#editor-status').textContent = dirty() ? 'Niezapisane zmiany w bazie.' : 'Brak niezapisanych zmian.';
   };
   const readRich = (el) => {

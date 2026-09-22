@@ -98,9 +98,9 @@ describe('powtarzalność losowania', () => {
     assert.notEqual(buildPlan(db, params).seed, buildPlan(db, other).seed);
 
     const dates = ['2026-09-11', '2026-09-12', '2026-09-13', '2026-09-14', '2026-09-15'];
-    const baseline = exerciseIds(buildPlan(realDb, makeDbParams(realDb, [['tekst-do-czytania-terapeutycznego', 3]])));
+    const baseline = exerciseIds(buildPlan(realDb, makeDbParams(realDb, [['teksty-do-czytania-terapeutycznego', 3]])));
     const different = dates.some((date) => {
-      const plan = buildPlan(realDb, makeDbParams(realDb, [['tekst-do-czytania-terapeutycznego', 3]], { date }));
+      const plan = buildPlan(realDb, makeDbParams(realDb, [['teksty-do-czytania-terapeutycznego', 3]], { date }));
       return JSON.stringify(exerciseIds(plan)) !== JSON.stringify(baseline);
     });
     assert.ok(different, 'zmiana daty powinna zmieniać dobór ćwiczeń');
@@ -147,7 +147,7 @@ describe('powtarzalność losowania', () => {
   });
 
   it('różne ziarna dają różne zestawy', () => {
-    const wide = makeDbParams(realDb, [['tekst-do-czytania-terapeutycznego', 4]]);
+    const wide = makeDbParams(realDb, [['teksty-do-czytania-terapeutycznego', 4]]);
     assert.notDeepEqual(exerciseIds(buildPlan(realDb, wide, 'ziarno-1')), exerciseIds(buildPlan(realDb, wide, 'ziarno-2')));
   });
 

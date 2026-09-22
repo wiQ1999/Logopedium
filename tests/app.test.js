@@ -16,16 +16,16 @@ after(() => {
   apps.forEach((app) => app.teardown());
 });
 
-const SELECTION = 'samogloski-wyrazista-wymowa:1:2:5,gloska-dz:1:4:29,wprawki-rymowanki-treningowe:2:1:8';
+const SELECTION = 'samogloski:1:2:5,artykulacja-i-roznicowanie-glosek:1:4:29,wprawki-artykulacyjne:2:1:8';
 const SESSION_QUERY = `d=2026-09-10&l=4&c=${SELECTION}&o=kolejnosc`;
 
 describe('start aplikacji', () => {
   it('wczytuje bazę i pokazuje parametry sesji', async () => {
     const app = await boot();
     assert.match(app.text(), /Parametry sesji/);
-    assert.equal(app.queryAll('.params-row').length, 30);
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 bloków');
-    assert.match(app.query('#app-footer-info').textContent, /schemat 1\.1/);
+    assert.equal(app.queryAll('.params-row').length, 7);
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 7 bloków');
+    assert.match(app.query('#app-footer-info').textContent, /schemat 2\.0/);
   });
 
   it('nieznany adres wraca do parametrów', async () => {
@@ -131,15 +131,15 @@ describe('przebieg sesji', () => {
       categories.push(app.query('.exercise-card .chip').textContent);
     }
     assert.deepEqual(categories, [
-      'samogłoski — wyrazista wymowa',
-      'głoska dż',
-      'wprawki / rymowanki treningowe',
-      'wprawki / rymowanki treningowe',
+      'samogłoski',
+      'artykulacja i różnicowanie głosek',
+      'wprawki artykulacyjne',
+      'wprawki artykulacyjne',
     ]);
   });
 
   it('ziarno z adresu zmienia zestaw, a jego brak przywraca zestaw dnia', async () => {
-    const query = 'd=2026-09-10&l=4&c=tekst-do-czytania-terapeutycznego:3:1:0&o=kolejnosc';
+    const query = 'd=2026-09-10&l=4&c=teksty-do-czytania-terapeutycznego:3:1:0&o=kolejnosc';
     const titles = async (app, suffix) => {
       const result = [];
       for (let step = 1; step <= 3; step += 1) {
@@ -187,7 +187,7 @@ describe('parametry sesji', () => {
     select.value = '1';
     select.dispatchEvent(new app.window.Event('change', { bubbles: true }));
 
-    const row = app.queryAll('.params-row').find((item) => item.dataset.category === 'tekst-do-czytania-terapeutycznego');
+    const row = app.queryAll('.params-row').find((item) => item.dataset.category === 'teksty-do-czytania-terapeutycznego');
     assert.equal(row.querySelector('[data-role="count"]').max, '8');
     assert.match(row.textContent, /dostępnych: 8/);
   });
@@ -200,24 +200,24 @@ describe('parametry sesji', () => {
 
     assert.equal(row.dataset.active, 'false');
     assert.equal(row.querySelector('[data-role="count"]').value, '0');
-    assert.equal(app.query('#params-total').textContent.trim(), '60 ćwiczeń z 29 bloków');
+    assert.equal(app.query('#params-total').textContent.trim(), '64 ćwiczenia z 6 bloków');
     assert.deepEqual(app.queryAll('.params-row').map((item) => item.dataset.category), before);
   });
 
   it('liczba ćwiczeń jest przycinana do dostępnych', async () => {
     const app = await boot();
-    const row = app.queryAll('.params-row').find((item) => item.dataset.category === 'opozycje-fonologiczne');
+    const row = app.queryAll('.params-row').find((item) => item.dataset.category === 'artykulacja-i-roznicowanie-glosek');
     const input = row.querySelector('[data-role="count"]');
     input.value = '99';
     input.dispatchEvent(new app.window.Event('input', { bubbles: true }));
     input.dispatchEvent(new app.window.Event('change', { bubbles: true }));
-    assert.equal(input.value, '2');
+    assert.equal(input.value, '21');
   });
 
   it('uchwyt pozwala przenieść blok klawiaturą', async () => {
     const app = await boot();
     const before = app.queryAll('.params-row').map((row) => row.dataset.category);
-    const handle = () => app.query('[data-drag="block"][data-id="terapia-miofunkcjonalna-polykanie"]');
+    const handle = () => app.query('[data-drag="block"][data-id="oddech-fonacja-i-rezonans"]');
     for (const key of [' ', 'ArrowUp', ' ']) handle().dispatchEvent(new app.window.KeyboardEvent('keydown', { key, bubbles:true }));
     const after = app.queryAll('.params-row').map((row) => row.dataset.category);
     assert.deepEqual(after.slice(0, 2), [before[1], before[0]]);
@@ -246,61 +246,58 @@ describe('parametry sesji', () => {
     const app = await boot();
     const field = (category, role) => app.query(`#param-${role}-${category}`);
 
-    assert.ok(field('opozycje-fonologiczne', 'variants'), 'kategoria wielowariantowa z pozycjami');
-    assert.ok(field('opozycje-fonologiczne', 'items'));
+    assert.ok(field('artykulacja-i-roznicowanie-glosek', 'variants'), 'kategoria wielowariantowa z pozycjami');
+    assert.ok(field('artykulacja-i-roznicowanie-glosek', 'items'));
 
-    assert.ok(field('terapia-miofunkcjonalna-polykanie', 'variants'), 'warianty bez pozycji');
-    assert.equal(field('terapia-miofunkcjonalna-polykanie', 'items'), null);
+    assert.equal(field('wprawki-artykulacyjne', 'variants'), null, 'jeden wariant, są pozycje');
+    assert.ok(field('wprawki-artykulacyjne', 'items'));
 
-    assert.equal(field('wprawki-rymowanki-treningowe', 'variants'), null, 'jeden wariant, są pozycje');
-    assert.ok(field('wprawki-rymowanki-treningowe', 'items'));
-
-    assert.equal(field('tekst-do-czytania-terapeutycznego', 'variants'), null, 'nie ma czego ograniczać');
-    assert.equal(field('tekst-do-czytania-terapeutycznego', 'items'), null);
+    assert.equal(field('teksty-do-czytania-terapeutycznego', 'variants'), null, 'nie ma czego ograniczać');
+    assert.equal(field('teksty-do-czytania-terapeutycznego', 'items'), null);
   });
 
   it('pola zakresu startują na krańcach swojej kategorii', async () => {
     const app = await boot();
-    const variants = app.query('#param-variants-opozycje-fonologiczne');
-    const items = app.query('#param-items-opozycje-fonologiczne');
-    assert.deepEqual([variants.value, variants.min, variants.max], ['3', '1', '3']);
+    const variants = app.query('#param-variants-artykulacja-i-roznicowanie-glosek');
+    const items = app.query('#param-items-artykulacja-i-roznicowanie-glosek');
+    assert.deepEqual([variants.value, variants.min, variants.max], ['6', '1', '6']);
     assert.deepEqual([items.value, items.max], ['58', '58']);
-    assert.equal(app.query('#param-items-wprawki-rymowanki-treningowe').max, '8');
-    assert.equal(app.query('#pick-opozycje-fonologiczne').value, 'kolejnosc');
+    assert.equal(app.query('#param-items-wprawki-artykulacyjne').max, '8');
+    assert.equal(app.query('#pick-artykulacja-i-roznicowanie-glosek').value, 'kolejnosc');
   });
 
   it('zmniejszenie liczby wariantów dociąga pozycje tylko w swoim wierszu', async () => {
     const app = await boot();
-    const variants = app.query('#param-variants-opozycje-fonologiczne');
+    const variants = app.query('#param-variants-artykulacja-i-roznicowanie-glosek');
     variants.value = '1';
     variants.dispatchEvent(new app.window.Event('input', { bubbles: true }));
 
-    const items = app.query('#param-items-opozycje-fonologiczne');
+    const items = app.query('#param-items-artykulacja-i-roznicowanie-glosek');
     assert.equal(items.max, '30');
     assert.equal(items.value, '30');
     assert.equal(
-      app.query('[data-category="opozycje-fonologiczne"] [data-role="item-limit-range"]').textContent,
+      app.query('[data-category="artykulacja-i-roznicowanie-glosek"] [data-role="item-limit-range"]').textContent,
       '1–30',
     );
-    assert.equal(app.query('#param-items-gloska-dz').value, '29');
+    assert.equal(app.query('#param-items-wprawki-artykulacyjne').value, '8');
   });
 
   it('limity kategorii i tryb doboru trafiają do adresu sesji', async () => {
     const app = await boot();
-    const variants = app.query('#param-variants-opozycje-fonologiczne');
+    const variants = app.query('#param-variants-artykulacja-i-roznicowanie-glosek');
     variants.value = '2';
     variants.dispatchEvent(new app.window.Event('input', { bubbles: true }));
-    const items = app.query('#param-items-opozycje-fonologiczne');
+    const items = app.query('#param-items-artykulacja-i-roznicowanie-glosek');
     items.value = '5';
     items.dispatchEvent(new app.window.Event('input', { bubbles: true }));
-    const pick = app.query('#pick-opozycje-fonologiczne');
+    const pick = app.query('#pick-artykulacja-i-roznicowanie-glosek');
     pick.value = 'losowo';
     pick.dispatchEvent(new app.window.Event('change', { bubbles: true }));
 
     await app.click('#params-submit');
-    assert.match(app.hash(), /opozycje-fonologiczne:2:2:5/);
-    assert.match(app.hash(), /tekst-do-czytania-terapeutycznego:23:1:0/);
-    assert.match(app.hash(), /opozycje-fonologiczne:2:2:5:losowo/);
+    assert.match(app.hash(), /artykulacja-i-roznicowanie-glosek:21:2:5/);
+    assert.match(app.hash(), /teksty-do-czytania-terapeutycznego:23:1:0/);
+    assert.match(app.hash(), /artykulacja-i-roznicowanie-glosek:21:2:5:losowo/);
   });
 });
 
@@ -314,10 +311,10 @@ describe('zapamiętywanie ustawień', () => {
     assert.ok(storage.data.has(STORAGE_KEY));
     const stored = JSON.parse(storage.data.get(STORAGE_KEY));
     assert.equal(stored.level, 4);
-    assert.deepEqual(stored.blocks.find((entry) => entry.id === 'opozycje-fonologiczne'), {
-      id: 'opozycje-fonologiczne',
-      count: 2,
-      variantLimit: 3,
+    assert.deepEqual(stored.blocks.find((entry) => entry.id === 'artykulacja-i-roznicowanie-glosek'), {
+      id: 'artykulacja-i-roznicowanie-glosek',
+      count: 21,
+      variantLimit: 6,
       itemLimit: 58,
       pick: 'kolejnosc',
     });
@@ -329,29 +326,29 @@ describe('zapamiętywanie ustawień', () => {
     const level = first.query('#param-level');
     level.value = '2';
     level.dispatchEvent(new first.window.Event('change', { bubbles: true }));
-    const variants = first.query('#param-variants-opozycje-fonologiczne');
+    const variants = first.query('#param-variants-artykulacja-i-roznicowanie-glosek');
     variants.value = '1';
     variants.dispatchEvent(new first.window.Event('input', { bubbles: true }));
     await first.click('#params-submit');
 
     const second = await boot({ storage });
     assert.equal(second.query('#param-level').value, '2');
-    assert.equal(second.query('#param-variants-opozycje-fonologiczne').value, '1');
-    assert.equal(second.query('#param-items-opozycje-fonologiczne').value, '30');
+    assert.equal(second.query('#param-variants-artykulacja-i-roznicowanie-glosek').value, '1');
+    assert.equal(second.query('#param-items-artykulacja-i-roznicowanie-glosek').value, '30');
   });
 
   it('parametry z adresu mają pierwszeństwo przed zapisem', async () => {
     const storage = makeStorage();
     const first = await boot({ storage });
-    const variants = first.query('#param-variants-gloska-dz');
+    const variants = first.query('#param-variants-artykulacja-i-roznicowanie-glosek');
     variants.value = '1';
     variants.dispatchEvent(new first.window.Event('input', { bubbles: true }));
     await first.click('#params-submit');
-    assert.match(first.hash(), /gloska-dz:1:1:/);
+    assert.match(first.hash(), /artykulacja-i-roznicowanie-glosek:21:1:/);
 
     const second = await boot({ storage, hash: `#/session/2?${SESSION_QUERY}` });
     assert.match(second.text(), /Ćwiczenie 2 z 4/);
-    assert.equal(second.queryAll('.exercise-card .variant').length, 4);
+    assert.match(second.query('.exercise-card .chip').textContent, /artykulacja i różnicowanie głosek/);
   });
 
   it('przywrócenie domyślnych czyści zapis i formularz', async () => {
@@ -367,15 +364,15 @@ describe('zapamiętywanie ustawień', () => {
     await app.click('[data-role="reset"]');
     assert.equal(storage.data.has(STORAGE_KEY), false);
     assert.equal(app.query('#param-level').value, '4');
-    assert.equal(app.query('#param-items-opozycje-fonologiczne').value, '58');
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 bloków');
+    assert.equal(app.query('#param-items-artykulacja-i-roznicowanie-glosek').value, '58');
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 7 bloków');
   });
 
   it('uszkodzony zapis jest pomijany bez komunikatu', async () => {
     const storage = makeStorage({ [STORAGE_KEY]: 'to nie jest JSON' });
     const app = await boot({ storage });
     assert.match(app.text(), /Parametry sesji/);
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 30 bloków');
+    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 7 bloków');
   });
 });
 
@@ -383,7 +380,7 @@ describe('przeglądanie bazy', () => {
   it('pokazuje całą bazę pogrupowaną po kategoriach', async () => {
     const app = await boot({ hash: '#/browse' });
     assert.equal(app.queryAll('.browse-item').length, 70);
-    assert.equal(app.queryAll('.browse-group').length, 30);
+    assert.equal(app.queryAll('.browse-group').length, 7);
     assert.match(app.text(), /Znaleziono 70 ćwiczeń/);
   });
 
@@ -398,7 +395,7 @@ describe('przeglądanie bazy', () => {
   });
 
   it('filtruje po kategorii i poziomie', async () => {
-    const app = await boot({ hash: '#/browse?cat=tekst-do-czytania-terapeutycznego&level=2' });
+    const app = await boot({ hash: '#/browse?cat=teksty-do-czytania-terapeutycznego&level=2' });
     const items = app.queryAll('.browse-item');
     assert.ok(items.length > 0);
     assert.equal(app.queryAll('.browse-group').length, 1);
@@ -415,13 +412,14 @@ describe('przeglądanie bazy', () => {
     assert.match(app.text(), /Adam Andrzejewski/);
     assert.match(app.text(), /Metryka/);
     assert.match(app.query('.raw-data').textContent, /"id": "adam-andrzejewski"/);
-    assert.match(app.text(), /Uwagi redakcyjne/);
+    assert.ok(!app.query('.raw-data').textContent.includes('"source"'));
+    assert.ok(!app.query('.raw-data').textContent.includes('"notes"'));
   });
 
   it('podgląd zachowuje filtry w odnośniku powrotnym', async () => {
-    const app = await boot({ hash: '#/browse/adam-andrzejewski?q=adam&cat=tekst-do-czytania-terapeutycznego' });
+    const app = await boot({ hash: '#/browse/adam-andrzejewski?q=adam&cat=teksty-do-czytania-terapeutycznego' });
     const back = app.query('.btn--ghost');
-    assert.equal(back.getAttribute('href'), '#/browse?q=adam&cat=tekst-do-czytania-terapeutycznego');
+    assert.equal(back.getAttribute('href'), '#/browse?q=adam&cat=teksty-do-czytania-terapeutycznego');
   });
 
   it('nieznane ćwiczenie kończy się czytelnym komunikatem', async () => {
@@ -430,9 +428,9 @@ describe('przeglądanie bazy', () => {
     assert.match(app.text(), /nie-ma-takiego/);
   });
 
-  it('pokazuje rejestr audytowy bazy', async () => {
+  it('nie pokazuje usuniętego rejestru audytowego bazy', async () => {
     const app = await boot({ hash: '#/browse' });
-    assert.match(app.text(), /Rejestr audytowy bazy/);
-    assert.equal(app.queryAll('.audit-table').length, 2);
+    assert.doesNotMatch(app.text(), /Rejestr audytowy bazy/);
+    assert.equal(app.queryAll('.audit-table').length, 0);
   });
 });

@@ -31,7 +31,7 @@ describe('bezpieczny HTML',()=>{
     assert.equal(sanitizeHtml('<p><span class="target"></span></p><span class="blank"></span><span class="exhale"></span>').html,'<span class="blank"></span><span class="exhale"></span>');
   });
   it('walidacja całej bazy wykrywa niebezpieczny HTML również poza aktualnym ćwiczeniem',()=>{
-    const draft=createDraft(db);draft.exercises.at(-1).variants[0].noteHtml='<script>bad()</script>';
+    const draft=createDraft(db);draft.exercises.at(-1).variants[0].instructionHtml='<script>bad()</script>';
     assert.ok(validateDatabase(draft).some(s=>s.includes('HTML')));assert.ok(prepareExport(draft).issues.length);
   });
 });
@@ -71,12 +71,12 @@ describe('eksport kompletnej bazy',()=>{
     }
     dom.window.close();
   });
-  it('modyfikuje wyłącznie kopię, zachowuje identyfikatory, audyt i nieznane metadane',()=>{
+  it('modyfikuje wyłącznie kopię, zachowuje identyfikatory i nieznane metadane',()=>{
     const draft=createDraft(db);draft.extra={preserved:true};draft.exercises[0].title='Poprawiony tytuł';
     const result=prepareExport(draft,new Date('2026-09-21T12:34:56Z'));
     assert.deepEqual(result.issues,[]);assert.equal(JSON.parse(result.json).exercises[0].title,'Poprawiony tytuł');
     assert.notEqual(db.raw.exercises[0].title,'Poprawiony tytuł');
-    assert.deepEqual(result.raw.extra,{preserved:true});assert.deepEqual(result.raw.duplicates,db.raw.duplicates);
+    assert.deepEqual(result.raw.extra,{preserved:true});
     assert.deepEqual(result.raw.exercises.map(e=>e.id),db.raw.exercises.map(e=>e.id));
     assert.equal(result.raw.generated,'2026-09-21T12:34:56.000Z');
     assert.equal(buildDatabase(JSON.parse(result.json)).stats.exerciseCount,70);
@@ -173,7 +173,6 @@ describe('przebieg pracy w edytorze',()=>{
     });
     const exported = buildDatabase(JSON.parse(json));
     assert.equal(exported.stats.exerciseCount,70);assert.equal(exported.exerciseById.get('adam-andrzejewski').title,'Zapisany tytuł');
-    assert.deepEqual(exported.raw.duplicates,db.raw.duplicates);
     let confirms=0;app.window.confirm=()=>{confirms++;return false;};await app.goto('#/browse/adam-andrzejewski');
     assert.equal(confirms,0);assert.equal(app.query('.exercise-card__title').textContent,'Zapisany tytuł');
     await app.goto(editHash);input(field('Tytuł'),'Druga zmiana');await app.goto('#/browse');

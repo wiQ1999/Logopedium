@@ -33,9 +33,9 @@ describe('wyszukiwanie w bazie', () => {
 
 describe('filtrowanie bazy', () => {
   it('filtruje po kategorii', () => {
-    const found = filterExercises(db, { query: '', category: 'opozycje-fonologiczne', level: '' });
+    const found = filterExercises(db, { query: '', category: 'artykulacja-i-roznicowanie-glosek', level: '' });
     assert.ok(found.length > 0);
-    assert.ok(found.every((exercise) => exercise.categoryId === 'opozycje-fonologiczne'));
+    assert.ok(found.every((exercise) => exercise.categoryId === 'artykulacja-i-roznicowanie-glosek'));
   });
 
   it('filtruje po dokładnym poziomie', () => {
@@ -53,13 +53,13 @@ describe('filtrowanie bazy', () => {
   it('łączy kryteria', () => {
     const found = filterExercises(db, {
       query: 'samogłoski',
-      category: 'tekst-do-czytania-terapeutycznego',
+      category: 'teksty-do-czytania-terapeutycznego',
       level: '2',
     });
     assert.ok(found.length > 0);
     assert.ok(
       found.every(
-        (exercise) => exercise.categoryId === 'tekst-do-czytania-terapeutycznego' && exercise.level === 2,
+        (exercise) => exercise.categoryId === 'teksty-do-czytania-terapeutycznego' && exercise.level === 2,
       ),
     );
   });
@@ -71,17 +71,17 @@ describe('filtrowanie bazy', () => {
 
 describe('adresy trybu przeglądania', () => {
   it('czyta filtry z parametrów adresu', () => {
-    const filters = readFilters(new URLSearchParams('q=sz&cat=gloska-dz&level=none'));
-    assert.deepEqual(filters, { query: 'sz', category: 'gloska-dz', level: 'none' });
+    const filters = readFilters(new URLSearchParams('q=sz&cat=artykulacja-i-roznicowanie-glosek&level=none'));
+    assert.deepEqual(filters, { query: 'sz', category: 'artykulacja-i-roznicowanie-glosek', level: 'none' });
     assert.deepEqual(readFilters(new URLSearchParams('')), { query: '', category: '', level: '' });
   });
 
   it('buduje adres listy i podglądu z zachowaniem filtrów', () => {
     assert.equal(browseHref({ query: '', category: '', level: '' }), '#/browse');
-    assert.equal(browseHref({ query: 'sz cz', category: 'gloska-dz', level: '2' }), '#/browse?q=sz%20cz&cat=gloska-dz&level=2');
+    assert.equal(browseHref({ query: 'sz cz', category: 'artykulacja-i-roznicowanie-glosek', level: '2' }), '#/browse?q=sz%20cz&cat=artykulacja-i-roznicowanie-glosek&level=2');
     assert.equal(
-      browseHref({ query: '', category: 'gloska-dz', level: '' }, 'adam-andrzejewski'),
-      '#/browse/adam-andrzejewski?cat=gloska-dz',
+      browseHref({ query: '', category: 'artykulacja-i-roznicowanie-glosek', level: '' }, 'adam-andrzejewski'),
+      '#/browse/adam-andrzejewski?cat=artykulacja-i-roznicowanie-glosek',
     );
   });
 

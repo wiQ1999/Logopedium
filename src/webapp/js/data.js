@@ -1,7 +1,7 @@
 import { sanitizeHtml, visitHtml } from './html.js';
 
 const DATABASE_URL = 'data/database.json';
-const SUPPORTED_SCHEMA_MAJOR = '1';
+const SUPPORTED_SCHEMA_MAJOR = '2';
 const VARIANT_TYPES = ['items', 'text', 'syllables', 'prompt'];
 export const MIN_LEVEL = 1;
 export const MAX_LEVEL = 4;
@@ -108,7 +108,7 @@ function validateVariants(exercise, path, issues, ids) {
     if (!VARIANT_TYPES.includes(variant.type)) {
       issues.push(`${variantPath}.type: nieznany typ "${variant.type}"; dozwolone: ${VARIANT_TYPES.join(', ')}.`);
     }
-    ['instructionHtml', 'syllablesHtml', 'textHtml', 'noteHtml'].forEach((field) => {
+    ['instructionHtml', 'syllablesHtml', 'textHtml'].forEach((field) => {
       if (!isNullableString(variant[field])) {
         issues.push(`${variantPath}.${field}: oczekiwano tekstu albo null.`);
       }
@@ -155,12 +155,6 @@ function validateExercises(raw, categoryIds, issues) {
     } else if (categoryIds.size > 0 && !categoryIds.has(exercise.categoryId)) {
       issues.push(`${path}.categoryId: brak kategorii "${exercise.categoryId}" w categories[].`);
     }
-    if (!isStringArray(exercise.phonemes)) {
-      issues.push(`${path}.phonemes: oczekiwano tablicy tekstów.`);
-    }
-    if (!isStringArray(exercise.positions)) {
-      issues.push(`${path}.positions: oczekiwano tablicy tekstów.`);
-    }
     if (exercise.level !== null && (!Number.isInteger(exercise.level) || exercise.level < MIN_LEVEL || exercise.level > MAX_LEVEL)) {
       issues.push(`${path}.level: oczekiwano liczby ${MIN_LEVEL}–${MAX_LEVEL} albo null.`);
     }
@@ -170,20 +164,7 @@ function validateExercises(raw, categoryIds, issues) {
     if (!isNonEmptyString(exercise.readQuality)) {
       issues.push(`${path}.readQuality: oczekiwano niepustego tekstu.`);
     }
-    if (!isPlainObject(exercise.source)) {
-      issues.push(`${path}.source: oczekiwano obiektu.`);
-    } else {
-      if (!isNonEmptyString(exercise.source.file)) {
-        issues.push(`${path}.source.file: oczekiwano niepustego tekstu.`);
-      }
-      if (!isNonEmptyString(exercise.source.kind)) {
-        issues.push(`${path}.source.kind: oczekiwano niepustego tekstu.`);
-      }
-      if (!isNullableString(exercise.source.publication)) {
-        issues.push(`${path}.source.publication: oczekiwano tekstu albo null.`);
-      }
-    }
-    ['notes', 'headerHtml', 'contextHtml', 'instructionHtml'].forEach((field) => {
+    ['headerHtml', 'contextHtml', 'instructionHtml'].forEach((field) => {
       if (!isNullableString(exercise[field])) {
         issues.push(`${path}.${field}: oczekiwano tekstu albo null.`);
       }
@@ -213,12 +194,6 @@ export function validateDatabase(raw) {
   validateExercises(raw, categoryIds, issues);
   if (Array.isArray(raw.exercises)) visitHtml(raw, (object, key, path) => {
     sanitizeHtml(object[key]).issues.forEach((message) => issues.push(`${path}: ${message}`));
-  });
-
-  ['duplicates', 'nonTextMaterials'].forEach((field) => {
-    if (raw[field] !== undefined && !Array.isArray(raw[field])) {
-      issues.push(`${field}: oczekiwano tablicy.`);
-    }
   });
 
   return issues;
@@ -263,7 +238,6 @@ function exercisePlainText(exercise) {
     parts.push(stripHtml(variant.instructionHtml));
     parts.push(stripHtml(variant.syllablesHtml));
     parts.push(stripHtml(variant.textHtml));
-    parts.push(stripHtml(variant.noteHtml));
     variant.examples.forEach((example) => parts.push(stripHtml(example)));
     variant.items.forEach((item) => parts.push(stripHtml(item.html)));
   });
@@ -313,8 +287,6 @@ export function buildDatabase(raw) {
     exercises,
     exerciseById,
     exercisesByCategory,
-    duplicates: raw.duplicates ?? [],
-    nonTextMaterials: raw.nonTextMaterials ?? [],
     stats: {
       categoryCount: categories.length,
       exerciseCount: exercises.length,

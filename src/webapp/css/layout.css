@@ -511,12 +511,6 @@
   font-size: 0.9375rem;
 }
 
-.block--editorial {
-  background: var(--surface-alt);
-  font-size: 0.875rem;
-  color: var(--text-muted);
-}
-
 .block__label {
   display: block;
   margin-bottom: var(--space-2);
@@ -858,27 +852,6 @@
   white-space: pre;
   max-height: 32rem;
   overflow-y: auto;
-}
-
-.audit-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-
-.audit-table th,
-.audit-table td {
-  padding: var(--space-2) var(--space-3);
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-
-.audit-table th {
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .loading {

@@ -19,13 +19,13 @@ it('przeciągnięcie dzieli blok, zachowuje tryb i pozwala połączyć go ponown
   const pick = rows()[0].querySelector('select');
   pick.value = 'losowo'; pick.dispatchEvent(new app.window.Event('change', { bubbles: true }));
   drag(id, rows()[0].querySelector('[data-split]'));
-  assert.equal(rows().length, 31);
+  assert.equal(rows().length, 8);
   assert.deepEqual(exercises(rows()[1]), [id]);
   assert.equal(rows()[1].querySelector('select').value, 'losowo');
   assert.equal(rows()[1].querySelector('[data-role="count"]').value, '1');
   assert.equal(rows()[1].querySelector('[data-role="item-limit"]').value, rows()[1].querySelector('[data-role="item-limit"]').max);
   drag(id, rows()[0]);
-  assert.equal(rows().length, 30);
+  assert.equal(rows().length, 7);
   assert.equal(exercises(rows()[0]).at(-1), id);
   assert.equal(app.queryAll(`[data-exercise="${id}"]`).length, 1);
 });
@@ -40,13 +40,13 @@ it('upuszczenie na obcej kategorii nie zmienia przynależności ani ustawień', 
 it('klawiatura porządkuje ćwiczenia, tworzy blok, przenosi do sąsiedniego i wycofuje całą operację', async () => {
   app = await bootApp();
   const before = rows().map(exercises); const id = before[0][0];
-  await app.click('[data-block="rozgrzewka"] [data-role="expand"]');
+  await app.click('[data-block="motoryka-orofacjalna-i-polykanie"] [data-role="expand"]');
   for (const value of [' ', 'ArrowDown', 'ArrowLeft']) key(id, value);
-  assert.equal(rows().length, 31);
+  assert.equal(rows().length, 8);
   assert.equal(app.document.activeElement.dataset.id, id);
   assert.equal(handle(id).getAttribute('aria-pressed'), 'true');
   key(id, 'ArrowRight');
-  assert.equal(rows().length, 30);
+  assert.equal(rows().length, 7);
   assert.equal(exercises(rows()[0]).at(-1), id);
   key(id, 'Escape');
   assert.deepEqual(rows().map(exercises), before);

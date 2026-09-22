@@ -120,47 +120,6 @@ function renderResults(db, filters) {
   ])}.</p>${groups}`;
 }
 
-function renderAudit(db) {
-  if (db.duplicates.length === 0 && db.nonTextMaterials.length === 0) {
-    return '';
-  }
-
-  const duplicates = db.duplicates.length
-    ? `<h3>Skany powielające inny materiał</h3>
-       <table class="audit-table">
-         <thead><tr><th>Plik</th><th>Duplikat</th><th>Materiał</th></tr></thead>
-         <tbody>${db.duplicates
-           .map(
-             (entry) =>
-               `<tr><td>${escapeHtml(entry.file)}</td><td>${escapeHtml(entry.duplicateOf)}</td><td>${escapeHtml(
-                 entry.material,
-               )}</td></tr>`,
-           )
-           .join('')}</tbody>
-       </table>`
-    : '';
-
-  const materials = db.nonTextMaterials.length
-    ? `<h3 style="margin-top: var(--space-4)">Skany bez zadań</h3>
-       <table class="audit-table">
-         <thead><tr><th>Plik</th><th>Zawartość</th><th>Zastosowanie</th></tr></thead>
-         <tbody>${db.nonTextMaterials
-           .map(
-             (entry) =>
-               `<tr><td>${escapeHtml(entry.file)}</td><td>${escapeHtml(entry.content)}</td><td>${escapeHtml(
-                 entry.use,
-               )}</td></tr>`,
-           )
-           .join('')}</tbody>
-       </table>`
-    : '';
-
-  return `<details class="disclosure">
-      <summary>Rejestr audytowy bazy</summary>
-      <div class="disclosure__body">${duplicates}${materials}</div>
-    </details>`;
-}
-
 function renderCategoryOptions(db, selected) {
   const options = db.categories
     .map(
@@ -224,9 +183,7 @@ export function mountList(root, app, query) {
       <div class="disclosure__body">${renderMarksLegend()}</div>
     </details>
 
-    <div id="browse-results">${renderResults(db, filters)}</div>
-
-    ${renderAudit(db)}`;
+    <div id="browse-results">${renderResults(db, filters)}</div>`;
 
   const queryInput = root.querySelector('#browse-query');
   const categorySelect = root.querySelector('#browse-category');
@@ -287,7 +244,6 @@ export function mountDetail(root, app, exerciseId, query) {
       categoryName: category?.name ?? '',
       markMode: app.markMode,
       headingId: 'browse-exercise-title',
-      showEditorial: true,
       editVariantHref: (id) => `${editHref}&variant=${encodeURIComponent(id)}`,
     })}
 
@@ -299,15 +255,10 @@ export function mountDetail(root, app, exerciseId, query) {
         ['Identyfikator', exercise.id],
         ['Kategoria', category?.name ?? exercise.categoryId],
         ['Poziom', levelLabel(exercise.level)],
-        ['Głoski', exercise.phonemes.join(', ') || '—'],
-        ['Pozycja w wyrazie', exercise.positions.join(', ') || '—'],
         ['Losowanie pozycji', exercise.randomizable ? 'dozwolone' : 'materiał w całości'],
         ['Jakość odczytu', exercise.readQuality],
         ['Zadania', String(exercise.variants.length)],
         ['Pozycje', String(exercise.itemCount)],
-        ['Plik źródłowy', exercise.source.file],
-        ['Rodzaj źródła', exercise.source.kind],
-        ['Publikacja', exercise.source.publication ?? '—'],
       ])}
     </div>
 
