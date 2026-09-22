@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { after, describe, it } from 'node:test';
 import { bootApp, errorResponse, jsonResponse, makeStorage, networkFailure } from './dom-helpers.js';
 import { STORAGE_KEY } from '../src/webapp/js/settings.js';
-import { loadRawDatabase } from './helpers.js';
+import { clampParams, decodeSessionState, encodeSessionState } from '../src/webapp/js/blocks.js';
+import { loadDatabaseFixture, loadRawDatabase } from './helpers.js';
 
 const apps = [];
 
@@ -16,8 +17,23 @@ after(() => {
   apps.forEach((app) => app.teardown());
 });
 
-const SELECTION = 'samogloski:1:2:5,artykulacja-i-roznicowanie-glosek:1:4:29,wprawki-artykulacyjne:2:1:8';
-const SESSION_QUERY = `d=2026-09-10&l=4&c=${SELECTION}&o=kolejnosc`;
+const db = loadDatabaseFixture();
+const sessionParams = clampParams(db, {
+  date: '2026-09-10',
+  level: 4,
+  blocks: [
+    { id: 'samogloski', count: 1, variantLimit: 2, itemLimit: 5, pick: 'kolejnosc' },
+    { id: 'artykulacja-i-roznicowanie-glosek', count: 1, variantLimit: 4, itemLimit: 29, pick: 'kolejnosc' },
+    { id: 'wprawki-artykulacyjne', count: 2, variantLimit: 1, itemLimit: 8, pick: 'kolejnosc' },
+  ],
+});
+const sessionQuery = (params = sessionParams, seedOverride = null) => `s=${encodeSessionState(params, db, seedOverride)}`;
+const SESSION_QUERY = sessionQuery();
+const stateFromHash = (app) => decodeSessionState(new URLSearchParams(app.hash().split('?')[1]).get('s'), db);
+const blockSettings = (params, id) => {
+  const { count, variantLimit, itemLimit, pick } = params.blocks.find((block) => block.id === id);
+  return { count, variantLimit, itemLimit, pick };
+};
 
 describe('start aplikacji', () => {
   it('wczytuje bazę i pokazuje parametry sesji', async () => {
@@ -61,7 +77,8 @@ describe('przebieg sesji', () => {
     const app = await boot();
     await app.click('#params-submit');
     assert.match(app.hash(), /^#\/session\/1\?/);
-    assert.match(app.hash(), /d=2026-09-10|d=\d{4}-\d{2}-\d{2}/);
+    assert.match(app.hash(), /\?s=[A-Za-z0-9_-]+$/);
+    assert.match(stateFromHash(app).params.date, /^\d{4}-\d{2}-\d{2}$/);
     assert.match(app.text(), /Ćwiczenie 1 z 70/);
   });
 
@@ -99,10 +116,9 @@ describe('przebieg sesji', () => {
     assert.match(app.text(), /Ćwiczenie 4 z 4/);
   });
 
-  it('sesja bez wybranych kategorii wraca do parametrów', async () => {
-    const app = await boot({ hash: '#/session/1?d=2026-09-10&l=4&c=' });
-    assert.equal(app.hash(), '#/params');
-    assert.match(app.text(), /Parametry sesji/);
+  it('uszkodzony lub stary stan sesji uruchamia ustawienia domyślne', async () => {
+    const app = await boot({ hash: '#/session/1?d=2026-09-10&l=4&c=stary-format&s=uszkodzone' });
+    assert.match(app.text(), /Ćwiczenie 1 z 70/);
   });
 
   it('ten sam adres po odświeżeniu daje ten sam zestaw ćwiczeń', async () => {
@@ -139,20 +155,21 @@ describe('przebieg sesji', () => {
   });
 
   it('ziarno z adresu zmienia zestaw, a jego brak przywraca zestaw dnia', async () => {
-    const query = 'd=2026-09-10&l=4&c=teksty-do-czytania-terapeutycznego:3:1:0&o=kolejnosc';
-    const titles = async (app, suffix) => {
+    const params = clampParams(db, { date: '2026-09-10', level: 4,
+      blocks: [{ id: 'teksty-do-czytania-terapeutycznego', count: 3, variantLimit: 1, itemLimit: 0, pick: 'kolejnosc' }] });
+    const titles = async (app, seedOverride) => {
       const result = [];
       for (let step = 1; step <= 3; step += 1) {
-        await app.goto(`#/session/${step}?${query}${suffix}`);
+        await app.goto(`#/session/${step}?${sessionQuery(params, seedOverride)}`);
         result.push(app.query('.exercise-card__title').textContent);
       }
       return result;
     };
 
-    const app = await boot({ hash: `#/session/1?${query}` });
-    const fromDate = await titles(app, '');
-    const fromSeed = await titles(app, '&seed=inne-ziarno');
-    const backToDate = await titles(app, '');
+    const app = await boot({ hash: `#/session/1?${sessionQuery(params)}` });
+    const fromDate = await titles(app, null);
+    const fromSeed = await titles(app, 'inne-ziarno');
+    const backToDate = await titles(app, null);
 
     assert.notDeepEqual(fromSeed, fromDate);
     assert.deepEqual(backToDate, fromDate);
@@ -176,7 +193,7 @@ describe('przebieg sesji', () => {
 
     await app.goto(`#/summary?${SESSION_QUERY}`);
     await app.click('[data-role="reroll"]');
-    assert.match(app.hash(), /#\/session\/1\?.*seed=/);
+    assert.ok(stateFromHash(app).seedOverride);
   });
 });
 
@@ -239,7 +256,29 @@ describe('parametry sesji', () => {
     const app = await boot();
     app.query('#param-seed').value = 'moje-ziarno';
     await app.click('#params-submit');
-    assert.match(app.hash(), /seed=moje-ziarno/);
+    assert.equal(stateFromHash(app).seedOverride, 'moje-ziarno');
+  });
+
+  it('ziarno wylosowanego zestawu wraca do formularza i zachowuje zestaw po zatwierdzeniu', async () => {
+    const app = await boot({ hash: `#/summary?${SESSION_QUERY}` });
+    await app.click('[data-role="reroll"]');
+    const rerolledState = stateFromHash(app);
+    const firstTitle = app.query('.exercise-card__title').textContent;
+    await app.goto('#/params');
+    assert.equal(app.query('#param-seed').value, rerolledState.seedOverride);
+    await app.click('#params-submit');
+    assert.equal(app.query('.exercise-card__title').textContent, firstTitle);
+    assert.equal(stateFromHash(app).seedOverride, rerolledState.seedOverride);
+  });
+
+  it('wyczyszczenie ziarna przywraca zestaw domyślny dla daty', async () => {
+    const app = await boot({ hash: `#/session/1?${sessionQuery(sessionParams, 'inne-ziarno')}` });
+    await app.goto('#/params');
+    await app.click('[data-role="seed-clear"]');
+    await app.click('#params-submit');
+    assert.equal(stateFromHash(app).seedOverride, null);
+    const expected = await boot({ hash: `#/session/1?${SESSION_QUERY}` });
+    assert.equal(app.query('.exercise-card__title').textContent, expected.query('.exercise-card__title').textContent);
   });
 
   it('wiersz pokazuje tylko te pola zakresu, które mają co ograniczać', async () => {
@@ -295,9 +334,11 @@ describe('parametry sesji', () => {
     pick.dispatchEvent(new app.window.Event('change', { bubbles: true }));
 
     await app.click('#params-submit');
-    assert.match(app.hash(), /artykulacja-i-roznicowanie-glosek:21:2:5/);
-    assert.match(app.hash(), /teksty-do-czytania-terapeutycznego:23:1:0/);
-    assert.match(app.hash(), /artykulacja-i-roznicowanie-glosek:21:2:5:losowo/);
+    const restored = stateFromHash(app).params;
+    assert.deepEqual(blockSettings(restored, 'artykulacja-i-roznicowanie-glosek'),
+      { count: 21, variantLimit: 2, itemLimit: 5, pick: 'losowo' });
+    assert.deepEqual(blockSettings(restored, 'teksty-do-czytania-terapeutycznego'),
+      { count: 23, variantLimit: 1, itemLimit: 0, pick: 'kolejnosc' });
   });
 });
 
@@ -344,7 +385,7 @@ describe('zapamiętywanie ustawień', () => {
     variants.value = '1';
     variants.dispatchEvent(new first.window.Event('input', { bubbles: true }));
     await first.click('#params-submit');
-    assert.match(first.hash(), /artykulacja-i-roznicowanie-glosek:21:1:/);
+    assert.equal(stateFromHash(first).params.blocks.find((block) => block.id === 'artykulacja-i-roznicowanie-glosek').variantLimit, 1);
 
     const second = await boot({ storage, hash: `#/session/2?${SESSION_QUERY}` });
     assert.match(second.text(), /Ćwiczenie 2 z 4/);

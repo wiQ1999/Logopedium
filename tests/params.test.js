@@ -7,7 +7,7 @@ import { makeFixtureDatabase, makeParams, loadDatabaseFixture } from './helpers.
 const db = makeFixtureDatabase();
 const defaults = () => p.createDefaultParams(db, '2026-09-21');
 const ids = (plan) => plan.steps.map((s) => s.exercise.id);
-const roundTrip = (params) => p.decodeParams(new URLSearchParams(`d=${params.date}&l=${params.level}&c=${p.encodeParams(params).c}`), db);
+const roundTrip = (params, seedOverride = null) => p.decodeSessionState(p.encodeSessionState(params, db, seedOverride), db).params;
 
 describe('daty i poziom', () => {
   it('używa lokalnej daty i odrzuca nieistniejące daty', () => {
@@ -96,9 +96,15 @@ describe('bloki i krańce', () => {
 });
 
 describe('adres, ziarno i sesja', () => {
-  it('domyślna pełna kategoria pomija identyfikatory ćwiczeń', () => {
-    assert.equal(p.encodeParams(makeParams([['cat-e', 1]])).c, 'cat-e:1:1:0:kolejnosc');
-    assert.equal(p.encodeParams(defaults()).o, undefined);
+  it('koduje komplet ustawień w jednym krótkim składniku bez identyfikatorów', () => {
+    const encoded = p.encodeSessionState(defaults(), db);
+    assert.match(encoded, /^[A-Za-z0-9_-]+$/);
+    assert.ok(encoded.length < 200, encoded.length);
+    assert.ok(!encoded.includes('cat-e'));
+
+    const real = loadDatabaseFixture();
+    const realEncoded = p.encodeSessionState(p.createDefaultParams(real, '2026-09-21'), real);
+    assert.ok(realEncoded.length < 300, realEncoded.length);
   });
   it('podział i różne tryby przetrwają ponowne wczytanie adresu', () => {
     const split = p.withMovedExercise(db, defaults(), 'cat-a', 'a1');
@@ -118,14 +124,23 @@ describe('adres, ziarno i sesja', () => {
     assert.ok(!ids(buildPlan(db, roundTrip(params))).includes('a1'));
     assert.equal(p.paramsSignature(roundTrip(params)), p.paramsSignature(params));
   });
-  it('nieznane i powtórzone ćwiczenia są pomijane w całej sesji', () => {
-    const params = p.decodeParams(new URLSearchParams('c=cat-a:9:1:12:losowo:a1+a2+no+b1,cat-a:9:1:12:kolejnosc:a2+a3'), db);
-    assert.deepEqual(ids(buildPlan(db, params)), ['a1','a2','a3']);
+  it('zapis zachowuje własne ziarno, także ze znakami spoza ASCII', () => {
+    const state = p.decodeSessionState(p.encodeSessionState(defaults(), db, 'żółte ziarno'), db);
+    assert.equal(state.valid, true);
+    assert.equal(state.seedOverride, 'żółte ziarno');
+    assert.deepEqual(ids(buildPlan(db, state.params, state.seedOverride)), ids(buildPlan(db, defaults(), 'żółte ziarno')));
   });
-  it('urwane wpisy i liczby spoza zakresu używają krańców', () => {
-    const params = p.decodeParams(new URLSearchParams('c=cat-d:99:2,cat-a:999:99:-5&l=4'), db);
-    assert.deepEqual(params.blocks.filter((b) => b.count).map((b) => [b.id,b.count,b.variantLimit,b.itemLimit]), [['cat-d',1,2,32],['cat-a',6,1,1]]);
-    assert.equal(p.totalExercises(p.decodeParams(new URLSearchParams(),db)),0);
+  it('uszkodzony zapis i zapis innej rewizji wracają do ustawień domyślnych', () => {
+    const encoded = p.encodeSessionState(makeParams([['cat-a', 2]]), db, 'ziarno');
+    const corrupted = p.decodeSessionState(`${encoded.slice(0, -1)}!`, db);
+    assert.equal(corrupted.valid, false);
+    assert.equal(corrupted.seedOverride, null);
+    assert.equal(p.paramsSignature(corrupted.params), p.paramsSignature(p.createDefaultParams(db)));
+
+    const newerDb = makeFixtureDatabase({ generated: '2026-01-02' });
+    const outdated = p.decodeSessionState(encoded, newerDb);
+    assert.equal(outdated.valid, false);
+    assert.equal(p.paramsSignature(outdated.params), p.paramsSignature(p.createDefaultParams(newerDb)));
   });
   it('kolejność, W, P i dobór nie zmieniają ziarna ani wybranych ćwiczeń', () => {
     const base = makeParams([['cat-a',3],['cat-b',2],['cat-d',1]]);
@@ -161,8 +176,8 @@ describe('adres, ziarno i sesja', () => {
       params = p.withPick(params,`${source.key}-block`, i%2 ? 'losowo':'kolejnosc');
       params = p.withLevel(real,params,i%4+1);
       params = p.withMovedBlock(params,`${source.key}-block`,i%params.blocks.length);
-      const encoded = p.encodeParams(params);
-      const restored = p.decodeParams(new URLSearchParams(`d=${encoded.d}&l=${encoded.l}&c=${encoded.c}`),real);
+      const encoded = p.encodeSessionState(params, real);
+      const restored = p.decodeSessionState(encoded, real).params;
       const before = buildPlan(real,params); const after = buildPlan(real,restored);
       assert.deepEqual(after.steps.map((s) => [s.exercise.id,s.variants.map((v) => [v.variant.id,v.items.map((item)=>item.id)])]),before.steps.map((s) => [s.exercise.id,s.variants.map((v) => [v.variant.id,v.items.map((item)=>item.id)])]));
       assert.equal(new Set(ids(before)).size,before.steps.length);

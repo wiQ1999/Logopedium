@@ -12,6 +12,25 @@ const drag = (id, destination) => {
   handle(id).dispatchEvent(new app.window.Event('dragstart', { bubbles: true }));
   destination.dispatchEvent(new app.window.Event('drop', { bubbles: true, cancelable: true }));
 };
+const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+const touchEvent = (target, type, current = [], changed = current) => {
+  const event = new app.window.Event(type, { bubbles: true, cancelable: true });
+  Object.defineProperties(event, {
+    touches: { value: current },
+    changedTouches: { value: changed },
+  });
+  target.dispatchEvent(event);
+};
+const touchDrag = async (id, destination) => {
+  const button = handle(id);
+  const start = { identifier: 1, clientX: 10, clientY: 10 };
+  const end = { identifier: 1, clientX: 20, clientY: 80 };
+  app.document.elementFromPoint = () => destination;
+  touchEvent(button, 'touchstart', [start]);
+  await wait(380);
+  touchEvent(button, 'touchmove', [end]);
+  touchEvent(button, 'touchend', [], [end]);
+};
 
 it('przeciągnięcie dzieli blok, zachowuje tryb i pozwala połączyć go ponownie', async () => {
   app = await bootApp();
@@ -35,6 +54,44 @@ it('upuszczenie na obcej kategorii nie zmienia przynależności ani ustawień', 
   const before = rows().map(exercises);
   drag(before[0][0], rows()[1]);
   assert.deepEqual(rows().map(exercises), before);
+});
+
+it('dotyk przenosi bloki i ćwiczenia między blokami po przytrzymaniu uchwytu', async () => {
+  app = await bootApp();
+  const firstBlock = rows()[0].dataset.block;
+  await touchDrag(firstBlock, rows()[1]);
+  assert.equal(rows()[1].dataset.block, firstBlock);
+
+  let source = rows().find((row) => row.dataset.block === firstBlock);
+  await app.click(`[data-block="${firstBlock}"] [data-role="expand"]`);
+  source = rows().find((row) => row.dataset.block === firstBlock);
+  const [firstExercise, secondExercise] = exercises(source);
+  await touchDrag(firstExercise, source.querySelector('[data-split]'));
+  const categoryBlocks = rows().filter((row) => row.querySelector(`[data-exercise="${firstExercise}"]`));
+  assert.equal(categoryBlocks.length, 1);
+  const splitKey = categoryBlocks[0].dataset.block;
+  assert.notEqual(splitKey, firstBlock);
+
+  await touchDrag(secondExercise, app.query(`[data-block="${splitKey}"] [data-exercise="${firstExercise}"]`));
+  const split = rows().find((row) => row.dataset.block === splitKey);
+  assert.deepEqual(exercises(split).slice(0, 2), [secondExercise, firstExercise]);
+  assert.equal(app.queryAll(`[data-exercise="${secondExercise}"]`).length, 1);
+});
+
+it('ruch palca przed przytrzymaniem przewija listę bez rozpoczęcia przenoszenia', async () => {
+  app = await bootApp();
+  const before = rows().map((row) => row.dataset.block);
+  const id = before[0];
+  const button = handle(id);
+  const start = { identifier: 2, clientX: 10, clientY: 10 };
+  const move = { identifier: 2, clientX: 10, clientY: 40 };
+  touchEvent(button, 'touchstart', [start]);
+  touchEvent(button, 'touchmove', [move]);
+  await wait(380);
+  touchEvent(button, 'touchend', [], [move]);
+  assert.deepEqual(rows().map((row) => row.dataset.block), before);
+  assert.equal(handle(id).getAttribute('aria-pressed'), 'false');
+  assert.equal(app.query('#drag-status').textContent, '');
 });
 
 it('klawiatura porządkuje ćwiczenia, tworzy blok, przenosi do sąsiedniego i wycofuje całą operację', async () => {
@@ -64,7 +121,7 @@ it('podział, wyłączenie ćwiczenia i różny dobór wracają po uruchomieniu 
   const expected = rows().map(row => ({ ids: exercises(row), pick: row.querySelector('select').value,
     active: [...row.querySelectorAll('[data-role="exercise-active"]')].map(el => el.checked) }));
   await app.click('#params-submit'); const sessionHash = app.hash();
-  assert.match(sessionHash, /:losowo:/); assert.match(sessionHash, /:kolejnosc:/);
+  assert.match(sessionHash, /^#\/session\/1\?s=[A-Za-z0-9_-]+$/);
   app.teardown(); app = null; app = await bootApp({ storage });
   assert.deepEqual(rows().map(row => ({ ids: exercises(row), pick: row.querySelector('select').value,
     active: [...row.querySelectorAll('[data-role="exercise-active"]')].map(el => el.checked) })), expected);

@@ -7,6 +7,8 @@ export * from './blocks.js';
 
 const options = (pick) => ['kolejnosc', 'losowo'].map((p) => `<option value="${p}" ${p === pick ? 'selected' : ''}>${p === 'kolejnosc' ? 'kolejność' : 'losowo'}</option>`).join('');
 const handle = (label, kind, id) => `<button type="button" class="btn drag-handle" draggable="true" data-drag="${kind}" data-id="${escapeHtml(id)}" aria-describedby="drag-help" aria-pressed="false" aria-label="Przenieś: ${escapeHtml(label)}">⠿</button>`;
+const TOUCH_HOLD_MS = 350;
+const TOUCH_MOVE_TOLERANCE = 10;
 
 function numberField(key, role, name, value, bounds, disabled) {
   const suffix = { count: 'count', 'variant-limit': 'variants', 'item-limit': 'items' }[role];
@@ -55,16 +57,18 @@ export function mount(root, app) {
   const expanded = new Set();
   let dragging = null;
   let beforeDrag = null;
+  let touchDrag = null;
+  let touchTarget = null;
   root.innerHTML = `<section class="view-head"><h1>Parametry sesji</h1>
     <p class="view-head__lead">Ustaw materiał i kolejność bloków. Rozwiń blok, aby wybrać lub przenieść ćwiczenia.</p></section>
     <form id="params-form"><div class="panel field-grid">
       <label class="field" for="param-date">Data sesji<input class="input" type="date" id="param-date" required value="${escapeHtml(app.params.date)}"></label>
       <label class="field" for="param-level">Poziom trudności<select class="select" id="param-level">${[1,2,3,4].map((l) => `<option value="${l}" ${l === app.params.level ? 'selected' : ''}>Poziom ${l} i niższe</option>`).join('')}</select></label>
     </div><div class="panel"><h2>Bloki ćwiczeń</h2>
-      <p id="drag-help" class="panel__hint">Przeciągnij uchwyt, aby zmienić kolejność. Klawiatura: spacja — przejęcie i upuszczenie, strzałki góra/dół — kolejność, lewo — nowy blok, prawo — następny blok tej kategorii, Escape — wycofanie.</p>
+      <p id="drag-help" class="panel__hint">Przeciągnij uchwyt, aby zmienić kolejność. Na ekranie dotykowym przytrzymaj uchwyt, a potem przesuń wiersz. Klawiatura: spacja — przejęcie i upuszczenie, strzałki góra/dół — kolejność, lewo — nowy blok, prawo — następny blok tej kategorii, Escape — wycofanie.</p>
       <p id="drag-status" role="status" aria-live="polite"></p><ol class="params-list" id="params-list"></ol></div>
       <details class="disclosure"><summary>Ziarno losowania</summary><div class="disclosure__body">
-        <label class="field" for="param-seed">Własne ziarno (opcjonalne)<input class="input" id="param-seed" value="${escapeHtml(app.seedOverride ?? '')}"></label>
+        <label class="field" for="param-seed">Własne ziarno (opcjonalne)<input class="input" id="param-seed" value="${escapeHtml(app.plan?.seedOverride ?? '')}"></label>
         <div class="btn-row"><button class="btn" type="button" data-role="seed-random">Wylosuj nowe ziarno</button><button class="btn" type="button" data-role="seed-clear">Wyczyść</button></div>
       </div></details>
       <details class="disclosure"><summary>Oznaczenia w treści ćwiczeń</summary><div class="disclosure__body">${renderMarksLegend()}</div></details>
@@ -142,20 +146,82 @@ export function mount(root, app) {
     if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
   });
   list.addEventListener('dragover', (event) => { if (dragging) event.preventDefault(); });
-  list.addEventListener('drop', (event) => {
+  const dropOn = (target) => {
     if (!dragging) return;
-    event.preventDefault();
-    const destination = event.target.closest('[data-block]');
+    const destination = target?.closest?.('[data-block]');
     if (dragging.kind === 'block' && destination) app.params = withMovedBlock(app.params, dragging.key, app.params.blocks.findIndex((b) => b.key === destination.dataset.block));
     else if (dragging.kind === 'exercise') {
-      const key = event.target.closest('[data-split]') || !destination ? null : destination.dataset.block;
-      const row = event.target.closest('[data-exercise]');
+      const key = target?.closest?.('[data-split]') || !destination ? null : destination.dataset.block;
+      const row = target?.closest?.('[data-exercise]');
       const position = row ? blockEntry(app.params, key).exercises.findIndex((e) => e.id === row.dataset.exercise) : Infinity;
       app.params = withMovedExercise(app.db, app.params, dragging.key, dragging.id, key, position);
     }
     moved(); finish();
+  };
+  list.addEventListener('drop', (event) => {
+    if (!dragging) return;
+    event.preventDefault();
+    dropOn(event.target);
   });
   list.addEventListener('dragend', () => finish());
+
+  const clearTouchTarget = () => {
+    touchTarget?.removeAttribute('data-touch-target');
+    touchTarget = null;
+  };
+  const cancelTouchTimer = () => {
+    if (touchDrag?.timer) clearTimeout(touchDrag.timer);
+  };
+  const resetTouch = () => {
+    cancelTouchTimer();
+    clearTouchTarget();
+    list.classList.remove('params-list--touch-dragging');
+    touchDrag = null;
+  };
+  const matchingTouch = (touches) => [...touches].find((touch) => touch.identifier === touchDrag?.identifier);
+  list.addEventListener('touchstart', (event) => {
+    const button = event.target.closest('[data-drag]');
+    if (!button || event.touches.length !== 1 || touchDrag) return;
+    const touch = event.touches[0];
+    touchDrag = { identifier: touch.identifier, x: touch.clientX, y: touch.clientY, active: false, timer: null };
+    touchDrag.timer = setTimeout(() => {
+      if (!touchDrag) return;
+      touchDrag.active = true;
+      grab(button);
+      list.classList.add('params-list--touch-dragging');
+      touchTarget = button.closest('[data-exercise], [data-block]');
+      touchTarget?.setAttribute('data-touch-target', 'true');
+    }, TOUCH_HOLD_MS);
+  }, { passive: true });
+  list.addEventListener('touchmove', (event) => {
+    if (!touchDrag) return;
+    const touch = matchingTouch(event.touches);
+    if (!touch) return;
+    if (!touchDrag.active) {
+      if (Math.hypot(touch.clientX - touchDrag.x, touch.clientY - touchDrag.y) > TOUCH_MOVE_TOLERANCE) resetTouch();
+      return;
+    }
+    event.preventDefault();
+    clearTouchTarget();
+    const hit = document.elementFromPoint?.(touch.clientX, touch.clientY);
+    touchTarget = hit?.closest?.('[data-split], [data-exercise], [data-block]') ?? null;
+    if (touchTarget && list.contains(touchTarget)) touchTarget.setAttribute('data-touch-target', 'true');
+    else touchTarget = null;
+  }, { passive: false });
+  list.addEventListener('touchend', (event) => {
+    if (!touchDrag || !matchingTouch(event.changedTouches)) return;
+    if (!touchDrag.active) { resetTouch(); return; }
+    event.preventDefault();
+    const destination = touchTarget;
+    resetTouch();
+    if (destination) dropOn(destination);
+    else finish();
+  }, { passive: false });
+  list.addEventListener('touchcancel', () => {
+    const active = touchDrag?.active;
+    resetTouch();
+    if (active) finish(true);
+  });
   list.addEventListener('click', (event) => {
     const button = event.target.closest('[data-role="expand"]');
     if (!button) return;
@@ -215,4 +281,9 @@ export function mount(root, app) {
     if (!totalExercises(app.params)) return;
     storeParams(app.params); app.startSession(app.params, seed.value.trim() || null);
   });
+  return () => {
+    const active = touchDrag?.active;
+    resetTouch();
+    if (active || dragging) finish(true);
+  };
 }

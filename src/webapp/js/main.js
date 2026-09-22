@@ -2,8 +2,8 @@ import { mountDetail, mountList } from './browse.js';
 import { DatabaseError, loadDatabase } from './data.js';
 import {
   createDefaultParams,
-  decodeParams,
-  encodeParams,
+  decodeSessionState,
+  encodeSessionState,
   loadStoredParams,
   mount as mountParams,
   paramsSignature,
@@ -41,12 +41,7 @@ const app = {
   },
 
   sessionQuery() {
-    const encoded = encodeParams(app.plan.params);
-    const parts = [`d=${encoded.d}`, `l=${encoded.l}`, `c=${encoded.c}`];
-    if (app.plan.seedOverride) {
-      parts.push(`seed=${encodeURIComponent(app.plan.seedOverride)}`);
-    }
-    return parts.join('&');
+    return `s=${encodeSessionState(app.plan.params, app.db, app.plan.seedOverride)}`;
   },
 
   sessionHref(stepNumber) {
@@ -82,8 +77,7 @@ function parseHash() {
 }
 
 function ensurePlan(query) {
-  const requested = decodeParams(query, app.db);
-  const seedOverride = query.get('seed') || null;
+  const { params: requested, seedOverride } = decodeSessionState(query.get('s'), app.db);
   const signature = paramsSignature(requested);
   const planMatches =
     app.plan && app.plan.signature === signature && (app.plan.seedOverride ?? null) === seedOverride;
