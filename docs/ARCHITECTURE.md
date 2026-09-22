@@ -110,7 +110,7 @@ Zasady:
 Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 
 ```
-#/session/3?d=2026-09-10&l=4&c=gloska-dz:1:2:12:kolejnosc,opozycje-fonologiczne:1:2:7:losowo:opozycje-c-cz-w-jednym-wyrazie&seed=...
+#/session/3?d=2026-09-10&l=4&c=samogloski:1:2:5:kolejnosc,artykulacja-i-roznicowanie-glosek:1:2:7:losowo:opozycje-c-cz-w-jednym-wyrazie&seed=...
 ```
 
 - Adres jest jedynym nośnikiem stanu konkretnej sesji, który przeżywa przeładowanie
@@ -181,8 +181,8 @@ z identyfikatora ćwiczenia, żeby zmiana limitów nie przesuwała sekwencji w p
 **Walidacja bazy.** Wczytanie kończy się sprawdzeniem struktury; zbierane są wszystkie
 niezgodności naraz, a aplikacja pokazuje ich listę zamiast pustego interfejsu. Walidowane są
 pola wymagane, unikalność identyfikatorów, odwołania do kategorii, znane typy wariantów,
-obecność treści i zakres poziomu. Pola informacyjne (`readQuality`, `source.kind`, `phonemes`,
-`positions`) nie są sprawdzane słownikowo — ich rozszerzenie nie powinno blokować startu.
+obecność treści i zakres poziomu. Pole informacyjne `readQuality` nie jest sprawdzane
+słownikowo — jego rozszerzenie nie powinno blokować startu.
 Ta sama walidacja obejmuje roboczą kopię po edycji i musi przejść przed eksportem.
 
 **Dostępność.** Nawigacja w sesji także strzałkami, fokus wracający na główny obszar po zmianie

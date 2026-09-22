@@ -1,146 +1,125 @@
 # Schemat pliku `database.json`
 
-Statyczna baza danych aplikacji: `src/webapp/data/database.json`, wczytywany raz przy starcie.
-Wersja schematu: **1.1**. Rozmiar ~535 kB, ~64 kB po gzipie.
+`src/webapp/data/database.json` jest statyczną bazą ćwiczeń wczytywaną raz przy starcie
+aplikacji. Wersja schematu: **2.0**.
 
-Zawartość: 30 kategorii, 70 ćwiczeń, 132 warianty, 735 pozycji.
+Aktualna zawartość: 7 kategorii, 70 ćwiczeń, 132 warianty i 735 pozycji.
 
-## Struktura
+## Zakres bazy
 
-```
+Plik zawiera wyłącznie dane potrzebne do wyboru, prezentacji i edycji ćwiczeń:
+
+```text
 schemaVersion, generated
 categories[]          kolejność wyświetlania = kolejność w tablicy
-exercises[]           jeden skan = jedno ćwiczenie
-  variants[]          zadania w obrębie ćwiczenia
-    items[]           pojedyncze pozycje do losowania
-duplicates[]          rejestr audytowy
-nonTextMaterials[]    skany bez zadań
+exercises[]
+  variants[]
+    items[]
 ```
 
-## Pola
+Wersja 2.0 nie przechowuje metadanych materiałów źródłowych ani rejestrów skanów. Usunięte
+zostały `source.file`, `source.kind`, `source.publication`, `notes`, `duplicates[]` oraz
+`nonTextMaterials[]`. Usunięto również pola ćwiczenia `phonemes` i `positions` oraz pole
+wariantu `noteHtml` wraz z jego treścią. Informacje audytowe powinny być utrzymywane poza bazą wykonawczą, jeśli
+będą ponownie potrzebne.
 
-### korzeń
+## Kategorie
 
-| Pole | Typ | Opis |
-|---|---|---|
-| `schemaVersion` | string | wersja schematu; podbijana przy zmianie kształtu struktury |
-| `generated` | string | rewizja treści: data wygenerowania lub eksportu (ISO 8601), uwzględniana w ziarnie |
+Kategorie opisują zastosowanie terapeutyczne, a nie pojedynczy skan, głoskę lub publikację.
+Szczegółowy cel ćwiczenia wynika z jego tytułu, poleceń i treści.
 
-### `categories[]`
+| `id` | Nazwa | Ćwiczeń |
+|---|---|---:|
+| `motoryka-orofacjalna-i-polykanie` | motoryka orofacjalna i połykanie | 6 |
+| `oddech-fonacja-i-rezonans` | oddech, fonacja i rezonans | 7 |
+| `technika-mowy-i-glosu` | technika mowy i głosu | 4 |
+| `samogloski` | samogłoski | 7 |
+| `artykulacja-i-roznicowanie-glosek` | artykulacja i różnicowanie głosek | 21 |
+| `wprawki-artykulacyjne` | wprawki artykulacyjne | 2 |
+| `teksty-do-czytania-terapeutycznego` | teksty do czytania terapeutycznego | 23 |
 
-| Pole | Typ | Opis |
-|---|---|---|
-| `id` | string | klucz techniczny, referowany przez `exercises[].categoryId` |
-| `name` | string | nazwa czytelna dla użytkownika |
-
-Kolejność kategorii wynika z ich kolejności w tablicy — nie ma osobnego pola pozycji.
-
-### `exercises[]`
-
-| Pole | Typ | Opis |
-|---|---|---|
-| `id` | string | unikalny w pliku, stabilny — nie zmieniać po wydaniu |
-| `title` | string | tytuł = pierwsze zadanie na skanie |
-| `categoryId` | string | FK do `categories[].id` |
-| `phonemes` | string[] | głoski / grupy docelowe; `[]` gdy ćwiczenie nie jest głoskowe |
-| `positions` | string[] | pozycja w wyrazie (nagłos / śródgłos / wygłos / …); `[]` gdy nie dotyczy |
-| `level` | number \| null | poziom trudności 1–4 wg oryginału; `null` gdy źródło nie podaje |
-| `randomizable` | boolean | `true` → wolno wybrać podzbiór pozycji; `false` → materiał podaje się w całości |
-| `readQuality` | string | `"pewny"` albo `"do_weryfikacji"` — zaufanie do odczytu ze skanu |
-| `source` | object | pochodzenie, do audytu i ponownej korekty |
-| `source.file` | string | nazwa pliku skanu |
-| `source.kind` | string | `"zdjecie"` albo `"pdf_kontener"` |
-| `source.publication` | string \| null | autor i tytuł publikacji; `null` gdy nieustalone |
-| `notes` | string \| null | uwagi redakcyjne: co ucięte, co pominięte, jak czytać zapis fonetyczny. Nie do pokazywania ćwiczącemu |
-| `headerHtml` | string \| null | nagłówek strony z oryginału |
-| `contextHtml` | string \| null | materiał towarzyszący, nie zadanie: opis układu artykulatorów, komentarz metodyczny. Do pokazania przed ćwiczeniem |
-| `instructionHtml` | string \| null | polecenie wspólne dla całego ćwiczenia; wariant może je nadpisać |
-| `variants` | object[] | zawsze co najmniej jeden |
-
-### `exercises[].variants[]`
+Każda pozycja `categories[]` ma dwa pola:
 
 | Pole | Typ | Opis |
 |---|---|---|
-| `id` | string | unikalny w pliku, stabilny |
-| `label` | string \| null | nagłówek wariantu; `null` gdy ćwiczenie jest jednowariantowe |
-| `type` | string | decyduje o renderowaniu, patrz niżej |
-| `instructionHtml` | string \| null | polecenie wariantu; `null` → użyj `exercises[].instructionHtml` |
-| `syllablesHtml` | string \| null | wiersz sylab treningowych przed pozycjami; wyświetlany raz, nie losowany |
-| `textHtml` | string \| null | treść dla `type: "text"`; akapity `<p>`, łamania wersów `<br>` |
-| `noteHtml` | string \| null | komentarz metodyczny wariantu |
-| `examples` | string[] | przykłady wzorcowe z oryginału — podpowiedź, **nie** losowane |
-| `items` | object[] | pozycje do losowania; puste dla `text`, `syllables`, `prompt` |
+| `id` | string | unikalny klucz techniczny, referowany przez `exercises[].categoryId` |
+| `name` | string | nazwa wyświetlana użytkownikowi |
 
-Kolejność wariantów w ćwiczeniu wynika z ich kolejności w tablicy — nie ma osobnego pola pozycji.
+Kolejność kategorii wynika z kolejności w tablicy; nie ma osobnego pola pozycji.
 
-#### wartości `type`
+## Pola korzenia
 
-| Wartość | Ile | Renderowanie |
+| Pole | Typ | Opis |
 |---|---|---|
-| `items` | 91 | lista niezależnych pozycji, z niej aplikacja losuje |
+| `schemaVersion` | string | wersja kontraktu danych; zmiana niezgodna wstecz podbija część główną |
+| `generated` | string | rewizja treści jako data lub znacznik czasu ISO 8601; składnik ziarna sesji |
+| `categories` | object[] | uporządkowany słownik kategorii |
+| `exercises` | object[] | komplet ćwiczeń |
+
+## `exercises[]`
+
+| Pole | Typ | Opis |
+|---|---|---|
+| `id` | string | unikalny, stabilny identyfikator ćwiczenia |
+| `title` | string | tytuł ćwiczenia |
+| `categoryId` | string | klucz obcy do `categories[].id` |
+| `level` | number \| null | poziom trudności 1–4; `null`, gdy poziom nie został określony |
+| `randomizable` | boolean | `true` pozwala ograniczać liczbę pozycji; `false` podaje cały materiał |
+| `readQuality` | string | `"pewny"` albo `"do_weryfikacji"` — zaufanie do treści transkrypcji |
+| `headerHtml` | string \| null | nagłówek materiału |
+| `contextHtml` | string \| null | opis metodyczny lub materiał wprowadzający pokazywany przed zadaniem |
+| `instructionHtml` | string \| null | wspólne polecenie; wariant może je nadpisać |
+| `variants` | object[] | co najmniej jeden wariant |
+
+## `exercises[].variants[]`
+
+| Pole | Typ | Opis |
+|---|---|---|
+| `id` | string | unikalny, stabilny identyfikator wariantu |
+| `label` | string \| null | nazwa wariantu; `null` przy ćwiczeniu jednowariantowym |
+| `type` | string | sposób renderowania: `items`, `text`, `prompt` albo `syllables` |
+| `instructionHtml` | string \| null | polecenie wariantu; `null` dziedziczy `exercises[].instructionHtml` |
+| `syllablesHtml` | string \| null | wiersz sylab treningowych, wyświetlany w całości |
+| `textHtml` | string \| null | treść ciągła dla `type: "text"` |
+| `examples` | string[] | przykłady wzorcowe; są podpowiedzią, nie podlegają losowaniu |
+| `items` | object[] | pozycje do losowania; puste dla `text`, `syllables` i `prompt` |
+
+Kolejność wariantów wynika z kolejności w tablicy.
+
+### Typy wariantów
+
+| Wartość | Liczba | Renderowanie |
+|---|---:|---|
+| `items` | 91 | lista niezależnych pozycji |
 | `text` | 28 | tekst ciągły lub wierszowany, czytany w całości |
-| `prompt` | 11 | samo polecenie, bez materiału do losowania (zadanie długoterminowe) |
+| `prompt` | 11 | polecenie bez pozycji, np. zadanie długoterminowe |
 | `syllables` | 2 | wiersz sylab treningowych |
 
-### `exercises[].variants[].items[]`
+## `exercises[].variants[].items[]`
 
 | Pole | Typ | Opis |
 |---|---|---|
-| `id` | string | unikalny w pliku, stabilny |
-| `html` | string | treść pozycji ze znacznikami |
-
-### `duplicates[]`
-
-Skany powielające inny materiał. Rejestr audytowy, nie ćwiczenia —
-żeby nikt nie dodał ich powtórnie.
-
-| Pole | Typ | Opis |
-|---|---|---|
-| `file` | string | nazwa pliku skanu |
-| `duplicateOf` | string | nazwa pliku oryginału |
-| `material` | string | opis powielonego materiału |
-
-### `nonTextMaterials[]`
-
-Skany bez zadań (np. schemat artykulacyjny) — kandydaci na ilustracje instruktażowe.
-
-| Pole | Typ | Opis |
-|---|---|---|
-| `file` | string | nazwa pliku skanu |
-| `content` | string | co przedstawia |
-| `use` | string | proponowane zastosowanie w aplikacji |
+| `id` | string | unikalny, stabilny identyfikator pozycji |
+| `html` | string | treść pozycji z dozwolonymi znacznikami semantycznymi |
 
 ## Znaczniki w treści HTML
 
-Klasy niosą znaczenie, nie wygląd — CSS jest ich konsekwencją.
-Sześć z ośmiu nie ma odpowiednika wśród standardowych tagów HTML.
+| Klasa | Znaczenie |
+|---|---|
+| `target` | głoska docelowa |
+| `legato` | samogłoska przedłużana w technice legato |
+| `phonetic` | zapis fonetyczny lub ortofoniczny |
+| `uncertain` | fragment niepewny albo nieczytelny |
+| `breath` | miejsce wdechu |
+| `exhale` | fraza realizowana na jednym wydechu |
+| `blank` | miejsce na odpowiedź ustną |
+| `juncture` | granica zestroju akcentowego |
 
-| Klasa | Znaczenie | Sugerowany styl |
-|---|---|---|
-| `target` | głoska docelowa (pogrubienie w oryginale) | `font-weight: 700` |
-| `legato` | samogłoska przedłużana w technice legato (podkreślenie) | `text-decoration: underline` |
-| `phonetic` | zapis fonetyczny / ortofoniczny z oryginału | `font-style: italic` |
-| `uncertain` | fragment ucięty lub nieczytelny na skanie | wyszarzenie, nawiasy |
-| `breath` | miejsce wdechu (czerwone V w oryginale) | akcent kolorem |
-| `exhale` | fraza realizowana na jednym wydechu | strzałka lub linia pod frazą |
-| `blank` | miejsce na odpowiedź w oryginale (ćwiczący odpowiada ustnie) | linia lub kropki |
-| `juncture` | granica zestroju akcentowego | cienka kreska pionowa |
+Treść może ponadto zawierać `<p>`, `<br>`, `<strong>` i `<em>`. Edytor dopuszcza tylko
+wymienione tagi i klasy oraz atrybut `title` na `span`. Puste znaczniki są usuwane z wyjątkiem
+samodzielnych oznaczeń `blank` i `exhale`.
 
-Poza tym w treści występują `<p>`, `<br>`, `<strong>` (wyróżnienie typograficzne
-w nagłówkach — **nie** głoska docelowa) oraz `<em>` (kursywa z oryginału).
-
-### Zasady edytora
-
-Pasek formatowania w podglądzie odwzorowuje każdą klasę z tabeli na przycisk i zapisuje
-zaznaczenie jako `<span class="nazwa-klasy">…</span>`. Edytor dopuszcza wyłącznie wymienione
-tagi i klasy oraz opisowy atrybut `title` na `span`. Usuwa puste znaczniki z wyjątkiem
-samodzielnych oznaczeń `blank` i `exhale`; nie zmienia tekstu poza zaznaczeniem. Te same
-reguły obowiązują podgląd na żywo i eksport pliku.
-
-### Przełączanie warstw
-
-Rozdzielenie `target` i `legato` daje trzy tryby wyświetlania jednego tekstu
-bez trzymania trzech wersji treści:
+Rozdzielenie `target` i `legato` pozwala przełączać trzy warstwy prezentacji:
 
 ```css
 /* pełny  */ .target { font-weight: 700 } .legato { text-decoration: underline }
@@ -148,54 +127,35 @@ bez trzymania trzech wersji treści:
 /* czysty */ .target { font-weight: inherit } .legato { text-decoration: none }
 ```
 
-## Uwagi dla implementacji
+## Reguły i konsekwencje implementacyjne
 
-**Brak pól redundantnych.** Plik nie zawiera ani liczników (`variants.length`, `items.length`
-liczy aplikacja), ani pól pozycji — kolejność niesie sama tablica. Jedno i drugie mogłoby
-rozjechać się z rzeczywistością po ręcznej edycji.
+- Plik nie przechowuje liczników ani pól pozycji. Liczby wynikają z długości tablic, a kolejność
+  z kolejności elementów.
+- `variants[].instructionHtml: null` oznacza użycie polecenia ćwiczenia; oba pola równe `null`
+  oznaczają brak polecenia.
+- `randomizable: false` wyłącza ograniczanie pozycji także dla wariantów `items`. Typy `text`,
+  `syllables` i `prompt` zawsze są podawane w całości.
+- `readQuality` pozostaje w bazie, ponieważ steruje ostrzeżeniem w interfejsie. Obecnie 9 z 70
+  ćwiczeń wymaga weryfikacji.
+- 54 ćwiczenia nie mają określonego poziomu. Poziomy 1–4 mają odpowiednio 1, 3, 4 i 8 ćwiczeń.
+- 35 ćwiczeń ma `randomizable: false`.
 
-**Dziedziczenie polecenia.** `variants[].instructionHtml` równe `null` oznacza użycie
-`exercises[].instructionHtml`; oba `null` — wariant bez polecenia.
+Krańce parametrów sesji `W` (warianty) i `P` (pozycje), liczone dla ćwiczeń w kategorii:
 
-**`randomizable` a `type`.** `randomizable` jest wskazówką na poziomie ćwiczenia;
-rozstrzyga `variants[].type` — `text`, `syllables` i `prompt` nigdy się nie dzielą,
-`items` zawsze można ciąć.
+| Kategoria | maks. `W` | maks. `P` |
+|---|---:|---:|
+| motoryka orofacjalna i połykanie | 2 | 10 |
+| oddech, fonacja i rezonans | 4 | 23 |
+| technika mowy i głosu | 4 | 21 |
+| samogłoski | 2 | 5 |
+| artykulacja i różnicowanie głosek | 6 | 58 |
+| wprawki artykulacyjne | 1 | 8 |
+| teksty do czytania terapeutycznego | 1 | 0 |
 
-**Rozkład kategorii jest nierówny.** „Tekst do czytania terapeutycznego” obejmuje 23 z 70
-ćwiczeń, „rozgrzewka” kolejnych 10, a 22 kategorie mają po jednym ćwiczeniu. Ważenie kategorii
-nie zostało wprowadzone — steruje tym liczba ćwiczeń w parametrach, a w kategoriach obszerniejszych
-także wybór i podział ćwiczeń na bloki (APPLICATION §3.2).
+Wartość `W = 1` albo `P = 0` oznacza, że formularz nie pokazuje danego ograniczenia.
 
-**Rozkład wariantów.** 42 z 70 ćwiczeń ma jeden wariant, pozostałe 2, 3, 4 albo 6. 27 ćwiczeń
-nie ma w ogóle pozycji (same `text`, `syllables`, `prompt`), a 6 wariantów ma po jednej pozycji.
+## Odpowiedzialność za prawa do materiałów
 
-**Poziom trudności bywa nieokreślony.** 54 z 70 ćwiczeń ma `level: null`; poziomy 1–4 mają
-kolejno 1, 3, 4 i 8 ćwiczeń. 35 ćwiczeń ma `randomizable: false`.
-
-**Krańce parametrów sesji.** `W` i `P` (APPLICATION §3.4) liczone są osobno dla każdego
-bloku, z jego własnych ćwiczeń. Rozpiętość przy blokach domyślnych, czyli po jednym na kategorię:
-
-| | najwyżej | najniżej |
-|---|---|---|
-| maks. `W` | 6 — `sygmatyzm-miedzyzebowy-cwiczenia-ze-szpatulka`, `gloski-nosowe-wzmocnienie-naglosu` | 1 — 7 kategorii jednowariantowych |
-| maks. `P` | 58 — `opozycje-fonologiczne` | 0 — 2 kategorie bez pozycji |
-
-Maksimum 58 pochodzi z `opozycje-c-cz-w-jednym-wyrazie` (warianty 30 + 16 + 12 pozycji);
-warianty bez pozycji nie wchodzą do rachunku `P`.
-
-Kraniec równy 1 dla `W` albo 0 dla `P` oznacza blok, w którym nie ma czego ograniczać —
-formularz nie pokazuje wtedy tego pola (APPLICATION §3.4). Bez pozycji są
-`tekst-do-czytania-terapeutycznego` (23 ćwiczenia, same `text`) oraz
-`terapia-miofunkcjonalna-polykanie` (`prompt`); ich materiał podawany jest w całości.
-
-**Materiał do korekty.** 9 ćwiczeń ma `readQuality: "do_weryfikacji"`. Kolejnych 20 ma
-w `notes` adnotację, że warstwa legato jest miejscami przybliżona; warstwa głoski docelowej
-pozostaje wierna.
-
-## Prawa autorskie
-
-Materiał pochodzi z publikacji chronionych prawem autorskim: Wydawnictwo Harmonia /
-SCTJ Wodzisław Śląski (seria „Teksty do czytania terapeutycznego”),
-A. Walencik-Topiłko „Głos jako narzędzie”, ćwiczenia w konwencji B. Toczyskiej,
-oraz materiał autorski terapeuty. Pliki są transkrypcją skanów właściciela projektu.
-Przed udostępnieniem aplikacji poza użytek własny należy uregulować licencje.
+Usunięcie metadanych źródłowych z pliku wykonawczego nie zmienia statusu prawnego treści.
+Przed udostępnieniem aplikacji poza dozwolonym zakresem właściciel projektu powinien osobno
+zweryfikować prawa i licencje do materiałów.

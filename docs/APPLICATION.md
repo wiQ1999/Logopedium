@@ -66,7 +66,8 @@ sesji i we własnym trybie doboru.
 - Nowy blok staje pod źródłowym i dziedziczy jego tryb doboru; liczby wracają na krańce
   własnej zawartości.
 - Blok przyjmuje wyłącznie ćwiczenia swojej kategorii; opróżniony ze wszystkich znika z listy.
-- Podział ma sens w 8 kategoriach z 30 — pozostałe mają po jednym ćwiczeniu.
+- Wszystkie 7 kategorii obejmuje więcej niż jedno ćwiczenie, więc każdą można sensownie
+  podzielić na mniejsze bloki.
 
 ### 3.3 Pozostałe parametry
 
@@ -110,17 +111,16 @@ pozycji, a one żadnej nie wnoszą. Do `W` liczą się normalnie, jak każdy inn
 Pole pojawia się tylko wtedy, gdy jest z czego wybierać:
 
 - blok o samych ćwiczeniach jednowariantowych nie dostaje pola `W` — przy blokach domyślnych
-  7 kategorii z 30;
+  dotyczy to „wprawek artykulacyjnych” i „tekstów do czytania terapeutycznego”;
 - blok bez pozycji nie dostaje pola `P`, a jego materiał podawany jest w całości — przy blokach
-  domyślnych „tekst do czytania terapeutycznego” (23 ćwiczenia) oraz „terapia
-  miofunkcjonalna — połykanie”.
+  domyślnych dotyczy to „tekstów do czytania terapeutycznego” (23 ćwiczenia).
 
 Przypadki są niezależne, więc wiersz niesie od jednej do trzech liczb. Ukryte pole zachowuje
 swoją jedyną możliwą wartość — `W` = 1 albo `P` = 0 — i tyle wchodzi do planu sesji. Wyłączenie
 ćwiczenia i podział kategorii mogą pole ukryć albo przywrócić, bo zmieniają zawartość bloku.
 
-Krańce przy blokach domyślnych sięgają `W` = 6 i `P` = 58 („opozycje fonologiczne”), a najuboższe
-bloki z pozycjami zatrzymują się na `P` = 5.
+Krańce przy blokach domyślnych sięgają `W` = 6 i `P` = 58 („artykulacja i różnicowanie
+głosek”), a najuboższy blok z pozycjami zatrzymuje się na `P` = 5.
 
 #### Podział `P` między warianty
 
@@ -253,8 +253,6 @@ Polecenie wariantu nadpisuje polecenie ćwiczenia. Gdy wszystkie pokazane warian
 identyczne polecenie skuteczne, wyświetlane jest ono raz, nad wariantami; gdy się różnią —
 każdy wariant pokazuje swoje.
 
-Uwagi redakcyjne (`notes`) nie są pokazywane w sesji.
-
 ### 6.4 Tryb oznaczeń
 
 Przełącznik `pełne / głoska / czysty` zmienia widoczność oznaczeń w treści. Wybór utrzymuje
@@ -276,9 +274,7 @@ sesyjnych. Ćwiczenia pokazywane są ze wszystkimi wariantami i pozycjami.
 - podgląd pojedynczego ćwiczenia oraz podgląd jego surowych danych z bazy,
 - wyszukiwanie tekstowe po tytule, instrukcji i treści,
 - filtrowanie po kategorii oraz po poziomie — tu filtr **dokładny**, nie górny limit,
-  z dodatkową opcją „bez określonego poziomu”,
-- uwagi redakcyjne widoczne jako osobny blok oznaczony jako nieprzeznaczony dla ćwiczącego,
-- rejestr audytowy bazy (`duplicates`, `nonTextMaterials`) w zwiniętej sekcji na końcu listy.
+  z dodatkową opcją „bez określonego poziomu”.
 
 ### 7.1 Tryb edycji
 
