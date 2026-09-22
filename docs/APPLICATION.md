@@ -56,8 +56,10 @@ Blok daje się rozwinąć: pokazuje wtedy wszystkie swoje ćwiczenia, po jednym 
 ćwiczenie ma własny przełącznik aktywności — wyłączone nie bierze udziału w losowaniu i nie
 liczy się do krańców bloku. Blok bez aktywnych ćwiczeń zachowuje się jak wyłączony.
 
-Wiersze — bloki i ćwiczenia — przestawia się przeciągnięciem; nie ma przycisków „góra”
-i „dół”. Ćwiczenie wyciągnięte poza swój blok tworzy nowy blok tej samej kategorii,
+Wiersze — bloki i ćwiczenia — przestawia się przeciągnięciem myszą, dotykiem albo klawiaturą;
+nie ma przycisków „góra” i „dół”. Na ekranie dotykowym uchwyt trzeba najpierw przytrzymać,
+więc zwykły ruch palca przewija listę zamiast przypadkowo przenosić wiersz. Ćwiczenie wyciągnięte
+poza swój blok tworzy nowy blok tej samej kategorii,
 zawierający tylko to ćwiczenie. Tak dzieli się jedną kategorię na kilka bloków o różnych
 ustawieniach: część ćwiczeń z pełnym materiałem, część przycięta, każda część w swoim miejscu
 sesji i we własnym trybie doboru.
@@ -167,6 +169,10 @@ wprost z zawartości bazy.
 Zatwierdzenie parametrów tworzy nowy plan sesji i rozpoczyna ją od początku. Postęp
 poprzedniej sesji nie jest przenoszony.
 
+Powrót z trwającej sesji do parametrów zachowuje użyte własne ziarno, także po ponownym
+losowaniu zestawu. Zatwierdzenie niezmienionego formularza odtwarza ten sam zestaw;
+wyczyszczenie pola ziarna świadomie przywraca zestaw domyślny wynikający z daty i parametrów.
+
 ### 3.8 Zapamiętywanie między wizytami
 
 Ustawienia przeżywają zamknięcie przeglądarki i wracają przy kolejnym otwarciu, także po
@@ -226,6 +232,9 @@ limitu przekształca zawartość kroku, ale nie podmienia wylosowanych ćwiczeń
 Aplikacja przyjmuje ziarno przekazane w adresie, polem w formularzu parametrów oraz
 przyciskiem ponownego losowania w podsumowaniu. Zastosowania: testy powtarzalności,
 odtworzenie sesji z przeszłości, nowy zestaw na bieżący dzień.
+
+Własne ziarno jest częścią stanu konkretnej sesji w adresie. Po powrocie do formularza pole
+pokazuje tę wartość; puste pole oznacza powrót do ziarna wyliczanego z daty, bazy i parametrów.
 
 ---
 

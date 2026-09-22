@@ -110,25 +110,23 @@ Zasady:
 Adres niesie komplet parametrów sesji, ziarno i numer kroku, np.
 
 ```
-#/session/3?d=2026-09-10&l=4&c=samogloski:1:2:5:kolejnosc,artykulacja-i-roznicowanie-glosek:1:2:7:losowo:opozycje-c-cz-w-jednym-wyrazie&seed=...
+#/session/3?s=WzEsIjIuMCIsIjIwMjYtMDktMjIiLCIyMDI2LTA5LTIyIiw0LFtbMCw2LDIsMTAsMF0sLi4uXQ
 ```
 
 - Adres jest jedynym nośnikiem stanu konkretnej sesji, który przeżywa przeładowanie
   i daje się przekazać dalej; `localStorage` niesie wyłącznie wartości początkowe formularza.
-- Kategorie i ćwiczenia identyfikowane po `id`, nie po indeksie — indeks rozjechałby się
-  po zmianie bazy.
-- `c` wymienia bloki aktywne, w kolejności wyświetlania; kategoria bez aktywnego bloku wraca
-  na pozycję domyślną.
-- Wpis to `id:ćwiczenia:W:P:tryb`, zawsze komplet — także gdy formularz ukrył pole `W` albo `P`
-  (APPLICATION §3.4), bo adres niesie wartości obowiązujące, nie stan interfejsu. Składniki
-  urwane przy ręcznej edycji przyjmują krańce swojego bloku.
-- Blok węższy od swojej kategorii — po podziale albo wyłączeniu ćwiczeń — dopisuje szósty
-  składnik: identyfikatory swoich ćwiczeń złączone `+`, w kolejności bloku. Blok obejmujący
-  kategorię w całości listę pomija, o ile nie zmieniono kolejności ćwiczeń; adres domyślnej
-  sesji ma więc ~1,5 kB.
-- Dwa bloki tej samej kategorii różnią się listą ćwiczeń, bo ćwiczenie należy do jednego bloku.
-- Wartości spoza zakresu są przycinane przy odczycie, ćwiczenia nieznane i powtórzone pomijane —
-  ręcznie zmieniony adres nie psuje aplikacji.
+- Parametr `s` jest jednym, nieprzezroczystym składnikiem Base64URL. Wewnątrz znajduje się
+  zwarta tablica JSON: wersja formatu, `schemaVersion`, `generated`, data, poziom, aktywne bloki
+  oraz opcjonalne własne ziarno. Kodowanie nie jest szyfrowaniem.
+- Kategorie i ćwiczenia zapisane są jako indeksy z aktualnej bazy. Bezpieczeństwo tej zwartej
+  reprezentacji zapewnia powiązanie z dokładną wersją schematu i rewizją treści: stan jest
+  odczytywany tylko przy obu zgodnych wartościach.
+- Blok niesie liczbę ćwiczeń, `W`, `P`, tryb doboru i — tylko jeśli nie obejmuje całej kategorii
+  w jej kolejności domyślnej — indeksy aktywnych ćwiczeń. Dwa bloki tej samej kategorii różnią
+  się listą ćwiczeń, bo ćwiczenie należy do jednego bloku.
+- Stan podlega ścisłej walidacji i ponownemu kodowaniu kontrolnemu. Uszkodzenie, obca rewizja
+  bazy albo starsza wersja formatu odrzuca całość i uruchamia sesję z ustawieniami domyślnymi.
+- Domyślny adres sesji ma około 200 znaków, zamiast wcześniejszych około 1,5 kB.
 - Tryb przeglądania trzyma w adresie filtry i aktualizuje je przez `replaceState`,
   żeby nie zaśmiecać historii.
 
@@ -187,10 +185,11 @@ Ta sama walidacja obejmuje roboczą kopię po edycji i musi przejść przed eksp
 
 **Dostępność.** Nawigacja w sesji także strzałkami, fokus wracający na główny obszar po zmianie
 stanu, nagłówek pierwszego poziomu w każdym stanie. Lista parametrów porządkowana jest
-przeciąganiem, więc uchwyt wiersza musi działać także z klawiatury — przejęcie wiersza,
-przesunięcie strzałkami, upuszczenie lub wycofanie — a każdy ruch musi być zapowiadany
-komunikatem dla czytnika ekranu. Pasek edytora musi zachowywać zaznaczenie przy obsłudze
-klawiaturą, a nazwa przycisku ma opisywać znaczenie nakładanej klasy.
+przeciąganiem. Uchwyt działa myszą, po przytrzymaniu dotykiem oraz klawiaturą — przejęcie
+wiersza, przesunięcie strzałkami, upuszczenie lub wycofanie — a każdy ruch jest zapowiadany
+tym samym komunikatem dla czytnika ekranu. Ruch palca przed upływem czasu przytrzymania
+pozostaje gestem przewijania. Pasek edytora musi zachowywać zaznaczenie przy obsłudze klawiaturą,
+a nazwa przycisku ma opisywać znaczenie nakładanej klasy.
 
 ---
 

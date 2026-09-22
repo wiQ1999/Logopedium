@@ -34,9 +34,10 @@ python -m http.server 4173 --directory src/webapp
 npm test
 ```
 
-Wbudowany `node --test`: dane, losowanie, bloki, zapis ustawień, bezpieczny HTML i eksport JSON,
-a także widoki, edytor i trasy na `jsdom` — jedynej zależności deweloperskiej. Przed pierwszym
-uruchomieniem testów wykonaj `npm ci`. Aplikacja nie ma zależności produkcyjnych.
+Wbudowany `node --test`: dane, losowanie, wersjonowany stan sesji w adresie, bloki i ich obsługa
+myszą, dotykiem oraz klawiaturą, zapis ustawień, bezpieczny HTML i eksport JSON, a także widoki,
+edytor i trasy na `jsdom` — jedynej zależności deweloperskiej. Przed pierwszym uruchomieniem
+testów wykonaj `npm ci`. Aplikacja nie ma zależności produkcyjnych.
 
 ## Publikacja
 

@@ -5,6 +5,27 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-22 — zwarty stan sesji i dotykowe przenoszenie
+
+Realizacja zadań BACKLOG 1, 2 i 4. Wymagania: APPLICATION §3.2, §3.7, §5.3;
+ARCHITECTURE §6, §10.
+
+- **Cały stan sesji trafia do jednego, wersjonowanego parametru `s` w Base64URL.** Zwarta tablica
+  JSON skraca domyślny adres z około 1,5 kB do około 200 znaków bez zależności produkcyjnej
+  i bez asynchronicznej kompresji.
+- **Kategorie i ćwiczenia są indeksami wyłącznie w obrębie dokładnej rewizji bazy.** Do stanu
+  wchodzą `schemaVersion` i `generated`; niezgodność, stary format lub uszkodzenie odrzuca całość.
+  Dzięki temu indeks nie może po cichu wskazać innego materiału po publikacji nowej bazy.
+- **Odrzucony stan uruchamia parametry domyślne.** Częściowe odzyskiwanie nie daje pewności,
+  że przekazany adres odtworzył zamierzony zestaw.
+- **Powrót do parametrów czyta własne ziarno z aktywnego planu.** Pole puste nadal jednoznacznie
+  oznacza zestaw dzienny; ręczne wyczyszczenie usuwa nadpisanie.
+- **Dotyk wymaga przytrzymania uchwytu przez 350 ms.** Ruch przed aktywacją anuluje przenoszenie
+  i pozostawia przewijanie przeglądarce; po aktywacji cel upuszczenia korzysta z tych samych
+  operacji i komunikatów co mysz i klawiatura.
+
+---
+
 ## 2026-09-21 — edycja bazy w podglądzie
 
 Podgląd ćwiczenia dostaje tryb edycji ćwiczenia lub wariantu. Wymagania: APPLICATION §7;
