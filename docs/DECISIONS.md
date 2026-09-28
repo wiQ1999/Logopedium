@@ -5,6 +5,24 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-28 — podgląd ćwiczenia w parametrach sesji
+
+Realizacja zadania BACKLOG 11. Wymagania: APPLICATION §3.2 „Podgląd ćwiczenia”.
+
+- **Próbka o stałych limitach, nie cały materiał.** 2 warianty × 3 pozycje, tekst ok. 220 znaków
+  i 3 wierszy, pozycja ok. 90 znaków i 2 wierszy. Na bazie z repozytorium najwyższy podgląd
+  ma ok. 560 px przy 1280 px szerokości (mediana ok. 250 px), więc mieści się na jednym ekranie.
+- **Skracanie na HTML po sanitacji, z liczeniem wierszy.** Wiele tekstów w bazie to wiersze
+  łamane `<br>` — sam limit znaków zostawiłby kilkanaście krótkich linii. Cięcie na granicy
+  słowa z zamknięciem otwartych znaczników zachowuje oznaczenia, a wynik nadal przechodzi
+  sanitację.
+- **Tytuł ćwiczenia stał się przyciskiem podglądu, a pole wyboru dostało własną nazwę.**
+  Wcześniej cały tytuł był etykietą pola wyboru, więc kliknięcie tytułu wyłączało ćwiczenie.
+- **Podgląd rysowany tylko dla otwartego ćwiczenia** i nie zapamiętywany — jest pomocą przy
+  doborze, nie częścią parametrów.
+
+---
+
 ## 2026-09-28 — pasek oznaczeń w polu i dodawanie materiału w edytorze
 
 Realizacja zadań BACKLOG 9 i 10. Wymagania: APPLICATION §7.1, §7.2; ARCHITECTURE §10;
