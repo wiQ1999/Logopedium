@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { loadRawDatabase } from './helpers.js';
+import { acceptDatabase } from '../tools/database-file.js';
+import { BASE_REVISION_HEADER, WRITABLE_HEADER } from '../src/webapp/js/data.js';
 
 const INDEX_HTML = readFileSync(new URL('../src/webapp/index.html', import.meta.url), 'utf8');
 const GLOBALS = ['window', 'document', 'HTMLElement', 'CSS', 'Event', 'KeyboardEvent', 'localStorage'];
@@ -48,7 +50,7 @@ function installGlobals(window) {
 
 function installFetch(response) {
   const previous = globalThis.fetch;
-  globalThis.fetch = async () => response();
+  globalThis.fetch = async (...args) => response(...args);
   return () => {
     globalThis.fetch = previous;
   };
@@ -72,6 +74,31 @@ export function jsonResponse(payload) {
     statusText: 'OK',
     json: async () => payload,
   });
+}
+
+/** Atrapa serwera projektu: GET podaje bazę z nagłówkiem zapisu, PUT stosuje reguły tools/database-file.js. */
+export function devServer(raw = loadRawDatabase(), { writable = true, fail = null } = {}) {
+  const state = { raw, saves: [], reads: 0 };
+  const reply = (status, payload, headers = {}) => ({
+    ok: status >= 200 && status < 300, status, statusText: String(status),
+    headers: { get: (name) => headers[name.toLowerCase()] ?? null },
+    json: async () => structuredClone(payload),
+  });
+  const handler = (url, init = {}) => {
+    if ((init.method ?? 'GET') !== 'PUT') {
+      state.reads += 1;
+      return reply(200, state.raw, writable ? { [WRITABLE_HEADER]: '1' } : {});
+    }
+    if (fail) return fail();
+    const result = acceptDatabase(JSON.parse(init.body), state.raw, { baseRevision: init.headers?.[BASE_REVISION_HEADER] });
+    state.saves.push(result);
+    if (result.status === 'conflict') return reply(409, { generated: result.generated });
+    if (result.status === 'invalid') return reply(400, { issues: result.issues });
+    state.raw = result.raw;
+    return reply(200, { generated: result.raw.generated });
+  };
+  handler.state = state;
+  return handler;
 }
 
 export function errorResponse(status, statusText = 'Not Found') {
@@ -100,7 +127,8 @@ export async function bootApp({ hash = '#/params', response, storage } = {}) {
   if (storage) {
     globalThis.localStorage = storage;
   }
-  const restoreFetch = installFetch(response ?? jsonResponse(loadRawDatabase()));
+  const server = response ?? devServer();
+  const restoreFetch = installFetch(server);
 
   instanceCounter += 1;
   await import(`../src/webapp/js/main.js?instance=${instanceCounter}`);
@@ -108,6 +136,7 @@ export async function bootApp({ hash = '#/params', response, storage } = {}) {
 
   return {
     window,
+    server: server.state,
     document: window.document,
     main: window.document.querySelector('#app-main'),
     hash: () => decodeURIComponent(window.location.hash),

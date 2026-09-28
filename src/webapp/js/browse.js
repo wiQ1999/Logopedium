@@ -143,7 +143,7 @@ function renderLevelOptions(selected) {
 
 export function mountList(root, app, query) {
   const filters = readFilters(query);
-  const db = app.editedDb ?? app.db;
+  const { db } = app;
 
   root.innerHTML = `
     <section class="view-head">
@@ -210,7 +210,7 @@ export function mountList(root, app, query) {
 }
 
 export function mountDetail(root, app, exerciseId, query) {
-  const db = app.editedDb ?? app.db;
+  const { db } = app;
   const exercise = db.exerciseById.get(exerciseId);
   const filters = readFilters(query);
   const backHref = browseHref(filters);
@@ -235,7 +235,7 @@ export function mountDetail(root, app, exerciseId, query) {
     <h1 class="visually-hidden">Podgląd ćwiczenia</h1>
     <div class="btn-row" style="margin-bottom: var(--space-4)">
       <a class="btn btn--ghost" href="${backHref}">&#9664; Wróć do listy</a>
-      <a class="btn" href="${escapeHtml(editHref)}">Edytuj ćwiczenie</a>
+      ${db.writable ? `<a class="btn" href="${escapeHtml(editHref)}">Edytuj ćwiczenie</a>` : ''}
     </div>
 
     ${renderMarksToolbar(app.markMode)}
@@ -244,7 +244,7 @@ export function mountDetail(root, app, exerciseId, query) {
       categoryName: category?.name ?? '',
       markMode: app.markMode,
       headingId: 'browse-exercise-title',
-      editVariantHref: (id) => `${editHref}&variant=${encodeURIComponent(id)}`,
+      editVariantHref: db.writable ? (id) => `${editHref}&variant=${encodeURIComponent(id)}` : undefined,
     })}
 
     <div class="panel">

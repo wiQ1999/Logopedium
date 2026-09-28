@@ -1,19 +1,17 @@
-import { buildDatabase, validateDatabase } from './data.js';
-import { MARKS, sanitizeHtml, visitHtml } from './html.js';
-import { escapeHtml, renderExerciseCard, renderNotice } from './render.js';
+import { normalizeDatabase, saveDatabase, SaveError, validateExercise } from './data.js';
+import { MARKS, sanitizeHtml } from './html.js';
+import { escapeHtml, formatRevision, renderExerciseCard, renderNotice } from './render.js';
 
-export const createDraft = (db) => structuredClone(db.raw);
+/** The editing buffer covers a single exercise; the base itself lives only in the served file. */
+export const createDraft = (db, exerciseId) => {
+  const exercise = db.raw.exercises.find((e) => e.id === exerciseId);
+  return exercise ? structuredClone(exercise) : null;
+};
 
-export function prepareExport(draft, now = new Date()) {
-  const raw = structuredClone(draft);
-  const issues = validateDatabase(raw);
-  if (issues.length) return { issues, raw: null };
-  visitHtml(raw, (object, key) => { object[key] = sanitizeHtml(object[key]).html; });
-  const normalizedIssues = validateDatabase(raw);
-  if (normalizedIssues.length) return { issues: normalizedIssues, raw: null };
-  // generated is the content revision; schemaVersion describes the unchanged JSON structure.
-  raw.generated = now.toISOString();
-  return { issues: [], raw, json: JSON.stringify(raw, null, 2) + '\n' };
+/** Whole-base check before writing: the buffered exercise merged into the loaded base. */
+export function prepareSave(db, draft) {
+  const raw = { ...db.raw, exercises: db.raw.exercises.map((e) => e.id === draft.id ? draft : e) };
+  return normalizeDatabase(raw);
 }
 
 export function applyMark(editable, range, mark) {
@@ -44,26 +42,30 @@ export function applyMark(editable, range, mark) {
   return next;
 }
 
-function downloadJson(json, doc) {
-  const win = doc.defaultView;
-  const url = win.URL.createObjectURL(new win.Blob([json], { type: 'application/json' }));
-  const a = doc.createElement('a');
-  a.href = url; a.download = 'database.json'; doc.body.append(a);
-  a.click(); a.remove();
-  win.setTimeout(() => win.URL.revokeObjectURL(url), 1000);
-}
+/** Idle time after the last keystroke before the exercise is re-checked and the preview redrawn. */
+export const EDIT_SETTLE_MS = 150;
 
 export function mountEditor(root, app, exerciseId, variantId, backHref) {
   const doc = root.ownerDocument;
   const win = doc.defaultView;
-  const sourceDb = app.editedDb ?? app.db;
-  const state = app.editorDraft ??= { raw: createDraft(sourceDb), saved: JSON.stringify(sourceDb.raw) };
-  const exercise = state.raw.exercises.find((e) => e.id === exerciseId);
+  if (!app.db.writable) {
+    root.innerHTML = `${renderNotice('Edycja niedostępna', 'Zapis bazy wymaga lokalnego serwera projektu (npm start) otwartego na tym komputerze. Tutaj ćwiczenia można tylko przeglądać.')}
+      <a class="btn" href="${escapeHtml(backHref)}">Wróć do podglądu</a>`;
+    return;
+  }
+  if (app.editorDraft?.exercise.id !== exerciseId) app.editorDraft = null;
+  const initial = app.editorDraft ? null : createDraft(app.db, exerciseId);
+  const state = app.editorDraft ??= initial && { exercise: initial, saved: JSON.stringify(initial) };
+  const exercise = state?.exercise;
   const variant = variantId ? exercise?.variants.find((v) => v.id === variantId) : null;
   if (!exercise || (variantId && !variant)) {
+    app.editorDraft = null;
     root.innerHTML = renderNotice('Nie znaleziono materiału', 'Wskazane ćwiczenie lub wariant nie istnieje.', 'notice--error');
     return;
   }
+  const categories = app.db.raw.categories;
+  const flash = app.editorFlash;
+  app.editorFlash = null;
   const bindings = [];
   let savedRange = null;
   let activeEditable = null;
@@ -94,7 +96,7 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
   const fields = variant ? variantFields(variant) : `<div class="panel editor-fields">
     <p class="panel__hint">Identyfikator ćwiczenia: ${escapeHtml(exercise.id)}</p>
     ${textField(exercise, 'title', 'Tytuł')}
-    ${selectField(exercise, 'categoryId', 'Kategoria', state.raw.categories.map((c) => [c.id,c.name]))}
+    ${selectField(exercise, 'categoryId', 'Kategoria', categories.map((c) => [c.id,c.name]))}
     ${selectField(exercise, 'level', 'Poziom', [['','Nieokreślony'], ...[1,2,3,4].map((n) => [n,String(n)])], (s) => s === '' ? null : Number(s))}
     ${selectField(exercise, 'randomizable', 'Losowanie pozycji', [['true','Dozwolone'],['false','Materiał w całości']], (s) => s === 'true')}
     ${textField(exercise, 'readQuality', 'Jakość odczytu')}
@@ -102,28 +104,40 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     </div>${exercise.variants.map(variantFields).join('')}`;
   root.innerHTML = `<section class="view-head"><h1>${variant ? 'Edycja wariantu' : 'Edycja ćwiczenia'}</h1><p>${escapeHtml(exercise.title)}</p>
     <div class="btn-row"><a class="btn" href="${escapeHtml(backHref)}">Wróć do podglądu</a><button class="btn" type="button" data-action="discard">Odrzuć zmiany</button>
-    <button class="btn btn--primary" type="button" data-action="export">Zapisz bazę JSON</button></div><p id="editor-status" role="status"></p></section>
+    <button class="btn btn--primary" type="button" data-action="save">Zapisz w pliku bazy</button></div>
+    <p class="panel__hint" id="editor-revision">Rewizja bazy: ${escapeHtml(formatRevision(app.db.generated))}</p><p id="editor-status" role="status"></p></section>
     <div class="editor-toolbar" role="group" aria-label="Formatowanie zaznaczonego tekstu">${Object.entries(MARKS).map(([key,label]) => `<button class="btn" type="button" data-mark="${key}">${label}</button>`).join('')}</div>
     <div id="editor-errors"></div><div class="editor-layout"><div class="editor-fields" id="editor-fields">${fields}</div>
     <section class="editor-preview" aria-label="Podgląd na żywo"><h2>Podgląd na żywo</h2><div id="editor-preview"></div></section></div>`;
   const preview = root.querySelector('#editor-preview');
   const errors = root.querySelector('#editor-errors');
-  const exportButton = root.querySelector('[data-action="export"]');
-  const dirty = () => JSON.stringify(state.raw) !== state.saved;
+  const status = root.querySelector('#editor-status');
+  const saveButton = root.querySelector('[data-action="save"]');
+  let saving = false;
+  const dirty = () => JSON.stringify(exercise) !== state.saved;
+  // Typing re-checks only the edited exercise; the whole base is validated when saving.
   const update = () => {
-    const issues = validateDatabase(state.raw);
-    exportButton.disabled = issues.length > 0;
-    errors.innerHTML = issues.length ? renderNotice('Popraw dane przed zapisem', 'Baza zawiera niezgodności:', 'notice--error', issues) : '';
+    const issues = validateExercise(app.db.raw, exercise);
+    saveButton.disabled = saving || issues.length > 0;
+    errors.innerHTML = issues.length ? renderNotice('Popraw dane przed zapisem', 'Ćwiczenie zawiera niezgodności:', 'notice--error', issues) : '';
     if (issues.length) preview.innerHTML = '<p class="notice">Podgląd będzie dostępny po poprawieniu danych.</p>';
     else preview.innerHTML = renderExerciseCard(exercise, exercise.variants.map((v) => ({ variant: v, items: v.items })), {
-      categoryName: state.raw.categories.find((c) => c.id === exercise.categoryId)?.name, markMode: 'full' });
-    root.querySelector('#editor-status').textContent = dirty() ? 'Niezapisane zmiany w bazie.' : 'Brak niezapisanych zmian.';
+      categoryName: categories.find((c) => c.id === exercise.categoryId)?.name, markMode: 'full' });
+    if (!saving) status.textContent = dirty() ? 'Niezapisane zmiany.' : flash ?? 'Brak niezapisanych zmian.';
+  };
+  // Checking and previewing wait for a pause in typing, so keystrokes never queue behind them.
+  let pending = null;
+  const flush = () => { win.clearTimeout(pending); pending = null; update(); };
+  const schedule = () => {
+    if (!saving) status.textContent = 'Niezapisane zmiany.';
+    win.clearTimeout(pending);
+    pending = win.setTimeout(flush, EDIT_SETTLE_MS);
   };
   const readRich = (el) => {
     const binding = bindings[Number(el.dataset.rich)];
     const result = sanitizeHtml(el.innerHTML);
     binding.object[binding.key] = binding.parse(result.issues.length ? el.innerHTML : result.html);
-    update();
+    schedule();
   };
   const capture = () => {
     const selection = win.getSelection();
@@ -168,7 +182,7 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
   });
   root.querySelectorAll('[data-field]').forEach((el) => {
     const updateField = () => {
-      const binding = bindings[Number(el.dataset.field)]; binding.object[binding.key] = binding.parse(el.value); update();
+      const binding = bindings[Number(el.dataset.field)]; binding.object[binding.key] = binding.parse(el.value); schedule();
     };
     el.addEventListener('input', updateField); el.addEventListener('change', updateField);
   });
@@ -177,7 +191,7 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     const button = e.target.closest('[data-mark]');
     if (!button || !activeEditable) return;
     const range = applyMark(activeEditable, savedRange, button.dataset.mark);
-    if (!range) { root.querySelector('#editor-status').textContent = 'Zaznacz tekst do sformatowania.'; return; }
+    if (!range) { status.textContent = 'Zaznacz tekst do sformatowania.'; return; }
     activeEditable.focus(); const selection = win.getSelection(); selection.removeAllRanges(); selection.addRange(range);
     savedRange = range; readRich(activeEditable);
   });
@@ -191,23 +205,34 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
   win.addEventListener('beforeunload', beforeUnload);
   root.querySelector('[data-action="discard"]').addEventListener('click', () => {
     if (!leave()) return;
-    state.raw = JSON.parse(state.saved); app.beforeLeave = null; app.editorDraft = null; app.navigate(backHref);
+    app.beforeLeave = null; app.editorDraft = null; app.navigate(backHref);
   });
-  root.querySelector('[data-action="export"]').addEventListener('click', () => {
-    const result = prepareExport(state.raw);
-    if (result.issues.length) { update(); return; }
-    try {
-      downloadJson(result.json, doc);
-      // Keep form bindings attached to the draft while the exported snapshot remains immutable.
-      state.raw.generated = result.raw.generated;
-      state.saved = JSON.stringify(state.raw);
-      app.editedDb = buildDatabase(structuredClone(result.raw));
-      update();
-      root.querySelector('#editor-status').textContent = 'Pobrano database.json. Zastąp plik bazy aplikacji i opublikuj ją ponownie.';
-    } catch (error) {
-      errors.innerHTML = renderNotice('Nie udało się zapisać pliku', error.message, 'notice--error');
+  saveButton.addEventListener('click', async () => {
+    flush();
+    if (saveButton.disabled) return;
+    const result = prepareSave(app.db, exercise);
+    if (result.issues.length) {
+      errors.innerHTML = renderNotice('Baza nie została zapisana', 'Baza zawiera niezgodności:', 'notice--error', result.issues);
+      return;
     }
+    const previous = app.db.generated;
+    const form = root.querySelector('#editor-fields');
+    saving = true; saveButton.disabled = true; form.inert = true; status.textContent = 'Zapisywanie…';
+    try {
+      await saveDatabase(result.raw, previous);
+      await app.reloadDatabase();
+    } catch (error) {
+      saving = false; form.inert = false; update();
+      const issues = error instanceof SaveError ? error.issues : [];
+      errors.innerHTML = renderNotice('Nie udało się zapisać bazy', error.message, 'notice--error', issues);
+      status.textContent = 'Niezapisane zmiany.';
+      return;
+    }
+    // The form is rebuilt from the base re-read from the file, so it shows exactly what was saved.
+    app.editorDraft = null; app.beforeLeave = null;
+    app.editorFlash = `Zapisano w pliku bazy. Rewizja zmieniona z ${formatRevision(previous)} na ${formatRevision(app.db.generated)}.`;
+    app.navigate(win.location.hash);
   });
   update();
-  return () => { doc.removeEventListener('selectionchange', capture); win.removeEventListener('beforeunload', beforeUnload); app.beforeLeave = null; };
+  return () => { win.clearTimeout(pending); doc.removeEventListener('selectionchange', capture); win.removeEventListener('beforeunload', beforeUnload); app.beforeLeave = null; };
 }

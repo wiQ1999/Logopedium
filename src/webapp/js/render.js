@@ -43,6 +43,14 @@ export function formatDate(isoDate) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: 'long', timeZone: 'UTC' }).format(date);
 }
 
+/** Content revision (`generated`): a bare date or an ISO timestamp, shown with seconds so consecutive saves differ. */
+export function formatRevision(revision) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(revision))) return formatDate(revision);
+  const date = new Date(String(revision));
+  if (!Number.isFinite(date.getTime())) return String(revision);
+  return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'medium' }).format(date);
+}
+
 export function levelLabel(level) {
   return level === null || level === undefined ? 'poziom nieokreślony' : `poziom ${level}`;
 }

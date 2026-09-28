@@ -254,7 +254,15 @@ export function loadStoredParams(db, date = todayIso()) {
   const stored = readSettings();
   if (!stored || !Array.isArray(stored.blocks) || stored.blocks.some((b) => !b || typeof b !== 'object' || Array.isArray(b) || typeof b.id !== 'string' ||
       (b.exercises !== undefined && (!Array.isArray(b.exercises) || b.exercises.some((e) => !e || typeof e.id !== 'string' || typeof e.active !== 'boolean'))))) return null;
-  let params = clampParams(db, { date, level: stored.level, blocks: stored.blocks });
+  return reconcileParams(db, { date, level: stored.level, blocks: stored.blocks });
+}
+
+/**
+ * Fits parameters to a (possibly changed) base: unknown exercises drop out and exercises
+ * the parameters do not know yet join the first block of their category.
+ */
+export function reconcileParams(db, source) {
+  const params = clampParams(db, source);
   const seen = new Set(params.blocks.flatMap((b) => b.exercises.map((e) => e.id)));
   for (const category of db.categories) {
     const missing = categoryIds(db, category.id).filter((id) => !seen.has(id)).map((id) => ({ id, active: true }));

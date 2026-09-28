@@ -7,10 +7,11 @@ import {
   loadStoredParams,
   mount as mountParams,
   paramsSignature,
+  reconcileParams,
   totalExercises,
 } from './params.js';
 import { buildPlan } from './picker.js';
-import { escapeHtml, formatCount, renderNotice } from './render.js';
+import { escapeHtml, formatCount, formatRevision, renderNotice } from './render.js';
 import { randomToken } from './rng.js';
 import { mountExercise, mountSummary } from './session.js';
 
@@ -61,6 +62,16 @@ const app = {
   rerollSession() {
     app.startSession(app.plan.params, randomToken());
   },
+
+  /** After a save every view reads the base again from the file, so no second copy survives. */
+  async reloadDatabase() {
+    const db = await loadDatabase();
+    app.db = db;
+    app.params = reconcileParams(db, app.params);
+    // A new revision changes the seed and may change material, so the running plan is dropped.
+    app.plan = null;
+    renderFooter();
+  },
 };
 
 function parseHash() {
@@ -101,7 +112,8 @@ function setActiveNav(mode) {
 
 function renderFooter() {
   const { db } = app;
-  footer.innerHTML = `<span>Baza: schemat ${escapeHtml(db.schemaVersion)}, wygenerowana ${escapeHtml(db.generated)}</span>
+  footer.innerHTML = `<span>Baza: schemat ${escapeHtml(db.schemaVersion)}, rewizja
+      <time datetime="${escapeHtml(db.generated)}" data-revision>${escapeHtml(formatRevision(db.generated))}</time></span>
     <span>${formatCount(db.stats.exerciseCount, ['ćwiczenie', 'ćwiczenia', 'ćwiczeń'])}
       w ${formatCount(db.stats.categoryCount, ['kategorii', 'kategoriach', 'kategoriach'])}</span>
     <span>Materiał chroniony prawem autorskim — do użytku własnego.</span>`;
