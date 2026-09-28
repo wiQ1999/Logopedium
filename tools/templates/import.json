@@ -1,0 +1,31 @@
+{
+  "categories": [],
+  "exercises": [
+    {
+      "id": "nowe-cwiczenie-ze-skanu",
+      "title": "Tytuł z nagłówka skanu",
+      "categoryId": "artykulacja-i-roznicowanie-glosek",
+      "level": null,
+      "randomizable": true,
+      "readQuality": "do_weryfikacji",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Polecenie przepisane ze skanu.</p>",
+      "variants": [
+        {
+          "id": "nowe-cwiczenie-ze-skanu-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            { "id": "nowe-cwiczenie-ze-skanu-w1-p01", "html": "<span class=\"target\">sz</span>afa" },
+            { "id": "nowe-cwiczenie-ze-skanu-w1-p02", "html": "ka<span class=\"target\">sz</span>a" }
+          ]
+        }
+      ]
+    }
+  ]
+}
