@@ -54,7 +54,7 @@ if (resolve(fileURLToPath(import.meta.url)) === resolve(process.argv[1] ?? '')) 
   if (result.status === 'saved') {
     console.log(`Dodano ćwiczeń: ${result.added}. Nowa rewizja bazy: ${result.generated}.`);
   } else if (result.status === 'checked') {
-    console.log(`Plik poprawny: ${result.added} ćwiczeń gotowych do importu. Baza nie została zmieniona.`);
+    console.log(`Plik poprawny, ćwiczenia gotowe do importu: ${result.added}. Baza nie została zmieniona.`);
   } else {
     console.error(result.status === 'conflict' ? 'Baza zmieniła się w trakcie importu; uruchom go ponownie.' : 'Import odrzucony, baza bez zmian:');
     (result.issues ?? []).forEach((issue) => console.error(`- ${issue}`));
