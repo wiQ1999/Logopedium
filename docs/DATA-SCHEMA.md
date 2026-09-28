@@ -1,7 +1,7 @@
 # Schemat pliku `database.json`
 
-`src/webapp/data/database.json` jest statyczną bazą ćwiczeń wczytywaną raz przy starcie
-aplikacji. Wersja schematu: **2.0**.
+`src/webapp/data/database.json` jest statyczną bazą ćwiczeń wczytywaną przy starcie aplikacji
+i ponownie po każdym zapisie z edytora, który zmienia ten plik bezpośrednio. Wersja schematu: **2.0**.
 
 Aktualna zawartość: 7 kategorii, 70 ćwiczeń, 132 warianty i 735 pozycji.
 

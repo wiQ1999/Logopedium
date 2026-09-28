@@ -5,6 +5,37 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-28 — zapis bezpośrednio do pliku, płynne przeciąganie, podział kategorii
+
+Zmiana założeń, jeszcze niewdrożona w kodzie. Wymagania: APPLICATION §3.2, §7.1; ARCHITECTURE
+§2, §4, §10. Zadania BACKLOG 3 i 6 domykają część zapisu, 7 i 8 — przeciąganie.
+
+- **Edytor zapisuje bazę bezpośrednio do `database.json` przez lokalny serwer.** Eksport pliku
+  i ręczna podmiana były kosztem nieproporcjonalnym do literówki. Statyczny hosting zapisu nie
+  przyjmie, więc edycja jest pracą lokalną, a publikacja nadal kopiuje katalog. Odrzucone:
+  File System Access API — tylko Chromium i wskazywanie pliku przy każdej sesji.
+- **Bez kopii pośredniej; po zapisie widoki wczytują bazę z pliku.** Dwie wersje materiału
+  w jednej karcie (BACKLOG 3) znikają, bo źródłem prawdy jest plik.
+- **Walidacja zarówno w edytorze, jak i na serwerze tym samym modułem.** Zapisu nie da się
+  obejść ani pomylić z drugą implementacją reguł.
+- **Zapis unieważnia plan trwającej sesji.** Podniesiona rewizja `generated` i tak odrzuciłaby
+  adres sesji; jawne unieważnienie usuwa pokazywanie starej treści.
+- **Przeciąganie wykonuje biblioteka SortableJS, dołączona do repozytorium.** Płynna przerwa,
+  animacja sąsiadów, autoprzewijanie i przytrzymanie na dotyku to gotowe rozwiązanie
+  zagnieżdżonych, połączonych list — własny kod (obecny) tego nie daje bez odtwarzania biblioteki.
+  Frameworku interfejsu nie dodajemy: brakuje silnika przeciągania, nie zarządzania widokami.
+  To pierwsza zależność produkcyjna; nie wymaga budowania. Odrzucone: dnd-kit (tylko React),
+  Pragmatic drag and drop (sortowanie i animacje do własnoręcznego dopisania), Dragula (bez
+  wydania od 2022).
+- **Klawiatura zostaje własnym kodem.** Biblioteka jej nie obsługuje, a wymaganie dostępności
+  z 2026-09-15 nie ustępuje.
+- **Nowy blok staje w miejscu upuszczenia, a nie pod źródłowym.** Przerwa podąża za wskaźnikiem,
+  więc wymuszenie miejsca pod źródłem łamałoby zasadę „ląduje tam, gdzie pokazuje przerwa”.
+- **Wyciągnięte ćwiczenie tworzy kopię kategorii, nie kopię ćwiczenia.** Ćwiczenie nadal ma jeden
+  blok, więc losowanie bez zwracania i ziarno (APPLICATION §4, §5.2) zostają bez zmian.
+
+---
+
 ## 2026-09-22 — zwarty stan sesji i dotykowe przenoszenie
 
 Realizacja zadań BACKLOG 1, 2 i 4. Wymagania: APPLICATION §3.2, §3.7, §5.3;

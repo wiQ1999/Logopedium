@@ -58,16 +58,38 @@ liczy się do krańców bloku. Blok bez aktywnych ćwiczeń zachowuje się jak w
 
 Wiersze — bloki i ćwiczenia — przestawia się przeciągnięciem myszą, dotykiem albo klawiaturą;
 nie ma przycisków „góra” i „dół”. Na ekranie dotykowym uchwyt trzeba najpierw przytrzymać,
-więc zwykły ruch palca przewija listę zamiast przypadkowo przenosić wiersz. Ćwiczenie wyciągnięte
-poza swój blok tworzy nowy blok tej samej kategorii,
-zawierający tylko to ćwiczenie. Tak dzieli się jedną kategorię na kilka bloków o różnych
-ustawieniach: część ćwiczeń z pełnym materiałem, część przycięta, każda część w swoim miejscu
-sesji i we własnym trybie doboru.
+więc zwykły ruch palca przewija listę zamiast przypadkowo przenosić wiersz.
 
-- Ćwiczenie należy do dokładnie jednego bloku — przeciągnięcie przenosi je, nie kopiuje.
-- Nowy blok staje pod źródłowym i dziedziczy jego tryb doboru; liczby wracają na krańce
-  własnej zawartości.
+#### Przeciąganie
+
+Przeciąganie jest płynne i interaktywne: miejsce upuszczenia wynika z bieżącego położenia
+przeciąganego wiersza względem sąsiadów, a nie z trafienia w wyznaczony cel.
+
+- Wiersz podąża za wskaźnikiem, a w liście widać w każdej chwili miejsce, w którym wyląduje —
+  pusta przerwa, do której płynnie rozsuwają się sąsiedzi. Puszczenie zostawia wiersz w tej przerwie.
+- Przerwa przesuwa się razem z wierszem także między listami: z jednego bloku do drugiego
+  i na poziom bloków.
+- Blok rozwinięty na czas przeciągania zwija się do jednego wiersza, żeby dało się go
+  przenieść na dalsze miejsce listy.
+- Przy krawędzi ekranu lista przewija się sama.
+- Przerwa pojawia się tylko tam, gdzie wiersz może stanąć. Blok innej kategorii nie przyjmuje
+  ćwiczenia — przerwy w nim nie ma.
+- Przeciągnięcie przerwane (Esc, upuszczenie poza listą) przywraca poprzedni układ.
+
+#### Wyciągnięcie ćwiczenia poza kategorię
+
+Ćwiczenie wyciągnięte z bloku na poziom bloków tworzy **kopię kategorii z osobną pulą
+ćwiczeń**: nowy blok tej samej kategorii, zawierający tylko to ćwiczenie. W miejscu upuszczenia
+pojawia się wtedy przerwa w kształcie nowego bloku. Tak dzieli się jedną kategorię na kilka
+bloków o różnych ustawieniach: część ćwiczeń z pełnym materiałem, część przycięta, każda część
+w swoim miejscu sesji i we własnym trybie doboru.
+
+- Kopiowana jest kategoria, nie ćwiczenie: ćwiczenie należy do dokładnie jednego bloku —
+  przeciągnięcie przenosi je.
+- Nowy blok staje tam, gdzie go upuszczono, także daleko od źródłowego, a nie tylko pod nim.
+  Dziedziczy tryb doboru źródłowego; liczby wracają na krańce własnej zawartości.
 - Blok przyjmuje wyłącznie ćwiczenia swojej kategorii; opróżniony ze wszystkich znika z listy.
+  Wyciągnięcie jedynego ćwiczenia bloku sprowadza się więc do przeniesienia całego bloku.
 - Wszystkie 7 kategorii obejmuje więcej niż jedno ćwiczenie, więc każdą można sensownie
   podzielić na mniejsze bloki.
 
@@ -294,10 +316,17 @@ Pola z treścią HTML mają pasek formatowania. Przycisk nakłada na zaznaczenie
 semantyczną opisaną w DATA-SCHEMA, bez ręcznego wpisywania znaczników. Każda zmiana tekstu
 lub formatowania jest od razu widoczna w podglądzie renderowanym tak samo jak karta ćwiczenia.
 
-Edycja zmienia roboczą kopię bazy w pamięci przeglądarki. Zapis jest dostępny dopiero po
-walidacji całości i eksportuje kompletny plik `database.json`; opublikowana baza zmienia się
-po zastąpieniu nim pliku aplikacji i ponownym wdrożeniu. Wyjście z niezapisanymi zmianami
-wymaga potwierdzenia.
+Zapis trafia bezpośrednio do pliku `database.json` — bez pobierania kopii i ręcznej podmiany
+pliku. Nie istnieje druga, robocza wersja bazy: pola formularza są wyłącznie buforem edytowanego
+ćwiczenia lub wariantu, a wyjście z niezapisanymi zmianami wymaga potwierdzenia.
 
-Wyeksportowana kopia pozostaje dostępna w przeglądaniu do odświeżenia strony. Nie zmienia
-planu sesji ani bazy używanej do losowania przed ponowną publikacją.
+- Zapis jest dostępny dopiero po walidacji całości. Baza niezgodna z DATA-SCHEMA nie zostaje
+  zapisana, a plik pozostaje bez zmian.
+- Zapis podnosi rewizję `generated`.
+- Po zapisie wszystkie widoki — przeglądanie, edycja i losowanie sesji — korzystają z bazy
+  wczytanej ponownie z pliku, więc pokazują tę samą wersję.
+- Zapis unieważnia plan trwającej sesji, tak jak każda zmiana rewizji bazy (ARCHITECTURE §6);
+  nowy plan powstaje przy zatwierdzeniu parametrów.
+- Edycja wymaga serwera obsługującego zapis (ARCHITECTURE §4). Na hostingu statycznym
+  ćwiczenia można przeglądać, ale nie edytować; opublikowana baza zmienia się po wdrożeniu
+  zapisanego pliku.

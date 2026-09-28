@@ -7,7 +7,8 @@ a użytkownik przechodzi przez kolejne ćwiczenia, jedno po drugim.
 Aplikacja działa w całości po stronie przeglądarki, bez backendu i bez konta użytkownika.
 Baza ćwiczeń jest plikiem JSON publikowanym razem z kodem. Sesję układa się z bloków
 o niezależnych ustawieniach, zapamiętywanych lokalnie między wizytami. Poza sesją można
-przeglądać i edytować ćwiczenia oraz warianty z podglądem na żywo i eksportem całej bazy.
+przeglądać i edytować ćwiczenia oraz warianty z podglądem na żywo; zapis edycji trafia
+bezpośrednio do pliku bazy (wymaga serwera z `npm start`).
 
 ## Uruchomienie
 
@@ -22,7 +23,8 @@ npm start
 
 Aplikacja nasłuchuje pod `http://localhost:4173/` (port zmienia zmienna `PORT`).
 
-Dowolny inny serwer statyczny działa tak samo, na przykład:
+Dowolny inny serwer statyczny pozwala przeglądać aplikację, ale nie obsługuje zapisu bazy,
+więc edycja jest wtedy wyłączona. Na przykład:
 
 ```bash
 python -m http.server 4173 --directory src/webapp
@@ -35,9 +37,10 @@ npm test
 ```
 
 Wbudowany `node --test`: dane, losowanie, wersjonowany stan sesji w adresie, bloki i ich obsługa
-myszą, dotykiem oraz klawiaturą, zapis ustawień, bezpieczny HTML i eksport JSON, a także widoki,
+myszą, dotykiem oraz klawiaturą, zapis ustawień, bezpieczny HTML i zapis bazy, a także widoki,
 edytor i trasy na `jsdom` — jedynej zależności deweloperskiej. Przed pierwszym uruchomieniem
-testów wykonaj `npm ci`. Aplikacja nie ma zależności produkcyjnych.
+testów wykonaj `npm ci`. Jedyną zależnością produkcyjną jest dołączona do repozytorium
+biblioteka przeciągania (`src/webapp/vendor/`).
 
 ## Publikacja
 
