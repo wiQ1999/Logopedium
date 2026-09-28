@@ -73,8 +73,13 @@ przeciąganego wiersza względem sąsiadów, a nie z trafienia w wyznaczony cel.
   przenieść na dalsze miejsce listy.
 - Przy krawędzi ekranu lista przewija się sama.
 - Przerwa pojawia się tylko tam, gdzie wiersz może stanąć. Blok innej kategorii nie przyjmuje
-  ćwiczenia — przerwy w nim nie ma.
-- Przeciągnięcie przerwane (Esc, upuszczenie poza listą) przywraca poprzedni układ.
+  ćwiczenia — przerwy w nim nie ma. Ćwiczenia bloku zwiniętego są niewidoczne, więc przerwa
+  otwiera się tylko w blokach rozwiniętych.
+- Przeciągnięcie przerwane (Esc, upuszczenie poza listą) przywraca poprzedni układ. „Poza listą”
+  oznacza poza jej obszarem; palec nad przyklejonym nagłówkiem, pod którym przewija się lista,
+  nadal upuszcza wiersz w przerwie.
+- Po upuszczeniu komunikat dla czytnika ekranu podaje nowe miejsce: numer bloku, kategorię
+  i — dla ćwiczenia — jego pozycję w bloku.
 
 #### Wyciągnięcie ćwiczenia poza kategorię
 
@@ -313,20 +318,33 @@ Z podglądu można przejść do edycji całego ćwiczenia albo wybranego wariant
 udostępnia odpowiadające im pola z `database.json`; identyfikatory pozostają niezmienne.
 
 Pola z treścią HTML mają pasek formatowania. Przycisk nakłada na zaznaczenie właściwą klasę
-semantyczną opisaną w DATA-SCHEMA, bez ręcznego wpisywania znaczników. Każda zmiana tekstu
-lub formatowania jest od razu widoczna w podglądzie renderowanym tak samo jak karta ćwiczenia.
+semantyczną opisaną w DATA-SCHEMA, bez ręcznego wpisywania znaczników. Zmiana tekstu
+lub formatowania trafia do podglądu, renderowanego tak samo jak karta ćwiczenia, po krótkiej
+przerwie w pisaniu (150 ms).
+
+Pisanie nie czeka na sprawdzanie: w jego trakcie aplikacja zapamiętuje treść pola, a zgodność
+ze schematem i podgląd odświeża po przerwie, i to tylko dla edytowanego ćwiczenia. Błąd jest
+wtedy sygnalizowany i blokuje zapis; przycisk zapisu sprawdza ćwiczenie od razu, więc błąd
+wpisany tuż przed kliknięciem także wstrzymuje zapis.
 
 Zapis trafia bezpośrednio do pliku `database.json` — bez pobierania kopii i ręcznej podmiany
 pliku. Nie istnieje druga, robocza wersja bazy: pola formularza są wyłącznie buforem edytowanego
 ćwiczenia lub wariantu, a wyjście z niezapisanymi zmianami wymaga potwierdzenia.
 
-- Zapis jest dostępny dopiero po walidacji całości. Baza niezgodna z DATA-SCHEMA nie zostaje
-  zapisana, a plik pozostaje bez zmian.
-- Zapis podnosi rewizję `generated`.
+- Zapis sprawdza całą bazę, także ćwiczenia spoza bufora — w edytorze i ponownie na serwerze.
+  Baza niezgodna z DATA-SCHEMA nie zostaje zapisana, a plik pozostaje bez zmian.
+- Zapis podnosi rewizję `generated`. Bieżąca rewizja jest widoczna w stopce i w edytorze,
+  a komunikat po zapisie podaje rewizję poprzednią i nową.
+- Jeśli plik zmienił się od chwili wczytania (np. zapis z innej karty), zapis jest odrzucany,
+  a edycja zostaje w formularzu.
 - Po zapisie wszystkie widoki — przeglądanie, edycja i losowanie sesji — korzystają z bazy
   wczytanej ponownie z pliku, więc pokazują tę samą wersję.
 - Zapis unieważnia plan trwającej sesji, tak jak każda zmiana rewizji bazy (ARCHITECTURE §6);
-  nowy plan powstaje przy zatwierdzeniu parametrów.
+  nowy plan powstaje przy zatwierdzeniu parametrów. Parametry sesji dopasowują się do nowej
+  bazy: ćwiczenie przeniesione do innej kategorii trafia do pierwszego bloku tej kategorii.
 - Edycja wymaga serwera obsługującego zapis (ARCHITECTURE §4). Na hostingu statycznym
-  ćwiczenia można przeglądać, ale nie edytować; opublikowana baza zmienia się po wdrożeniu
-  zapisanego pliku.
+  ćwiczenia można przeglądać, ale nie edytować — przyciski edycji są ukryte; opublikowana baza
+  zmienia się po wdrożeniu zapisanego pliku.
+
+Edytor poprawia istniejące ćwiczenia; nie dodaje ich ani nie usuwa. Nowe zadania ze skanów
+trafiają do bazy narzędziem importu według [CONTENT.md](CONTENT.md).

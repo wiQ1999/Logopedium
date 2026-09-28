@@ -33,10 +33,15 @@ Konsekwencje:
 ```
 logopedium/
 ├─ README.md                  # uruchomienie lokalne, publikacja, spis dokumentacji
-├─ package.json               # type: module, skrypty start i test
+├─ package.json               # type: module, skrypty start, test, validate, import
 │
-├─ docs/                      # ARCHITECTURE, APPLICATION, DATA-SCHEMA, DECISIONS, BACKLOG
-├─ tools/serve.js             # lokalny serwer HTTP bez zależności, z zapisem bazy
+├─ docs/                      # ARCHITECTURE, APPLICATION, DATA-SCHEMA, CONTENT, DECISIONS, BACKLOG
+├─ tools/
+│  ├─ serve.js                # lokalny serwer HTTP bez zależności, z zapisem bazy (§4)
+│  ├─ database-file.js        # reguły przyjęcia bazy, znacznik rewizji, atomowy zapis pliku
+│  ├─ import-exercises.js     # dopisanie zadań ze skanów (CONTENT)
+│  ├─ validate-database.js    # sprawdzenie pliku bazy
+│  └─ templates/import.json   # wzór pliku importu
 ├─ tests/                     # testy uruchamiane przez node --test
 │
 └─ src/
@@ -60,7 +65,7 @@ logopedium/
       │  └─ render.js         # wyświetlanie treści
       │
       ├─ data/database.json   # kompletna baza ćwiczeń
-      ├─ vendor/              # dołączone biblioteki, w postaci niezmienionej (§10)
+      ├─ vendor/              # SortableJS w postaci niezmienionej, licencja, README z wersją (§10)
       └─ assets/              # img (ilustracje), icons
 ```
 
@@ -78,15 +83,28 @@ Zasady:
 Wymagany lokalny serwer HTTP uruchomiony w katalogu aplikacji — otwarcie dokumentu wprost
 z dysku blokuje pobranie bazy. Ograniczenie dotyczy wyłącznie pracy lokalnej.
 
-Serwer z `tools/serve.js` obsługuje także zapis bazy z edytora (APPLICATION §7.1):
+Serwer z `tools/serve.js` obsługuje także zapis bazy z edytora (APPLICATION §7.1). Zapis to
+`PUT data/database.json` z kompletną bazą w JSON.
 
-- zapis dotyczy wyłącznie pliku `data/database.json` i jest przyjmowany tylko z adresu
-  pętli zwrotnej;
-- serwer waliduje przesłaną bazę tym samym walidatorem co klient (§10) i odrzuca niezgodną,
-  nie ruszając pliku;
-- plik podmieniany jest atomowo — zapis do pliku tymczasowego i zmiana nazwy — więc przerwany
-  zapis nie zostawia uszkodzonej bazy;
-- edytor wykrywa brak obsługi zapisu (inny serwer statyczny, hosting) i wyłącza edycję.
+- Zapis przyjmowany jest tylko z adresu pętli zwrotnej, z nagłówkiem `Host` wskazującym
+  na lokalny komputer i — jeśli przeglądarka go wysyła — z `Origin` tej samej strony.
+  Pozostałe zapytania dostają 403; inne metody niż `GET`, `HEAD` i ten `PUT` — 405.
+- Serwer normalizuje i waliduje bazę tym samym modułem co klient (§10). Niezgodna dostaje
+  400 z listą niezgodności, a plik zostaje nietknięty.
+- Nagłówek `x-logopedium-base-revision` niesie rewizję, na której oparto zmianę. Gdy plik ma
+  już inną, zapis dostaje 409 — nie nadpisuje zmian z innej karty.
+- Rewizję `generated` nadaje serwer (bieżący czas, zawsze późniejszy od poprzedniej) i zwraca ją
+  w odpowiedzi; rewizji z przeglądarki nie przyjmuje.
+- Plik podmieniany jest atomowo — zapis do pliku tymczasowego i zmiana nazwy — a zapisy w obrębie
+  procesu idą po kolei, więc sprawdzenie rewizji i zapis są jednym krokiem.
+- Odpowiedź na `GET data/database.json` z lokalnego komputera ma nagłówek
+  `x-logopedium-writable: 1`. Tylko on włącza edycję — inny serwer statyczny, hosting czy
+  wejście z innego urządzenia w sieci zostawiają bazę do odczytu, bez dodatkowego zapytania.
+- `npm start -- --database <plik>` podaje i zapisuje inną kopię bazy, np. do bezpiecznej próby
+  edytora.
+
+Narzędzia `npm run validate` i `npm run import` korzystają z tych samych reguł
+(`tools/database-file.js`); drogę wprowadzania zadań ze skanów opisuje CONTENT.
 
 ---
 
@@ -197,6 +215,12 @@ Ta sama walidacja obejmuje bazę po edycji i musi przejść przed zapisem — w 
 na serwerze (§4). Moduł walidatora nie odwołuje się do API przeglądarki, więc serwer importuje go
 bez zmian.
 
+**Koszt walidacji w edytorze.** Walidacja całej bazy kosztuje dziesiątki milisekund, a na telefonie
+wielokrotnie więcej — przy każdym znaku blokowałaby pisanie. Podczas pisania sprawdzane jest więc
+tylko edytowane ćwiczenie (`validateExercise`), i to dopiero po 150 ms bez zmian, razem
+z odświeżeniem podglądu. Całość (`normalizeDatabase`) sprawdza zapis. Test pilnuje, żeby
+sprawdzenie najdłuższego ćwiczenia pozostało wielokrotnie tańsze od sprawdzenia całej bazy.
+
 **Przeciąganie.** Płynne przenoszenie wierszy (APPLICATION §3.2) wymaga dwupoziomowej listy
 z ruchomą przerwą, animacją sąsiadów, autoprzewijaniem i przytrzymaniem na dotyku. Do tego
 wystarczy biblioteka przeciągania — frameworku interfejsu nie potrzeba, bo widoki pozostają
@@ -207,8 +231,17 @@ i licencja opisane są w pliku obok. Wymagania wobec integracji:
 - lista bloków i listy ćwiczeń w blokach to wzajemnie połączone listy; blok przyjmuje
   ćwiczenie tylko własnej kategorii, a lista bloków — ćwiczenie z dowolnego bloku (nowy blok);
 - upuszczenie zmienia model bloków (`blocks.js`), a widok jest z niego odtwarzany — biblioteka
-  nie jest źródłem prawdy o kolejności;
-- opóźnienie aktywacji na dotyku pozostaje 350 ms (APPLICATION §3.2).
+  nie jest źródłem prawdy o kolejności. Miejsce upuszczenia odczytywane jest z układu DOM
+  zostawionego przez bibliotekę, a instancje list są niszczone i tworzone przy każdym
+  odtworzeniu widoku;
+- mysz i dotyk korzystają z tego samego trybu biblioteki (`forceFallback`) zamiast natywnego
+  przeciągania HTML — daje to jednakowy wygląd przerwy i pływającego wiersza oraz możliwość
+  przerwania ruchu klawiszem Esc;
+- opóźnienie aktywacji na dotyku pozostaje 350 ms, a ruch palca o 10 px przed jego upływem
+  oddaje gest przewijaniu (APPLICATION §3.2);
+- biblioteka nie ma publicznego przerwania ruchu: Esc kończy go sztucznym puszczeniem
+  wskaźnika, a układ wraca z modelu. Wersja jest przypięta, a test porównuje dołączony plik
+  z pakietem npm, więc zmiana tego zachowania nie przejdzie niezauważona.
 
 **Dostępność.** Nawigacja w sesji także strzałkami, fokus wracający na główny obszar po zmianie
 stanu, nagłówek pierwszego poziomu w każdym stanie. Lista parametrów porządkowana jest
@@ -216,8 +249,10 @@ przeciąganiem. Uchwyt działa myszą, po przytrzymaniu dotykiem oraz klawiatur�
 wiersza, przesunięcie strzałkami, upuszczenie lub wycofanie — a każdy ruch jest zapowiadany
 tym samym komunikatem dla czytnika ekranu. Biblioteka nie obsługuje klawiatury, więc ta droga
 pozostaje własnym kodem i korzysta z tych samych operacji na modelu co przeciąganie. Ruch palca
-przed upływem czasu przytrzymania pozostaje gestem przewijania. Pasek edytora musi zachowywać zaznaczenie przy obsłudze klawiaturą,
-a nazwa przycisku ma opisywać znaczenie nakładanej klasy.
+przed upływem czasu przytrzymania pozostaje gestem przewijania. Ruch wykonywany myszą albo
+dotykiem nie reaguje na klawisze przejęcia i strzałek — tylko Esc go przerywa. Pasek edytora musi
+zachowywać zaznaczenie przy obsłudze klawiaturą, a nazwa przycisku ma opisywać znaczenie
+nakładanej klasy.
 
 ---
 

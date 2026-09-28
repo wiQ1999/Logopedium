@@ -21,7 +21,12 @@ Serwer dołączony do repozytorium (Node 20+, bez zależności):
 npm start
 ```
 
-Aplikacja nasłuchuje pod `http://localhost:4173/` (port zmienia zmienna `PORT`).
+Aplikacja nasłuchuje pod `http://localhost:4173/` (port zmienia zmienna `PORT`). Edycję bez
+ruszania bazy repozytorium można wypróbować na kopii:
+
+```bash
+npm start -- --database kopia-bazy.json
+```
 
 Dowolny inny serwer statyczny pozwala przeglądać aplikację, ale nie obsługuje zapisu bazy,
 więc edycja jest wtedy wyłączona. Na przykład:
@@ -30,23 +35,38 @@ więc edycja jest wtedy wyłączona. Na przykład:
 python -m http.server 4173 --directory src/webapp
 ```
 
+## Treść bazy
+
+Poprawki nanosi się w edytorze aplikacji, nowe zadania ze skanów — plikiem importu. Obie drogi
+opisuje [docs/CONTENT.md](docs/CONTENT.md).
+
+```bash
+npm run import -- zadania.json --dry-run
+```
+
+```bash
+npm run validate
+```
+
 ## Testy
 
 ```bash
 npm test
 ```
 
-Wbudowany `node --test`: dane, losowanie, wersjonowany stan sesji w adresie, bloki i ich obsługa
-myszą, dotykiem oraz klawiaturą, zapis ustawień, bezpieczny HTML i zapis bazy, a także widoki,
-edytor i trasy na `jsdom` — jedynej zależności deweloperskiej. Przed pierwszym uruchomieniem
-testów wykonaj `npm ci`. Jedyną zależnością produkcyjną jest dołączona do repozytorium
-biblioteka przeciągania (`src/webapp/vendor/`).
+Wbudowany `node --test`: dane, losowanie, wersjonowany stan sesji w adresie, bloki i ich
+przeciąganie (SortableJS) oraz obsługa klawiaturą, zapis ustawień, bezpieczny HTML, serwer
+z zapisem bazy i import, a także widoki, edytor i trasy na `jsdom`. Przed pierwszym
+uruchomieniem testów wykonaj `npm ci`. Zależności deweloperskie to `jsdom` i `sortablejs`
+(wzorzec do sprawdzenia dołączonej kopii). Jedyną zależnością produkcyjną jest ta kopia
+biblioteki przeciągania w `src/webapp/vendor/`, bez kroku budowania.
 
 ## Publikacja
 
 Katalog `src/webapp/` jest samowystarczalny — publikacja polega na skopiowaniu jego zawartości
 na hosting statyczny. Poza nim znajdują się wyłącznie dokumentacja, testy i narzędzia
-deweloperskie, które nie trafiają na hosting.
+deweloperskie, które nie trafiają na hosting. Hosting statyczny nie przyjmuje zapisu, więc
+opublikowana aplikacja pozwala przeglądać bazę, ale nie edytować jej.
 
 ## Dokumentacja
 
@@ -55,4 +75,6 @@ deweloperskie, które nie trafiają na hosting.
 - **[docs/APPLICATION.md](docs/APPLICATION.md)** — wymagania funkcjonalne: parametry sesji,
   dobór i losowanie ćwiczeń, przebieg sesji, przeglądanie bazy.
 - **[docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md)** — struktura bazy i notacja treści zadań.
+- **[docs/CONTENT.md](docs/CONTENT.md)** — poprawki w edytorze i import zadań ze skanów.
 - **[docs/DECISIONS.md](docs/DECISIONS.md)** — dziennik decyzji, chronologicznie.
+- **[docs/BACKLOG.md](docs/BACKLOG.md)** — zadania przyjęte do wykonania.

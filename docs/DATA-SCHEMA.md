@@ -154,6 +154,9 @@ Krańce parametrów sesji `W` (warianty) i `P` (pozycje), liczone dla ćwiczeń 
 
 Wartość `W = 1` albo `P = 0` oznacza, że formularz nie pokazuje danego ograniczenia.
 
+Nowe ćwiczenia trafiają do bazy narzędziem importu, poprawki — edytorem; oba sprawdzają zgodność
+z tym schematem przed zapisem (CONTENT).
+
 ## Odpowiedzialność za prawa do materiałów
 
 Usunięcie metadanych źródłowych z pliku wykonawczego nie zmienia statusu prawnego treści.
