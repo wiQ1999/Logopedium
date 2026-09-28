@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { afterEach, describe, it } from 'node:test';
 import { JSDOM } from 'jsdom';
-import { createDraft, EDIT_SETTLE_MS, mountEditor, prepareSave } from '../src/webapp/js/editor.js';
+import { addItem, addVariant, createDraft, createExerciseDraft, EDIT_SETTLE_MS, mountEditor, NEW_CATEGORY, prepareSave, removeAdded, slugify, uniqueId } from '../src/webapp/js/editor.js';
 import { activeMarks, applyMark, removeMark, toggleMark } from '../src/webapp/js/rich-text.js';
 import { MARKS, sanitizeHtml, visitHtml } from '../src/webapp/js/html.js';
 import { buildDatabase, validateDatabase, validateExercise } from '../src/webapp/js/data.js';
@@ -316,5 +316,124 @@ describe('przebieg pracy w edytorze',()=>{
     app=await bootApp({hash:editHash});input(field('Tytuł'),'Zmiana');app.window.confirm=()=>true;
     await app.click('[data-action="discard"]');await tick();assert.equal(app.hash(),'#/browse/adam-andrzejewski');
     assert.equal(app.query('.exercise-card__title').textContent,'Adam Andrzejewski');
+  });
+});
+
+describe('nowe elementy bazy',()=>{
+  it('identyfikatory według konwencji: małe litery bez znaków diakrytycznych, unikalne w bazie',()=>{
+    assert.equal(slugify('Żółć — łąka, „Sz” i ŁOŚ'),'zolc-laka-sz-i-los');
+    assert.equal(uniqueId('a',new Set(['a','a-2'])),'a-3');assert.equal(uniqueId('b',new Set(['a'])),'b');
+  });
+  it('nowe ćwiczenie ma jeden pusty wariant z pozycją i identyfikatory z tytułu',()=>{
+    const {issues,state}=createExerciseDraft(db,{title:' Adam Andrzejewski ',categoryId:'samogloski'});
+    assert.deepEqual(issues,[]);assert.equal(state.saved,null);assert.equal(state.newCategory,null);
+    const e=state.exercise;assert.equal(e.id,'adam-andrzejewski-2');assert.equal(e.title,'Adam Andrzejewski');
+    assert.deepEqual(Object.keys(e),Object.keys(db.raw.exercises[0]));
+    assert.deepEqual(e.variants.map(v=>v.id),['adam-andrzejewski-2-w1']);assert.deepEqual(e.variants[0].items,[{id:'adam-andrzejewski-2-w1-p01',html:''}]);
+    assert.deepEqual(Object.keys(e.variants[0]),Object.keys(db.raw.exercises[0].variants[0]));
+    assert.equal(e.readQuality,'do_weryfikacji');assert.deepEqual(state.added,['adam-andrzejewski-2-w1','adam-andrzejewski-2-w1-p01']);
+    assert.ok(validateExercise(db.raw,e).some(s=>s.includes('niepustej treści')));
+  });
+  it('formularz odrzuca brak tytułu, brak kategorii i powtórzoną nazwę kategorii',()=>{
+    assert.equal(createExerciseDraft(db,{title:'',categoryId:'samogloski'}).issues.length,1);
+    assert.match(createExerciseDraft(db,{title:'x',categoryId:'brak'}).issues[0],/Wybierz kategorię/);
+    assert.match(createExerciseDraft(db,{title:'x',categoryId:NEW_CATEGORY,categoryName:''}).issues[0],/nazwę nowej kategorii/);
+    assert.match(createExerciseDraft(db,{title:'x',categoryId:NEW_CATEGORY,categoryName:' SAMOGŁOSKI '}).issues[0],/już istnieje/);
+    const {state}=createExerciseDraft(db,{title:'x',categoryId:NEW_CATEGORY,categoryName:'Rytm i tempo mowy'});
+    assert.deepEqual(state.newCategory,{id:'rytm-i-tempo-mowy',name:'Rytm i tempo mowy'});assert.equal(state.exercise.categoryId,'rytm-i-tempo-mowy');
+  });
+  it('kolejny wariant i pozycja dostają następny wolny numer',()=>{
+    const exercise=createDraft(db,'alsza-szla-roznicowanie-sz-l');const state={exercise,saved:'x',newCategory:null,added:[]};
+    const count=exercise.variants[0].items.length;
+    const variant=addVariant(db,state);assert.equal(variant.id,`alsza-szla-roznicowanie-sz-l-w${exercise.variants.length}`);
+    assert.equal(variant.items[0].id,`${variant.id}-p01`);
+    const item=addItem(db,state,exercise.variants[0]);assert.equal(item.id,`alsza-szla-roznicowanie-sz-l-w1-p${String(count+1).padStart(2,'0')}`);
+    item.html='nowa';variant.items[0].html='druga';
+    const saved=prepareSave(db,exercise);assert.deepEqual(saved.issues,[]);
+    assert.equal(buildDatabase(saved.raw).stats.itemCount,db.stats.itemCount+2);
+  });
+  it('cofnąć można tylko elementy dodane w tej edycji',()=>{
+    const exercise=createDraft(db,'alsza-szla-roznicowanie-sz-l');const state={exercise,saved:'x',newCategory:null,added:[]};
+    const before=structuredClone(exercise);
+    assert.equal(removeAdded(state,exercise.variants[0].id),false);assert.equal(removeAdded(state,exercise.variants[0].items[0].id),false);
+    const variant=addVariant(db,state);const item=addItem(db,state,exercise.variants[0]);
+    assert.ok(removeAdded(state,item.id));assert.ok(removeAdded(state,variant.id));
+    assert.deepEqual(exercise,before);assert.deepEqual(state.added,[]);
+  });
+  it('zapis dopisuje nowe ćwiczenie i jego kategorię na końcu bazy',()=>{
+    const {state}=createExerciseDraft(db,{title:'Tempo',categoryId:NEW_CATEGORY,categoryName:'Rytm'});
+    state.exercise.variants[0].items[0].html='ta <span class="target">ta</span>';
+    const result=prepareSave(db,state.exercise,state.newCategory);assert.deepEqual(result.issues,[]);
+    assert.deepEqual(result.raw.categories.at(-1),{id:'rytm',name:'Rytm'});assert.equal(result.raw.exercises.at(-1).id,'tempo');
+    assert.equal(result.raw.exercises.length,71);
+    state.exercise.categoryId='samogloski';assert.equal(prepareSave(db,state.exercise,state.newCategory).raw.categories.length,7);
+  });
+});
+
+describe('dodawanie w aplikacji',()=>{
+  const submit=async()=>{app.query('#add-exercise').dispatchEvent(new app.window.Event('submit',{bubbles:true,cancelable:true}));await tick(4);};
+  it('nowe ćwiczenie w nowej kategorii: od formularza przez edytor do pliku bazy i sesji',async()=>{
+    app=await bootApp({hash:'#/browse'});
+    app.query('#add-title').value='Rytm w wierszu';
+    const category=app.query('#add-category');category.value=NEW_CATEGORY;category.dispatchEvent(new app.window.Event('change',{bubbles:true}));
+    assert.ok(!app.query('#add-category-name-field').hidden);app.query('#add-category-name').value='Rytm i tempo';
+    await submit();
+    assert.equal(app.hash(),'#/browse/rytm-w-wierszu?edit=1');assert.match(app.text(),/Nowe ćwiczenie/);
+    assert.equal(app.server.saves.length,0);assert.ok(app.query('[data-action="save"]').disabled);
+    assert.match(app.query('#editor-errors').textContent,/niepustej treści/);assert.match(app.query('#editor-status').textContent,/Niezapisane/);
+    assert.equal(field('Kategoria').value,'rytm-i-tempo');assert.equal(field('Nazwa nowej kategorii').value,'Rytm i tempo');
+    richInput(app.query('[data-item="rytm-w-wierszu-w1-p01"] [data-rich]'),'<span class="target">ta</span>-ta');await settle();
+    assert.ok(!app.query('[data-action="save"]').disabled);
+    await app.click('[data-action="save"]');await tick();
+    assert.equal(app.server.saves[0].status,'accepted');
+    assert.deepEqual(app.server.raw.categories.at(-1),{id:'rytm-i-tempo',name:'Rytm i tempo'});
+    const saved=app.server.raw.exercises.at(-1);assert.equal(saved.id,'rytm-w-wierszu');assert.equal(saved.variants[0].items[0].html,'<span class="target">ta</span>-ta');
+    assert.match(app.text(),/Edycja ćwiczenia/);assert.match(app.query('#editor-status').textContent,/Zapisano w pliku bazy/);
+    assert.equal(app.queryAll('[data-action="remove"]').length,0,'zapisane elementy nie mają przycisku usuwania');
+    await app.goto('#/browse');assert.match(app.text(),/Rytm i tempo/);
+    await app.goto('#/params');assert.ok(app.query('[data-block="rytm-i-tempo"] [data-exercise="rytm-w-wierszu"]'));
+  });
+  it('błędy formularza są wskazane, a nic nie trafia do edytora',async()=>{
+    app=await bootApp({hash:'#/browse'});await submit();
+    assert.equal(app.hash(),'#/browse');assert.match(app.query('#add-errors').textContent,/Podaj tytuł/);
+  });
+  it('odrzucenie nowego ćwiczenia usuwa je bez śladu',async()=>{
+    app=await bootApp({hash:'#/browse?cat=samogloski'});
+    assert.equal(app.query('#add-category').value,'samogloski');app.query('#add-title').value='Na chwilę';await submit();
+    let asked=0;app.window.confirm=()=>{asked++;return true;};
+    await app.click('[data-action="discard"]');assert.equal(asked,1);assert.equal(app.hash(),'#/browse?cat=samogloski');
+    await app.goto('#/browse/na-chwile?edit=1');assert.match(app.text(),/Nie znaleziono ćwiczenia/);
+    assert.equal(app.server.saves.length,0);
+  });
+  it('w edycji dodaje wariant i pozycję na końcu, a nowe elementy można cofnąć',async()=>{
+    const id='alsza-szla-roznicowanie-sz-l';app=await bootApp({hash:`#/browse/${id}?edit=1`});
+    const addItemButton=(variantId)=>app.query(`[data-action="add-item"][data-variant="${variantId}"]`);
+    const variants=app.queryAll('#editor-fields details').length;const items=app.queryAll(`[data-variant="${id}-w1"] [data-item]`).length;
+    await app.click(`[data-action="add-item"][data-variant="${id}-w1"]`);
+    const newItem=`${id}-w1-p${String(items+1).padStart(2,'0')}`;
+    const itemFields=app.queryAll(`[data-variant="${id}-w1"] [data-item]`);assert.equal(itemFields.at(-1).dataset.item,newItem);
+    assert.equal(app.document.activeElement,itemFields.at(-1).querySelector('[data-rich]'));
+    assert.ok(app.query(`[data-item="${newItem}"] [data-action="remove"]`));assert.equal(app.query(`[data-item="${id}-w1-p01"] [data-action="remove"]`),null);
+    assert.ok(app.query('[data-action="save"]').disabled);
+    await app.click('[data-action="add-variant"]');
+    assert.equal(app.queryAll('#editor-fields details').length,variants+1);const newVariant=`${id}-w${variants+1}`;
+    assert.ok(app.query(`[data-variant="${newVariant}"] [data-action="remove"]`));
+    const type=app.query(`[data-variant="${newVariant}"] select`);type.value='prompt';type.dispatchEvent(new app.window.Event('change',{bubbles:true}));await settle();
+    assert.ok(addItemButton(newVariant).hidden);assert.ok(!addItemButton(`${id}-w1`).hidden);
+    await app.click(`[data-variant="${newVariant}"] [data-action="remove"]`);await app.click(`[data-item="${newItem}"] [data-action="remove"]`);
+    assert.equal(app.queryAll('#editor-fields details').length,variants);await settle();
+    assert.ok(!app.query('[data-action="save"]').disabled);assert.match(app.query('#editor-status').textContent,/Brak niezapisanych zmian/);
+  });
+  it('pozycja dodana w edycji wariantu trafia do pliku',async()=>{
+    const id='alsza-szla-roznicowanie-sz-l';app=await bootApp({hash:`#/browse/${id}?edit=1&variant=${id}-w2`});
+    assert.equal(app.query('[data-action="add-variant"]'),null);
+    await app.click('[data-action="add-item"]');const rich=app.queryAll('[data-item] [data-rich]').at(-1);richInput(rich,'szlafrok');await settle();
+    await app.click('[data-action="save"]');await tick();
+    const variant=app.server.raw.exercises.find(e=>e.id===id).variants[1];assert.equal(variant.items.at(-1).html,'szlafrok');
+    assert.equal(variant.items.at(-1).id,rich.closest('[data-item]').dataset.item);
+  });
+  it('bez zapisu do pliku nie ma formularza dodawania',async()=>{
+    app=await bootApp({hash:'#/browse',response:devServer(undefined,{writable:false})});
+    assert.equal(app.query('#add-exercise'),null);
   });
 });

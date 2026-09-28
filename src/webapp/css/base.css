@@ -92,6 +92,11 @@
   box-sizing: border-box;
 }
 
+/* Components set their own display; the hidden attribute must still win. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }

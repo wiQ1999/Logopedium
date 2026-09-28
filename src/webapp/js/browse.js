@@ -1,5 +1,5 @@
 import { normalizeText } from './data.js';
-import { mountEditor } from './editor.js';
+import { createExerciseDraft, mountEditor, NEW_CATEGORY } from './editor.js';
 import {
   attachMarkModeControl,
   escapeHtml,
@@ -141,6 +141,61 @@ function renderLevelOptions(selected) {
   }>bez określonego poziomu</option>`;
 }
 
+/** Adding material starts in the editor: nothing reaches the file until the new exercise is saved there. */
+function renderAddForm(db, filters) {
+  const selected = filters.category || db.categories[0]?.id;
+  const options = db.categories.map((c) => `<option value="${escapeHtml(c.id)}" ${c.id === selected ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('');
+  return `<details class="disclosure" id="browse-add">
+      <summary>Dodaj ćwiczenie lub kategorię</summary>
+      <div class="disclosure__body">
+        <form class="add-form" id="add-exercise" novalidate>
+          <div class="field">
+            <label class="field__label" for="add-title">Tytuł nowego ćwiczenia</label>
+            <input class="input" type="text" id="add-title" autocomplete="off">
+          </div>
+          <div class="field">
+            <label class="field__label" for="add-category">Kategoria</label>
+            <select class="select" id="add-category">${options}<option value="${NEW_CATEGORY}">nowa kategoria…</option></select>
+          </div>
+          <div class="field" id="add-category-name-field" hidden>
+            <label class="field__label" for="add-category-name">Nazwa nowej kategorii</label>
+            <input class="input" type="text" id="add-category-name" autocomplete="off">
+          </div>
+          <div id="add-errors"></div>
+          <div class="btn-row"><button class="btn btn--primary" type="submit">Utwórz w edytorze</button></div>
+          <p class="panel__hint">Ćwiczenie powstaje w edytorze z jednym pustym wariantem; do pliku bazy trafi dopiero po zapisie.</p>
+        </form>
+      </div>
+    </details>`;
+}
+
+function attachAddForm(root, app, currentFilters) {
+  const form = root.querySelector('#add-exercise');
+  if (!form) return;
+  const category = form.querySelector('#add-category');
+  const nameField = form.querySelector('#add-category-name-field');
+  const errors = form.querySelector('#add-errors');
+  category.addEventListener('change', () => {
+    nameField.hidden = category.value !== NEW_CATEGORY;
+    if (!nameField.hidden) nameField.querySelector('input').focus();
+  });
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const { issues, state } = createExerciseDraft(app.db, {
+      title: form.querySelector('#add-title').value,
+      categoryId: category.value,
+      categoryName: form.querySelector('#add-category-name').value,
+    });
+    if (issues.length) {
+      errors.innerHTML = renderNotice('Nie można utworzyć ćwiczenia', 'Uzupełnij formularz:', 'notice--error', issues);
+      return;
+    }
+    app.editorDraft = state;
+    const detailHref = browseHref(currentFilters(), state.exercise.id);
+    app.navigate(`${detailHref}${detailHref.includes('?') ? '&' : '?'}edit=1`);
+  });
+}
+
 export function mountList(root, app, query) {
   const filters = readFilters(query);
   const { db } = app;
@@ -178,6 +233,8 @@ export function mountList(root, app, query) {
       </div>
     </div>
 
+    ${db.writable ? renderAddForm(db, filters) : ''}
+
     <details class="disclosure">
       <summary>Oznaczenia w treści ćwiczeń</summary>
       <div class="disclosure__body">${renderMarksLegend()}</div>
@@ -205,6 +262,7 @@ export function mountList(root, app, query) {
   queryInput.addEventListener('input', update);
   categorySelect.addEventListener('change', update);
   levelSelect.addEventListener('change', update);
+  attachAddForm(root, app, currentFilters);
 
   return undefined;
 }
@@ -215,6 +273,10 @@ export function mountDetail(root, app, exerciseId, query) {
   const filters = readFilters(query);
   const backHref = browseHref(filters);
 
+  // A new exercise lives only in the editor's draft until it is saved to the file.
+  if (!exercise && query.get('edit') === '1' && app.editorDraft?.saved === null && app.editorDraft.exercise.id === exerciseId) {
+    return mountEditor(root, app, exerciseId, null, backHref);
+  }
   if (!exercise) {
     root.innerHTML = `${renderNotice(
       'Nie znaleziono ćwiczenia',
