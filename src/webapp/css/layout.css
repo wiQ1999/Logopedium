@@ -349,11 +349,21 @@
 .exercise-rows { list-style: none; margin: var(--space-2) 0 var(--space-2) var(--space-4); }
 .exercise-row { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); border-bottom: 1px solid var(--border); }
 .exercise-row label { min-width: 0; overflow-wrap: anywhere; }
-.drag-handle { cursor: grab; min-width: 40px; padding: var(--space-2); touch-action: pan-y; }
+.drag-handle { cursor: grab; min-width: 40px; padding: var(--space-2); touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .drag-handle[aria-pressed="true"] { background: var(--accent-soft); outline: 2px solid var(--accent); }
-.params-list--touch-dragging { user-select: none; }
-.params-list--touch-dragging [data-touch-target="true"] { outline: 2px dashed var(--accent); outline-offset: 2px; }
-.split-target { padding: var(--space-3); margin: var(--space-2); border: 1px dashed var(--border-strong); border-radius: var(--radius); color: var(--text-muted); font-size: .875rem; }
+.params-list--dragging, .params-list--dragging * { user-select: none; -webkit-user-select: none; cursor: grabbing; }
+/* A lifted block travels as its header row only. */
+.params-block--lifted > .params-block__exercises { display: none; }
+/* The gap: the dragged row's own slot, emptied, showing where it will land. */
+.drag-gap { position: relative; border-radius: var(--radius); background: var(--accent-soft); outline: 2px dashed var(--accent); outline-offset: -2px; }
+.drag-gap > * { visibility: hidden; }
+.exercise-row.drag-gap { border-bottom-color: transparent; }
+/* An exercise on the block level becomes a new block of its category: the gap takes a block's shape. */
+.params-list > .exercise-row.drag-gap { min-height: 3.25rem; padding: var(--space-2) var(--space-3); }
+.params-list > .exercise-row.drag-gap::after { content: "Nowy blok: " attr(data-category-name); position: absolute; inset: 0; display: flex; align-items: center; padding: 0 var(--space-4); color: var(--accent); font-weight: 550; font-size: .9375rem; }
+.drag-float { list-style: none; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius); box-shadow: 0 12px 28px rgb(0 0 0 / .22); cursor: grabbing; }
+.drag-float .params-row { border: 0; }
+@media (prefers-reduced-motion: reduce) { .drag-float { box-shadow: none; } }
 .editor-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
 .editor-fields { display: grid; gap: var(--space-3); min-width: 0; }
 .editor-fields .input, .editor-fields .select { width: 100%; min-width: 0; }
