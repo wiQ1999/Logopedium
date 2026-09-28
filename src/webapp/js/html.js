@@ -50,6 +50,42 @@ export function sanitizeHtml(value) {
   return { html, issues: [] };
 }
 
+const LINE_ENDS = /^<(br\s*\/?|\/p\s*)>$/i;
+const hasContent = (tokens) => tokens.some((t) => t.startsWith('<') ? /class="[^"]*\b(blank|exhale)\b/.test(t) : /\S/.test(t));
+
+/**
+ * Shortens sanitized HTML to a sample: at most `chars` visible characters and `lines` lines,
+ * cut at a word boundary, with every open tag closed. `truncated` says whether anything was left out.
+ */
+export function truncateHtml(html, { chars = 240, lines = 4 } = {}) {
+  const tokens = String(html ?? '').match(/<[^>]*>|[^<]+/g) ?? [];
+  const out = [];
+  const open = [];
+  let used = 0;
+  let breaks = 0;
+  const stop = () => ({ html: `${out.join('').replace(/\s+$/, '')}…${open.reverse().map((tag) => `</${tag}>`).join('')}`, truncated: true });
+  for (const [index, token] of tokens.entries()) {
+    const rest = tokens.slice(index + 1);
+    if (!token.startsWith('<')) {
+      const units = token.match(/&[#a-z0-9]+;|[\s\S]/gi);
+      if (used + units.length <= chars || !hasContent([token, ...rest])) { out.push(token); used += units.length; continue; }
+      const taken = units.slice(0, chars - used).join('');
+      const space = taken.lastIndexOf(' ');
+      out.push(space > 0 ? taken.slice(0, space) : taken);
+      return stop();
+    }
+    if (LINE_ENDS.test(token)) {
+      if (breaks + 1 >= lines && hasContent(rest)) return stop();
+      breaks += 1;
+    }
+    const tag = /^<\/?([a-z]+)/i.exec(token)[1].toLowerCase();
+    if (token.startsWith('</')) open.pop();
+    else if (tag !== 'br') open.push(tag);
+    out.push(token);
+  }
+  return { html: out.join(''), truncated: false };
+}
+
 /** Visits only schema fields that contain markup, retaining all other JSON data verbatim. */
 export function visitHtml(raw, visit) {
   for (const [ei, e] of (raw.exercises ?? []).entries()) {

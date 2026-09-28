@@ -1,5 +1,5 @@
 import Sortable from '../vendor/sortable.esm.js';
-import { escapeHtml, formatCount, renderMarksLegend } from './render.js';
+import { escapeHtml, formatCount, renderExercisePreview, renderMarksLegend } from './render.js';
 import { randomToken } from './rng.js';
 import { activeSelections, blockEntry, blockExercises, createDefaultParams, forgetParams, itemBounds,
   storeParams, totalExercises, variantBounds, withBlockActive, withBlockCount, withDate,
@@ -19,7 +19,20 @@ function numberField(key, role, name, value, bounds, disabled) {
     <input class="input params-row__num" id="${id}" type="number" data-role="${role}" min="${bounds.min}" max="${bounds.max}" value="${value}" ${disabled ? 'disabled' : ''}></span>`;
 }
 
-function renderBlock(db, b, level, expanded) {
+function renderExerciseRow(db, b, category, entry, open) {
+  const exercise = db.exerciseById.get(entry.id);
+  const id = escapeHtml(entry.id);
+  return `<li class="exercise-row" data-exercise="${id}" data-category="${escapeHtml(b.id)}" data-category-name="${escapeHtml(category.name)}">
+    <div class="exercise-row__main">
+      ${handle(exercise.title, 'exercise', entry.id)}
+      <input type="checkbox" data-role="exercise-active" aria-label="Ćwiczenie w sesji: ${escapeHtml(exercise.title)}" ${entry.active ? 'checked' : ''}>
+      <button type="button" class="btn btn--ghost exercise-row__name" data-role="preview" aria-expanded="${open}"${open ? ` aria-controls="preview-${id}"` : ''}>${escapeHtml(exercise.title)}</button>
+    </div>
+    ${open ? `<div class="exercise-preview" id="preview-${id}">${renderExercisePreview(exercise)}</div>` : ''}
+  </li>`;
+}
+
+function renderBlock(db, b, level, expanded, previewed) {
   const category = db.categoryById.get(b.id);
   const limit = blockExercises(db, b, level).length;
   const variants = variantBounds(db, b, level);
@@ -39,10 +52,7 @@ function renderBlock(db, b, level, expanded) {
       </span>
     </div>
     <div class="params-block__exercises" id="exercises-${escapeHtml(b.key)}" ${expanded ? '' : 'hidden'}>
-      <ol class="exercise-rows" data-category="${escapeHtml(b.id)}">${b.exercises.map((e) => `<li class="exercise-row" data-exercise="${escapeHtml(e.id)}" data-category="${escapeHtml(b.id)}" data-category-name="${escapeHtml(category.name)}">
-        ${handle(db.exerciseById.get(e.id).title, 'exercise', e.id)}
-        <label><input type="checkbox" data-role="exercise-active" ${e.active ? 'checked' : ''}> ${escapeHtml(db.exerciseById.get(e.id).title)}</label>
-      </li>`).join('')}</ol>
+      <ol class="exercise-rows" data-category="${escapeHtml(b.id)}">${b.exercises.map((e) => renderExerciseRow(db, b, category, e, e.id === previewed)).join('')}</ol>
     </div>
   </li>`;
 }
@@ -55,6 +65,8 @@ function summary(params) {
 
 export function mount(root, app) {
   const expanded = new Set();
+  // One previewed exercise at a time: opening another closes the previous one.
+  let previewed = null;
   const doc = root.ownerDocument;
   const win = doc.defaultView;
   let dragging = null;
@@ -62,7 +74,7 @@ export function mount(root, app) {
   let sortables = [];
   let onRefresh = null;
   root.innerHTML = `<section class="view-head"><h1>Parametry sesji</h1>
-    <p class="view-head__lead">Ustaw materiał i kolejność bloków. Rozwiń blok, aby wybrać lub przenieść ćwiczenia.</p></section>
+    <p class="view-head__lead">Ustaw materiał i kolejność bloków. Rozwiń blok, aby wybrać lub przenieść ćwiczenia; kliknij ćwiczenie, aby zobaczyć jego opis i treść.</p></section>
     <form id="params-form"><div class="panel field-grid">
       <label class="field" for="param-date">Data sesji<input class="input" type="date" id="param-date" required value="${escapeHtml(app.params.date)}"></label>
       <label class="field" for="param-level">Poziom trudności<select class="select" id="param-level">${[1,2,3,4].map((l) => `<option value="${l}" ${l === app.params.level ? 'selected' : ''}>Poziom ${l} i niższe</option>`).join('')}</select></label>
@@ -83,7 +95,7 @@ export function mount(root, app) {
     root.querySelector('#params-submit').disabled = totalExercises(app.params) === 0;
   };
   const refresh = (focusId, role) => {
-    list.innerHTML = app.params.blocks.map((b) => renderBlock(app.db, b, app.params.level, expanded.has(b.key))).join('');
+    list.innerHTML = app.params.blocks.map((b) => renderBlock(app.db, b, app.params.level, expanded.has(b.key), previewed)).join('');
     onRefresh?.();
     totals();
     if (focusId) [...list.querySelectorAll(role ? `[data-role="${role}"]` : '[data-drag]')]
@@ -198,8 +210,9 @@ export function mount(root, app) {
     chosenClass: 'drag-chosen',
     fallbackClass: 'drag-float',
     // A lifted block folds to its header row, so it can travel past long expanded neighbours.
-    onChoose: (event) => { if (event.item.matches('.params-block')) event.item.classList.add('params-block--lifted'); },
-    onUnchoose: (event) => { if (!dragging) event.item.classList.remove('params-block--lifted'); },
+    // A lifted exercise leaves its preview behind for the same reason.
+    onChoose: (event) => { event.item.classList.add(event.item.matches('.params-block') ? 'params-block--lifted' : 'exercise-row--lifted'); },
+    onUnchoose: (event) => { if (!dragging) event.item.classList.remove('params-block--lifted', 'exercise-row--lifted'); },
     onStart: (event) => {
       grab(event.item.querySelector('[data-drag]'));
       dragging.mode = 'pointer';
@@ -232,6 +245,14 @@ export function mount(root, app) {
   onRefresh = attachSortables;
   attachSortables();
   list.addEventListener('click', (event) => {
+    const preview = event.target.closest('[data-role="preview"]');
+    if (preview) {
+      const id = preview.closest('[data-exercise]').dataset.exercise;
+      previewed = previewed === id ? null : id;
+      refresh();
+      [...list.querySelectorAll('[data-exercise]')].find((row) => row.dataset.exercise === id)?.querySelector('[data-role="preview"]').focus();
+      return;
+    }
     const button = event.target.closest('[data-role="expand"]');
     if (!button) return;
     const key = button.closest('[data-block]').dataset.block;
@@ -274,13 +295,13 @@ export function mount(root, app) {
       const id = input.closest('[data-exercise]').dataset.exercise;
       app.params = withExerciseActive(app.db, app.params, key, id, input.checked);
       refresh();
-      [...list.querySelectorAll('[data-exercise]')].find((row) => row.dataset.exercise === id)?.querySelector('input').focus();
+      [...list.querySelectorAll('[data-exercise]')].find((row) => row.dataset.exercise === id)?.querySelector('[data-role="exercise-active"]').focus();
     }
   });
   root.querySelector('#param-date').addEventListener('change', (e) => { app.params = withDate(app.params, e.target.value); e.target.value = app.params.date; });
   root.querySelector('#param-level').addEventListener('change', (e) => { app.params = withLevel(app.db, app.params, e.target.value); refresh(); });
   root.querySelector('[data-role="reset"]').addEventListener('click', () => {
-    forgetParams(); app.params = createDefaultParams(app.db, app.params.date); root.querySelector('#param-level').value = app.params.level; expanded.clear(); refresh();
+    forgetParams(); app.params = createDefaultParams(app.db, app.params.date); root.querySelector('#param-level').value = app.params.level; expanded.clear(); previewed = null; refresh();
   });
   const seed = root.querySelector('#param-seed');
   root.querySelector('[data-role="seed-random"]').addEventListener('click', () => { seed.value = randomToken(); seed.focus(); });

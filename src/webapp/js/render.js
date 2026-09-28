@@ -1,4 +1,4 @@
-import { MARK_SAMPLES, sanitizeHtml } from './html.js';
+import { MARK_SAMPLES, sanitizeHtml, truncateHtml } from './html.js';
 const safeHtml = (value) => sanitizeHtml(value).html;
 
 const MARK_MODES = [
@@ -196,6 +196,54 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
       ${trimmed}
       ${variants}
     </article>`;
+}
+
+/** How much of an exercise the session parameters show: enough to tell exercises apart. */
+export const PREVIEW_LIMITS = { variants: 2, items: 3, text: { chars: 220, lines: 3 }, item: { chars: 90, lines: 2 } };
+
+const sample = (html, limits = PREVIEW_LIMITS.text) => (html ? truncateHtml(safeHtml(html), limits).html : '');
+
+function previewPart(label, html, contentClass = 'content content--small') {
+  return html ? `<div class="exercise-preview__part"><span class="block__label">${escapeHtml(label)}</span><div class="${contentClass}">${html}</div></div>` : '';
+}
+
+function previewVariant(variant, ownInstruction) {
+  const shown = variant.items.slice(0, PREVIEW_LIMITS.items);
+  const rest = variant.items.length - shown.length;
+  const items = shown.length ? `<ol class="items items--preview">${shown.map((item) => `<li class="items__item">${sample(item.html, PREVIEW_LIMITS.item)}</li>`).join('')}</ol>
+    ${rest ? `<p class="items__note">…i ${formatCount(rest, ['kolejna pozycja', 'kolejne pozycje', 'kolejnych pozycji'])} (razem ${variant.items.length}).</p>` : ''}` : '';
+  const body = [
+    ownInstruction ? `<div class="content content--small exercise-preview__instruction">${sample(ownInstruction)}</div>` : '',
+    variant.syllablesHtml ? `<div class="syllables content content--small">${sample(variant.syllablesHtml)}</div>` : '',
+    variant.textHtml ? `<div class="content content--small">${sample(variant.textHtml)}</div>` : '',
+    items,
+  ].join('');
+  return `<div class="exercise-preview__variant">${variant.label ? `<span class="exercise-preview__variant-label">${escapeHtml(variant.label)}</span>` : ''}${body}</div>`;
+}
+
+/**
+ * A shortened look at an exercise for the session parameters (APPLICATION §3.2): description,
+ * shared instruction and the first variants and items, each cut to a sample.
+ */
+export function renderExercisePreview(exercise) {
+  const itemCount = exercise.variants.reduce((total, variant) => total + variant.items.length, 0);
+  const chips = [
+    `<span class="chip chip--neutral">${escapeHtml(levelLabel(exercise.level))}</span>`,
+    `<span class="chip chip--neutral">${formatCount(exercise.variants.length, ['wariant', 'warianty', 'wariantów'])}</span>`,
+    itemCount ? `<span class="chip chip--neutral">${formatCount(itemCount, ['pozycja', 'pozycje', 'pozycji'])}</span>` : '',
+    exercise.readQuality === 'do_weryfikacji' ? '<span class="chip chip--warn">odczyt do weryfikacji</span>' : '',
+  ].join('');
+  const description = [exercise.headerHtml, exercise.contextHtml].filter(Boolean).map((html) => sample(html)).join('<br>');
+  const instructions = exercise.variants.map((variant) => variant.instructionHtml ?? exercise.instructionHtml ?? null);
+  const shared = instructions.every((entry) => entry === instructions[0]) ? instructions[0] : exercise.instructionHtml;
+  const shown = exercise.variants.slice(0, PREVIEW_LIMITS.variants);
+  const content = shown.map((variant, index) => previewVariant(variant, instructions[index] !== shared ? instructions[index] : null)).join('');
+  const more = exercise.variants.length > shown.length
+    ? `<p class="items__note">Pokazano ${shown.length} z ${formatCount(exercise.variants.length, ['wariantu', 'wariantów', 'wariantów'])}.</p>` : '';
+  return `<div class="chip-row">${chips}</div>
+    ${previewPart('Opis', description)}
+    ${previewPart('Polecenie', sample(shared))}
+    ${content ? `<div class="exercise-preview__part"><span class="block__label">Treść</span>${content}${more}</div>` : ''}`;
 }
 
 export function renderProgress(stepNumber, total, categoryName) {
