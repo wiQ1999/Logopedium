@@ -5,10 +5,45 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-28 — wdrożenie zapisu do pliku i płynnego przeciągania
+
+Realizacja zadań BACKLOG 3, 5, 6, 7 i 8. Wymagania: APPLICATION §3.2, §7.1; ARCHITECTURE §4, §10;
+CONTENT.
+
+- **Rewizję `generated` nadaje serwer, nie przeglądarka.** Zegar klienta bywa cofnięty, a rewizja
+  musi rosnąć, bo wchodzi do ziarna i do stanu sesji w adresie.
+- **Zapis niesie rewizję, na której go oparto; niezgodna daje 409.** Dwie karty z edytorem nie
+  nadpiszą sobie zmian po cichu — blokada optymistyczna wystarcza przy jednym autorze.
+- **Obsługę zapisu ogłasza nagłówek odpowiedzi z bazą**, a nie osobne zapytanie. Hosting
+  statyczny nie wyśle nagłówka, nawet jeśli na nieznane adresy odpowiada stroną aplikacji.
+- **Zapis wymaga pętli zwrotnej, lokalnego `Host` i zgodnego `Origin`.** Serwer słucha na wszystkich
+  interfejsach, a obca strona w przeglądarce autora albo DNS rebinding nie może zmienić bazy.
+- **Bufor edytora to jedno ćwiczenie.** Kopia całej bazy była drugą wersją materiału (BACKLOG 3),
+  a jej serializacja przy każdym znaku — częścią kosztu pisania (BACKLOG 5).
+- **Sprawdzanie przy pisaniu obejmuje tylko edytowane ćwiczenie i czeka 150 ms bez zmian.**
+  Sama walidacja całej bazy przy każdym znaku kosztowała ok. 31 ms na komputerze; obsługa znaku
+  w najdłuższym ćwiczeniu kosztuje teraz ok. 2,6 ms. Pełna walidacja przy zapisie zachowuje
+  dotychczasową gwarancję.
+- **Po zapisie baza jest wczytywana z pliku, a parametry dopasowywane do niej.** Formularz pokazuje
+  treść po normalizacji serwera, a ćwiczenie przeniesione do innej kategorii nie znika z sesji.
+- **Import ze skanów tylko dopisuje.** Istniejący identyfikator przerywa import — poprawki należą
+  do edytora, gdzie widać podgląd przed zapisem.
+- **Mysz też przeciąga w trybie `forceFallback`.** Natywne przeciąganie HTML samo obsługuje Esc,
+  ale nie pozwala odróżnić przerwania od upuszczenia i inaczej rysuje przenoszony wiersz.
+- **„Poza listą” liczone geometrycznie, nie przez trafienie w element.** Przy autoprzewijaniu palec
+  spoczywa na przyklejonym nagłówku, a upuszczenie tam musiało trafiać w widoczną przerwę.
+- **Zwinięty blok nie przyjmuje ćwiczenia wskaźnikiem.** Jego lista jest ukryta, więc przerwa
+  nie ma gdzie się otworzyć; rozwinięcie wymuszone w trakcie ruchu przesuwałoby wiersze pod palcem.
+  Klawiatura (strzałka w prawo) nadal przenosi ćwiczenie do następnego bloku kategorii.
+- **Blok zwija się już przy przejęciu, nie przy starcie ruchu.** Pływająca kopia wiersza powstaje
+  przed zdarzeniem startu i miałaby wysokość rozwiniętego bloku.
+
+---
+
 ## 2026-09-28 — zapis bezpośrednio do pliku, płynne przeciąganie, podział kategorii
 
-Zmiana założeń, jeszcze niewdrożona w kodzie. Wymagania: APPLICATION §3.2, §7.1; ARCHITECTURE
-§2, §4, §10. Zadania BACKLOG 3 i 6 domykają część zapisu, 7 i 8 — przeciąganie.
+Zmiana założeń, wdrożona tego samego dnia (wpis wyżej). Wymagania: APPLICATION §3.2, §7.1;
+ARCHITECTURE §2, §4, §10. Zadania BACKLOG 3 i 6 domykają część zapisu, 7 i 8 — przeciąganie.
 
 - **Edytor zapisuje bazę bezpośrednio do `database.json` przez lokalny serwer.** Eksport pliku
   i ręczna podmiana były kosztem nieproporcjonalnym do literówki. Statyczny hosting zapisu nie
