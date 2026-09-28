@@ -102,8 +102,12 @@ export function withMovedBlock(params, key, target) {
   return { ...params, blocks };
 }
 
-/** A null destination splits off a new block directly below the source. */
-export function withMovedExercise(db, params, sourceKey, id, targetKey = null, position = Infinity) {
+/**
+ * A null destination splits off a new block of the same category holding only this exercise.
+ * `blockIndex` places it on the block list as it stood before the move (source still counted);
+ * without it the new block lands directly below the source.
+ */
+export function withMovedExercise(db, params, sourceKey, id, targetKey = null, position = Infinity, blockIndex = null) {
   const source = blockEntry(params, sourceKey);
   const target = blockEntry(params, targetKey);
   const exercise = source?.exercises.find((e) => e.id === id);
@@ -115,7 +119,8 @@ export function withMovedExercise(db, params, sourceKey, id, targetKey = null, p
   } else {
     let key = `${source.key}-block`;
     while (blocks.some((b) => b.key === key)) key += '-block';
-    blocks.splice(blocks.findIndex((b) => b.key === sourceKey) + 1, 0,
+    const index = blockIndex ?? blocks.findIndex((b) => b.key === sourceKey) + 1;
+    blocks.splice(Math.max(0, Math.min(index, blocks.length)), 0,
       { id: source.id, key, pick: source.pick, exercises: [exercise] });
   }
   return clampParams(db, { ...params, blocks });

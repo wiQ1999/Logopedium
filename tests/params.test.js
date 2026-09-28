@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import * as p from '../src/webapp/js/blocks.js';
 import { buildPlan } from '../src/webapp/js/picker.js';
-import { makeFixtureDatabase, makeParams, loadDatabaseFixture } from './helpers.js';
+import { buildDatabase } from '../src/webapp/js/data.js';
+import { makeFixtureDatabase, makeParams, loadDatabaseFixture, makeRawDatabase } from './helpers.js';
 
 const db = makeFixtureDatabase();
 const defaults = () => p.createDefaultParams(db, '2026-09-21');
@@ -75,6 +76,25 @@ describe('bloki i krańce', () => {
     assert.equal(merged.blocks.length, 5);
     assert.equal(merged.blocks[0].exercises[0].id, 'a2');
     assert.equal(merged.blocks.flatMap((b) => b.exercises).filter((e) => e.id === 'a2').length, 1);
+  });
+  it('nowy blok staje w miejscu upuszczenia, liczonym na liście sprzed przeniesienia', () => {
+    const params = defaults();
+    const last = p.withMovedExercise(db, params, 'cat-a', 'a2', null, Infinity, params.blocks.length);
+    assert.deepEqual(last.blocks.map((b) => b.id), ['cat-a', 'cat-b', 'cat-c', 'cat-d', 'cat-e', 'cat-a']);
+    assert.deepEqual(last.blocks.at(-1).exercises.map((e) => e.id), ['a2']);
+    const first = p.withMovedExercise(db, params, 'cat-b', 'b3', null, Infinity, 0);
+    assert.deepEqual(first.blocks.map((b) => b.id), ['cat-b', 'cat-a', 'cat-b', 'cat-c', 'cat-d', 'cat-e']);
+    const single = p.withMovedExercise(db, first, 'cat-b-block', 'b3', null, Infinity, 4);
+    assert.deepEqual(single.blocks.map((b) => b.id), ['cat-a', 'cat-b', 'cat-c', 'cat-b', 'cat-d', 'cat-e']);
+  });
+  it('po zmianie bazy parametry gubią nieznane ćwiczenia i przyjmują nowe do pierwszego bloku kategorii', () => {
+    const split = p.withMovedExercise(db, defaults(), 'cat-a', 'a2');
+    const raw = makeRawDatabase();
+    raw.exercises = raw.exercises.filter((e) => e.id !== 'a3').map((e) => e.id === 'b1' ? { ...e, categoryId: 'cat-a' } : e);
+    const changed = p.reconcileParams(buildDatabase(raw), split);
+    assert.deepEqual(changed.blocks[0].exercises.map((e) => e.id), ['a1', 'a4', 'a5', 'a6', 'b1']);
+    assert.deepEqual(changed.blocks[1].exercises.map((e) => e.id), ['a2']);
+    assert.ok(!changed.blocks.some((b) => b.id === 'cat-b' && b.exercises.some((e) => e.id === 'b1')));
   });
   it('obca kategoria nie przyjmuje ćwiczenia', () => {
     const params = defaults();
