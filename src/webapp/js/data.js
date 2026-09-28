@@ -199,6 +199,22 @@ export function validateDatabase(raw) {
   return issues;
 }
 
+/** Checks one edited exercise against the rest of the schema; cost scales with the exercise, not the base. */
+export function validateExercise(raw, exercise) {
+  const scope = { schemaVersion: raw.schemaVersion, generated: raw.generated, categories: raw.categories, exercises: [exercise] };
+  return validateDatabase(scope).map((issue) => issue.replace(/^exercises\[0\]\.?/, ''));
+}
+
+/** Validates and rewrites markup into the sanitized form shared by the editor, the server and tools. */
+export function normalizeDatabase(raw) {
+  const copy = structuredClone(raw);
+  const issues = validateDatabase(copy);
+  if (issues.length) return { issues, raw: null };
+  visitHtml(copy, (object, key) => { object[key] = sanitizeHtml(object[key]).html; });
+  const normalizedIssues = validateDatabase(copy);
+  return normalizedIssues.length ? { issues: normalizedIssues, raw: null } : { issues: [], raw: copy };
+}
+
 const ENTITIES = {
   '&nbsp;': ' ',
   '&amp;': '&',
@@ -320,5 +336,44 @@ export async function loadDatabase(url = DATABASE_URL) {
     throw new DatabaseError('Plik bazy ćwiczeń nie jest poprawnym dokumentem JSON.', [error.message]);
   }
 
-  return buildDatabase(raw);
+  const db = buildDatabase(raw);
+  // Only the project server advertises write support; static hosts leave the base read-only.
+  db.writable = response.headers?.get?.(WRITABLE_HEADER) === '1';
+  return db;
+}
+
+export const WRITABLE_HEADER = 'x-logopedium-writable';
+export const BASE_REVISION_HEADER = 'x-logopedium-base-revision';
+
+export class SaveError extends Error {
+  constructor(message, issues = []) {
+    super(message);
+    this.name = 'SaveError';
+    this.issues = issues;
+  }
+}
+
+/** Writes the whole base straight into the served file; the server validates and stamps the revision. */
+export async function saveDatabase(raw, baseRevision, url = DATABASE_URL) {
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json', [BASE_REVISION_HEADER]: baseRevision },
+      body: JSON.stringify(raw),
+    });
+  } catch (error) {
+    throw new SaveError('Serwer nie odpowiedział. Zmiany pozostały niezapisane.', [error.message]);
+  }
+  let payload = {};
+  try { payload = await response.json(); } catch { /* reported by status below */ }
+  if (response.ok) return payload;
+  if (response.status === 409) {
+    throw new SaveError('Plik bazy zmienił się od chwili wczytania, np. w innej karcie. Odśwież stronę i nanieś zmiany ponownie.');
+  }
+  if (response.status === 400 && Array.isArray(payload.issues)) {
+    throw new SaveError('Serwer odrzucił bazę niezgodną ze schematem; plik pozostał bez zmian.', payload.issues);
+  }
+  throw new SaveError(`Serwer nie zapisał bazy (kod ${response.status}); plik pozostał bez zmian.`,
+    payload.error ? [payload.error] : []);
 }
