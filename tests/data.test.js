@@ -40,6 +40,12 @@ describe('walidacja bazy', () => {
     assert.ok(findIssue(issues, 'powtarza się'), issues.join('\n'));
   });
 
+  it('wykrywa kategorie o tej samej nazwie, niezależnie od wielkości liter i odstępów', () => {
+    const raw = loadRawDatabase();
+    raw.categories.push({ id: 'druga-kopia', name: ` ${raw.categories[0].name.toUpperCase()} ` });
+    assert.ok(findIssue(validateDatabase(raw), `categories[${raw.categories.length - 1}].name: nazwa`));
+  });
+
   it('wykrywa odwołanie do nieistniejącej kategorii', () => {
     const raw = makeRawDatabase();
     raw.exercises[0].categoryId = 'brak-takiej';

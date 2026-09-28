@@ -27,8 +27,11 @@ const hasHtmlContent = (value) => {
     /<span class="[^"]*\b(?:blank|exhale)\b/.test(html);
 };
 
+export const categoryNameKey = (name) => name.trim().toLocaleLowerCase('pl');
+
 function validateCategories(raw, issues) {
   const ids = new Set();
+  const names = new Set();
 
   if (!Array.isArray(raw.categories) || raw.categories.length === 0) {
     issues.push('categories: oczekiwano niepustej tablicy kategorii.');
@@ -50,6 +53,11 @@ function validateCategories(raw, issues) {
     }
     if (!isNonEmptyString(category.name)) {
       issues.push(`${path}.name: oczekiwano niepustego tekstu.`);
+    } else if (names.has(categoryNameKey(category.name))) {
+      // Two categories with one name would be indistinguishable in every list of the app.
+      issues.push(`${path}.name: nazwa "${category.name}" powtarza się.`);
+    } else {
+      names.add(categoryNameKey(category.name));
     }
   });
 
