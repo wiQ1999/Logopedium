@@ -59,7 +59,8 @@ logopedium/
       │  ├─ picker.js         # budowa planu sesji
       │  ├─ session.js        # przechodzenie przez ćwiczenia
       │  ├─ browse.js         # przeglądanie bazy
-      │  ├─ editor.js         # edycja, podgląd i zapis bazy
+      │  ├─ editor.js         # edycja, dodawanie elementów, podgląd i zapis bazy
+      │  ├─ rich-text.js      # pole z paskiem oznaczeń: nakładanie i zdejmowanie klas
       │  ├─ html.js           # dozwolone znaczniki i sanitacja treści
       │  ├─ settings.js       # trwały zapis ustawień w przeglądarce
       │  └─ render.js         # wyświetlanie treści
@@ -208,7 +209,7 @@ z identyfikatora ćwiczenia, żeby zmiana limitów nie przesuwała sekwencji w p
 
 **Walidacja bazy.** Wczytanie kończy się sprawdzeniem struktury; zbierane są wszystkie
 niezgodności naraz, a aplikacja pokazuje ich listę zamiast pustego interfejsu. Walidowane są
-pola wymagane, unikalność identyfikatorów, odwołania do kategorii, znane typy wariantów,
+pola wymagane, unikalność identyfikatorów i nazw kategorii, odwołania do kategorii, znane typy wariantów,
 obecność treści i zakres poziomu. Pole informacyjne `readQuality` nie jest sprawdzane
 słownikowo — jego rozszerzenie nie powinno blokować startu.
 Ta sama walidacja obejmuje bazę po edycji i musi przejść przed zapisem — w edytorze i ponownie
@@ -220,6 +221,21 @@ wielokrotnie więcej — przy każdym znaku blokowałaby pisanie. Podczas pisani
 tylko edytowane ćwiczenie (`validateExercise`), i to dopiero po 150 ms bez zmian, razem
 z odświeżeniem podglądu. Całość (`normalizeDatabase`) sprawdza zapis. Test pilnuje, żeby
 sprawdzenie najdłuższego ćwiczenia pozostało wielokrotnie tańsze od sprawdzenia całej bazy.
+
+**Pole z paskiem oznaczeń.** Pasek jest własnym komponentem (`rich-text.js`) na zwykłym
+`contenteditable`, bez biblioteki edytora. Przegląd (DECISIONS 2026-09-28) odrzucił gotowe
+edytory: Quill i Squire przebudowują treść na własny model wierszy (każdy wiersz w akapicie),
+więc zmieniłyby `<br>` i pozycje bez akapitu w całej bazie; Tiptap/ProseMirror wymaga
+budowania; Trix nie nadaje klas; Jodit i Pell opierają się na przestarzałym `execCommand`
+i stylach wbudowanych. Wymagania wobec komponentu:
+
+- oznaczenie to `span` z klasą z DATA-SCHEMA; nakładanie dzieli węzły tekstu tylko w obrębie
+  zaznaczenia i pomija litery, które już je mają, a zdejmowanie wyjmuje zaznaczone litery
+  z oznaczenia, zostawiając je na reszcie i zachowując inne klasy i zagnieżdżone znaczniki;
+- wynik przechodzi tę samą sanitację co każda treść (§9) — komponent nie poszerza gramatyki HTML;
+- naciśnięcie przycisku nie zabiera zaznaczenia z pola (`mousedown` bez domyślnej akcji
+  i zapamiętany zakres), bo inaczej przycisk nie miałby na czym działać;
+- dodanie lub usunięcie elementu przebudowuje formularz z bufora, zachowując przewinięcie.
 
 **Przeciąganie.** Płynne przenoszenie wierszy (APPLICATION §3.2) wymaga dwupoziomowej listy
 z ruchomą przerwą, animacją sąsiadów, autoprzewijaniem i przytrzymaniem na dotyku. Do tego
@@ -250,9 +266,11 @@ wiersza, przesunięcie strzałkami, upuszczenie lub wycofanie — a każdy ruch 
 tym samym komunikatem dla czytnika ekranu. Biblioteka nie obsługuje klawiatury, więc ta droga
 pozostaje własnym kodem i korzysta z tych samych operacji na modelu co przeciąganie. Ruch palca
 przed upływem czasu przytrzymania pozostaje gestem przewijania. Ruch wykonywany myszą albo
-dotykiem nie reaguje na klawisze przejęcia i strzałek — tylko Esc go przerywa. Pasek edytora musi
-zachowywać zaznaczenie przy obsłudze klawiaturą, a nazwa przycisku ma opisywać znaczenie
-nakładanej klasy.
+dotykiem nie reaguje na klawisze przejęcia i strzałek — tylko Esc go przerywa. Pasek oznaczeń ma
+rolę `toolbar` powiązaną z polem, jeden przycisk w kolejności tabulacji (strzałki, Home/End),
+Alt+F10 z pola i Esc z powrotem; zachowuje zaznaczenie przy obsłudze klawiaturą. Przycisk
+pokazuje próbkę oznaczenia, a jego nazwa dostępna (`aria-label`) opisuje znaczenie klasy;
+`aria-pressed` podaje, czy zaznaczenie ją ma.
 
 ---
 

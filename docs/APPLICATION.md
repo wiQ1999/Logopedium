@@ -317,10 +317,22 @@ sesyjnych. Ćwiczenia pokazywane są ze wszystkimi wariantami i pozycjami.
 Z podglądu można przejść do edycji całego ćwiczenia albo wybranego wariantu. Formularz
 udostępnia odpowiadające im pola z `database.json`; identyfikatory pozostają niezmienne.
 
-Pola z treścią HTML mają pasek formatowania. Przycisk nakłada na zaznaczenie właściwą klasę
-semantyczną opisaną w DATA-SCHEMA, bez ręcznego wpisywania znaczników. Zmiana tekstu
-lub formatowania trafia do podglądu, renderowanego tak samo jak karta ćwiczenia, po krótkiej
-przerwie w pisaniu (150 ms).
+Każde pole z treścią HTML (nagłówek, materiał wprowadzający, polecenia, sylaby, tekst,
+przykłady, pozycje) ma własny pasek oznaczeń wbudowany w ramkę pola, jak w edytorze tekstu.
+Pola proste — tytuł, nazwa wariantu, kategoria, poziom, losowanie, jakość odczytu — są zwykłymi
+polami bez paska.
+
+- Przycisk pokazuje próbkę oznaczenia w wyglądzie z materiału (np. pogrubione „sz”,
+  podkreślone „a”); nazwa oznaczenia jest w podpowiedzi i dla czytnika ekranu.
+- Przycisk działa jak przełącznik: nakłada na zaznaczenie klasę semantyczną z DATA-SCHEMA,
+  a na zaznaczeniu, które już ją ma, zdejmuje ją tylko z zaznaczonych liter. Wciśnięty
+  przycisk sygnalizuje, że zaznaczenie (albo miejsce kursora) ma dane oznaczenie.
+- Pasek działa na pole, w którym jest; zaznaczenie w innym polu nie zmienia treści.
+- Klawiatura: Alt+F10 z pola przechodzi na pasek, strzałki i Home/End wybierają przycisk,
+  Esc wraca do tekstu. Na telefonie pasek mieści się w jednym wierszu pola.
+
+Zmiana tekstu lub formatowania trafia do podglądu, renderowanego tak samo jak karta ćwiczenia,
+po krótkiej przerwie w pisaniu (150 ms).
 
 Pisanie nie czeka na sprawdzanie: w jego trakcie aplikacja zapamiętuje treść pola, a zgodność
 ze schematem i podgląd odświeża po przerwie, i to tylko dla edytowanego ćwiczenia. Błąd jest
@@ -346,5 +358,28 @@ pliku. Nie istnieje druga, robocza wersja bazy: pola formularza są wyłącznie 
   ćwiczenia można przeglądać, ale nie edytować — przyciski edycji są ukryte; opublikowana baza
   zmienia się po wdrożeniu zapisanego pliku.
 
-Edytor poprawia istniejące ćwiczenia; nie dodaje ich ani nie usuwa. Nowe zadania ze skanów
-trafiają do bazy narzędziem importu według [CONTENT.md](CONTENT.md).
+### 7.2 Dodawanie materiału
+
+Dodawanie działa tam, gdzie edycja — przy serwerze z zapisem; na hostingu statycznym formularz
+i przyciski dodawania są ukryte.
+
+- **Ćwiczenie i kategoria.** Lista „Przeglądaj bazę” ma formularz „Dodaj ćwiczenie lub
+  kategorię”: tytuł i kategoria (domyślnie ta z filtra) albo „nowa kategoria…” z nazwą.
+  Nowa kategoria powstaje razem ze swoim pierwszym ćwiczeniem, bo pusta nie pojawiłaby się
+  w żadnym widoku; nazwa kategorii nie może powtarzać istniejącej. Ćwiczenie otwiera się
+  w edytorze z jednym wariantem typu „Pozycje” i jedną pustą pozycją, poziomem nieokreślonym
+  i jakością odczytu „do weryfikacji”.
+- **Wariant i pozycja.** Edycja ćwiczenia ma „Dodaj wariant” na końcu listy wariantów, a każdy
+  wariant typu „Pozycje” — „Dodaj pozycję” na końcu listy pozycji (także w edycji wariantu).
+  Kursor przechodzi do dodanego elementu.
+- **Identyfikatory** nadawane są według konwencji z CONTENT: ćwiczenie i kategoria z tytułu
+  (nazwy), wariant `<ćwiczenie>-w<n>`, pozycja `<wariant>-p<nn>` z kolejnym wolnym numerem;
+  zajęty identyfikator dostaje przyrostek `-2`, `-3`… Po zapisie identyfikator się nie zmienia.
+- **Przed zapisem** nowy element istnieje tylko w edytorze. Pusty albo niekompletny element
+  jest wskazany jako niezgodność i blokuje zapis. Element dodany w tej edycji ma przycisk
+  „Usuń”, a „Odrzuć zmiany” usuwa całe nowe ćwiczenie bez śladu. Zapisanego materiału edytor
+  nie usuwa.
+- **Zapis** dopisuje nowe ćwiczenie i nową kategorię na końcu tablic w pliku, tak jak import.
+  Nowa kategoria pojawia się w parametrach sesji jako ostatni blok.
+
+Większe partie zadań ze skanów wprowadza się plikiem importu według [CONTENT.md](CONTENT.md).

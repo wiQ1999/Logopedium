@@ -37,8 +37,8 @@ python -m http.server 4173 --directory src/webapp
 
 ## Treść bazy
 
-Poprawki nanosi się w edytorze aplikacji, nowe zadania ze skanów — plikiem importu. Obie drogi
-opisuje [docs/CONTENT.md](docs/CONTENT.md).
+Poprawki i pojedyncze nowe ćwiczenia nanosi się w edytorze aplikacji, partie zadań ze skanów —
+plikiem importu. Obie drogi opisuje [docs/CONTENT.md](docs/CONTENT.md).
 
 ```bash
 npm run import -- zadania.json --dry-run

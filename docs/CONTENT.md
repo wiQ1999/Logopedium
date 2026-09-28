@@ -7,18 +7,25 @@ nie zostaje zapisana.
 | Zmiana | Droga |
 |---|---|
 | poprawka istniejącego ćwiczenia (literówka, oznaczenia, poziom) | edytor w aplikacji (APPLICATION §7.1) |
-| nowe zadania ze skanu | plik importu i `npm run import` |
+| pojedyncze nowe ćwiczenie, kategoria, wariant lub pozycja | edytor w aplikacji (APPLICATION §7.2) |
+| partia zadań ze skanu | plik importu i `npm run import` |
 
 ## Poprawka w edytorze
 
 1. `npm start`, otwórz `http://localhost:4173/`, znajdź ćwiczenie w „Przeglądaj bazę”.
-2. „Edytuj ćwiczenie” albo „Edytuj wariant”, popraw treść, oznacz fragmenty paskiem formatowania.
+2. „Edytuj ćwiczenie” albo „Edytuj wariant”, popraw treść, oznacz fragmenty paskiem w ramce pola
+   (zaznacz litery, kliknij próbkę oznaczenia; ponowne kliknięcie zdejmuje oznaczenie).
 3. „Zapisz w pliku bazy” — zmiana trafia od razu do pliku; komunikat podaje nową rewizję.
 4. Zatwierdź plik w repozytorium i opublikuj katalog `src/webapp/`.
 
+Nowe ćwiczenie: w „Przeglądaj bazę” rozwiń „Dodaj ćwiczenie lub kategorię”, podaj tytuł
+i kategorię (albo „nowa kategoria…” z nazwą) i „Utwórz w edytorze”. Wariant i pozycję dodają
+przyciski na końcu list w edytorze. Identyfikatory powstają same, według konwencji poniżej;
+do zapisu nowy element można usunąć przyciskiem „Usuń”.
+
 Do próby bez ruszania bazy: `npm start -- --database <kopia.json>`.
 
-## Nowe zadania ze skanu
+## Partia zadań ze skanu
 
 1. **Plik importu.** Skopiuj `tools/templates/import.json` poza katalog aplikacji. Plik zawiera
    `exercises` (wymagane) i `categories` (tylko nowe kategorie; zwykle puste).

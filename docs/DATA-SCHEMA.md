@@ -43,7 +43,7 @@ Każda pozycja `categories[]` ma dwa pola:
 | Pole | Typ | Opis |
 |---|---|---|
 | `id` | string | unikalny klucz techniczny, referowany przez `exercises[].categoryId` |
-| `name` | string | nazwa wyświetlana użytkownikowi |
+| `name` | string | nazwa wyświetlana użytkownikowi; unikalna bez względu na wielkość liter i odstępy |
 
 Kolejność kategorii wynika z kolejności w tablicy; nie ma osobnego pola pozycji.
 
@@ -81,7 +81,7 @@ Kolejność kategorii wynika z kolejności w tablicy; nie ma osobnego pola pozyc
 | `instructionHtml` | string \| null | polecenie wariantu; `null` dziedziczy `exercises[].instructionHtml` |
 | `syllablesHtml` | string \| null | wiersz sylab treningowych, wyświetlany w całości |
 | `textHtml` | string \| null | treść ciągła dla `type: "text"` |
-| `examples` | string[] | przykłady wzorcowe; są podpowiedzią, nie podlegają losowaniu |
+| `examples` | string[] | przykłady wzorcowe w HTML; są podpowiedzią, nie podlegają losowaniu |
 | `items` | object[] | pozycje do losowania; puste dla `text`, `syllables` i `prompt` |
 
 Kolejność wariantów wynika z kolejności w tablicy.
@@ -114,6 +114,9 @@ Kolejność wariantów wynika z kolejności w tablicy.
 | `exhale` | fraza realizowana na jednym wydechu |
 | `blank` | miejsce na odpowiedź ustną |
 | `juncture` | granica zestroju akcentowego |
+
+Znaczniki mogą występować we wszystkich polach `…Html`, w `items[].html` i w `examples[]`;
+pozostałe pola tekstowe są zwykłym tekstem.
 
 Treść może ponadto zawierać `<p>`, `<br>`, `<strong>` i `<em>`. Edytor dopuszcza tylko
 wymienione tagi i klasy oraz atrybut `title` na `span`. Puste znaczniki są usuwane z wyjątkiem
@@ -154,8 +157,8 @@ Krańce parametrów sesji `W` (warianty) i `P` (pozycje), liczone dla ćwiczeń 
 
 Wartość `W = 1` albo `P = 0` oznacza, że formularz nie pokazuje danego ograniczenia.
 
-Nowe ćwiczenia trafiają do bazy narzędziem importu, poprawki — edytorem; oba sprawdzają zgodność
-z tym schematem przed zapisem (CONTENT).
+Nowe ćwiczenia trafiają do bazy edytorem (pojedyncze) albo narzędziem importu (partie ze skanów),
+poprawki — edytorem; obie drogi sprawdzają zgodność z tym schematem przed zapisem (CONTENT).
 
 ## Odpowiedzialność za prawa do materiałów
 
