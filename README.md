@@ -56,7 +56,8 @@ npm test
 
 Wbudowany `node --test`: dane, losowanie, wersjonowany stan sesji w adresie, bloki i ich
 przeciąganie (SortableJS) oraz obsługa klawiaturą, zapis ustawień, bezpieczny HTML, serwer
-z zapisem bazy i import, a także widoki, edytor i trasy na `jsdom`. Przed pierwszym
+z zapisem bazy i import, a także widoki, podgląd ćwiczeń w parametrach, edytor i trasy
+na `jsdom`. Przed pierwszym
 uruchomieniem testów wykonaj `npm ci`. Zależności deweloperskie to `jsdom` i `sortablejs`
 (wzorzec do sprawdzenia dołączonej kopii). Jedyną zależnością produkcyjną jest ta kopia
 biblioteki przeciągania w `src/webapp/vendor/`, bez kroku budowania.

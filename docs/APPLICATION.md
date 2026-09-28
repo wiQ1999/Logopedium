@@ -60,6 +60,22 @@ Wiersze — bloki i ćwiczenia — przestawia się przeciągnięciem myszą, dot
 nie ma przycisków „góra” i „dół”. Na ekranie dotykowym uchwyt trzeba najpierw przytrzymać,
 więc zwykły ruch palca przewija listę zamiast przypadkowo przenosić wiersz.
 
+#### Podgląd ćwiczenia
+
+Kliknięcie tytułu ćwiczenia rozwija pod nim podgląd, który pozwala odróżnić ćwiczenia o podobnych
+tytułach bez przechodzenia do przeglądania bazy. Ponowne kliknięcie zwija podgląd.
+
+- Podgląd pokazuje poziom, liczbę wariantów i pozycji, opis (nagłówek i materiał
+  wprowadzający), wspólne polecenie oraz treść zadania.
+- Treść jest próbką, nie całym materiałem: pierwsze 2 warianty, w każdym pierwsze 3 pozycje,
+  z informacją, ile jest wszystkiego. Tekst ciągły, opis i polecenia są przycięte do około
+  220 znaków i 3 wierszy, a pozycja do około 90 znaków i 2 wierszy. Przycięcie wypada
+  na granicy słowa i kończy się wielokropkiem, a oznaczenia zostają.
+- Rozwinięte może być tylko jedno ćwiczenie naraz, także między blokami. Rozwinięcie kolejnego
+  zwija poprzednie, a „Przywróć domyślne” zwija każde.
+- Podgląd nie zmienia parametrów sesji ani nie jest zapamiętywany. Przełącznik aktywności jest
+  osobnym polem obok tytułu, więc rozwinięcie nie włącza ani nie wyłącza ćwiczenia.
+
 #### Przeciąganie
 
 Przeciąganie jest płynne i interaktywne: miejsce upuszczenia wynika z bieżącego położenia
@@ -70,7 +86,8 @@ przeciąganego wiersza względem sąsiadów, a nie z trafienia w wyznaczony cel.
 - Przerwa przesuwa się razem z wierszem także między listami: z jednego bloku do drugiego
   i na poziom bloków.
 - Blok rozwinięty na czas przeciągania zwija się do jednego wiersza, żeby dało się go
-  przenieść na dalsze miejsce listy.
+  przenieść na dalsze miejsce listy. Z tego samego powodu ćwiczenie chowa na ten czas swój
+  podgląd; po upuszczeniu podgląd wraca.
 - Przy krawędzi ekranu lista przewija się sama.
 - Przerwa pojawia się tylko tam, gdzie wiersz może stanąć. Blok innej kategorii nie przyjmuje
   ćwiczenia — przerwy w nim nie ma. Ćwiczenia bloku zwiniętego są niewidoczne, więc przerwa

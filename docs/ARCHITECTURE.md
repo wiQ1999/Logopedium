@@ -53,7 +53,7 @@ logopedium/
       ├─ js/
       │  ├─ main.js           # start aplikacji, routing, przełączanie stanów
       │  ├─ data.js           # wczytanie i walidacja bazy
-      │  ├─ params.js         # formularz parametrów i przeciąganie
+      │  ├─ params.js         # formularz parametrów, podgląd ćwiczenia i przeciąganie
       │  ├─ blocks.js         # model bloków, limity, adres i zapis parametrów
       │  ├─ rng.js            # losowanie z ziarnem
       │  ├─ picker.js         # budowa planu sesji
@@ -61,7 +61,7 @@ logopedium/
       │  ├─ browse.js         # przeglądanie bazy
       │  ├─ editor.js         # edycja, dodawanie elementów, podgląd i zapis bazy
       │  ├─ rich-text.js      # pole z paskiem oznaczeń: nakładanie i zdejmowanie klas
-      │  ├─ html.js           # dozwolone znaczniki i sanitacja treści
+      │  ├─ html.js           # dozwolone znaczniki, sanitacja i skracanie treści
       │  ├─ settings.js       # trwały zapis ustawień w przeglądarce
       │  └─ render.js         # wyświetlanie treści
       │
@@ -270,7 +270,9 @@ dotykiem nie reaguje na klawisze przejęcia i strzałek — tylko Esc go przeryw
 rolę `toolbar` powiązaną z polem, jeden przycisk w kolejności tabulacji (strzałki, Home/End),
 Alt+F10 z pola i Esc z powrotem; zachowuje zaznaczenie przy obsłudze klawiaturą. Przycisk
 pokazuje próbkę oznaczenia, a jego nazwa dostępna (`aria-label`) opisuje znaczenie klasy;
-`aria-pressed` podaje, czy zaznaczenie ją ma.
+`aria-pressed` podaje, czy zaznaczenie ją ma. Tytuł ćwiczenia w parametrach jest przyciskiem
+z `aria-expanded` (i `aria-controls` przy otwartym podglądzie), a fokus zostaje na nim po
+rozwinięciu i zwinięciu; przełącznik aktywności ćwiczenia ma własną nazwę dostępną.
 
 ---
 

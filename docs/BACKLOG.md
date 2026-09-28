@@ -34,6 +34,7 @@ Wzór: `- [ ] **7 (N)** — tytuł zadania`, po zamknięciu `- [x] **7 (N)** —
 - [x] **8 (R)** — podział kategorii przez wyciągnięcie ćwiczenia poza kategorię · 2026-09-28
 - [x] **9 (R)** — pasek formatowania wbudowany w pole treści edytora · 2026-09-28
 - [x] **10 (N)** — dodawanie kategorii, ćwiczeń, wariantów i pozycji w edytorze · 2026-09-28
+- [x] **11 (R)** — podgląd ćwiczenia rozwijany w parametrach sesji · 2026-09-28
 
 ---
 
