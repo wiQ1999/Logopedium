@@ -3,6 +3,13 @@ export const MARKS = {
   uncertain: 'Fragment nieczytelny', breath: 'Miejsce wdechu', exhale: 'Fraza na wydechu',
   blank: 'Miejsce na odpowiedź', juncture: 'Granica zestroju',
 };
+/** How each mark looks in the material; shared by the legend and the editor's toolbar buttons. */
+export const MARK_SAMPLES = {
+  target: '<span class="target">sz</span>', legato: '<span class="legato">a</span>',
+  phonetic: '<span class="phonetic">ţsze</span>', uncertain: '<span class="uncertain">ucięte</span>',
+  breath: '<span class="breath">V</span>', exhale: '<span class="exhale"></span>',
+  blank: '<span class="blank"></span>', juncture: 'a<span class="juncture">|</span>b',
+};
 const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** Closed HTML grammar shared by load, preview and export; no executable attributes or URLs. */

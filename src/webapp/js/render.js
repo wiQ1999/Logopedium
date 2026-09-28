@@ -1,4 +1,4 @@
-import { sanitizeHtml } from './html.js';
+import { MARK_SAMPLES, sanitizeHtml } from './html.js';
 const safeHtml = (value) => sanitizeHtml(value).html;
 
 const MARK_MODES = [
@@ -96,14 +96,14 @@ export function attachMarkModeControl(root, app) {
 
 export function renderMarksLegend() {
   const entries = [
-    ['<span class="target">sz</span>', 'głoska docelowa'],
-    ['<span class="legato">a</span>', 'przedłużenie w technice legato'],
-    ['<span class="phonetic">ţsze</span>', 'zapis fonetyczny z oryginału'],
-    ['<span class="uncertain">ucięte</span>', 'fragment nieczytelny na skanie'],
-    ['<span class="breath">V</span>', 'miejsce wdechu'],
-    ['<span class="exhale"></span>', 'fraza na jednym wydechu'],
-    ['a<span class="juncture">|</span>b', 'granica zestroju akcentowego'],
-    ['<span class="blank"></span>', 'miejsce na odpowiedź'],
+    [MARK_SAMPLES.target, 'głoska docelowa'],
+    [MARK_SAMPLES.legato, 'przedłużenie w technice legato'],
+    [MARK_SAMPLES.phonetic, 'zapis fonetyczny z oryginału'],
+    [MARK_SAMPLES.uncertain, 'fragment nieczytelny na skanie'],
+    [MARK_SAMPLES.breath, 'miejsce wdechu'],
+    [MARK_SAMPLES.exhale, 'fraza na jednym wydechu'],
+    [MARK_SAMPLES.juncture, 'granica zestroju akcentowego'],
+    [MARK_SAMPLES.blank, 'miejsce na odpowiedź'],
   ];
   const items = entries
     .map(

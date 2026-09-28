@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { afterEach, describe, it } from 'node:test';
 import { JSDOM } from 'jsdom';
-import { applyMark, createDraft, EDIT_SETTLE_MS, mountEditor, prepareSave } from '../src/webapp/js/editor.js';
+import { createDraft, EDIT_SETTLE_MS, mountEditor, prepareSave } from '../src/webapp/js/editor.js';
+import { activeMarks, applyMark, removeMark, toggleMark } from '../src/webapp/js/rich-text.js';
 import { MARKS, sanitizeHtml, visitHtml } from '../src/webapp/js/html.js';
 import { buildDatabase, validateDatabase, validateExercise } from '../src/webapp/js/data.js';
 import { loadDatabaseFixture } from './helpers.js';
@@ -46,6 +47,32 @@ describe('zaznaczenie i klasy semantyczne',()=>{
     range.setStart(el.firstChild.firstChild,3);range.setEnd(el.lastChild.firstChild,2);
     const before=el.textContent;applyMark(el,range,'target');
     assert.equal(el.textContent,before);assert.deepEqual(sanitizeHtml(el.innerHTML).issues,[]);dom.window.close();
+  });
+  const fixture=(html)=>{const dom=new JSDOM(`<div id="edit">${html}</div>`);const doc=dom.window.document;return {dom,doc,el:doc.querySelector('#edit')};};
+  const select=(doc,startNode,start,endNode,end)=>{const r=doc.createRange();r.setStart(startNode,start);r.setEnd(endNode,end);return r;};
+  it('zdejmuje oznaczenie tylko z zaznaczonych liter, reszta je zachowuje',()=>{
+    const {dom,doc,el}=fixture('<span class="target">szafa</span>');const text=el.querySelector('span').firstChild;
+    const next=removeMark(el,select(doc,text,1,text,3),'target');
+    assert.equal(el.innerHTML,'<span class="target">s</span>za<span class="target">fa</span>');assert.equal(next.toString(),'za');dom.window.close();
+  });
+  it('zdjęcie oznaczenia zachowuje inne klasy i zagnieżdżone znaczniki',()=>{
+    const {dom,doc,el}=fixture('<span class="target legato">ab<em>cd</em></span>');const em=el.querySelector('em').firstChild;
+    removeMark(el,select(doc,em,0,em,1),'target');
+    assert.deepEqual(sanitizeHtml(el.innerHTML).issues,[]);assert.equal(el.textContent,'abcd');
+    assert.equal(el.innerHTML,'<span class="target legato">ab</span><span class="legato"><em>c</em></span><span class="target legato"><em>d</em></span>');dom.window.close();
+  });
+  it('przycisk działa jak przełącznik: nakłada, a na całym oznaczonym zaznaczeniu zdejmuje',()=>{
+    const {dom,doc,el}=fixture('ab<span class="target">cd</span>ef');
+    let range=select(doc,el.firstChild,0,el.lastChild,2);
+    assert.ok(!activeMarks(el,range).has('target'));
+    range=toggleMark(el,range,'target');assert.ok(activeMarks(el,range).has('target'));
+    assert.equal(el.textContent,'abcdef');assert.ok(!el.innerHTML.includes('<span class="target"><span class="target">'));
+    range=toggleMark(el,range,'target');assert.equal(el.querySelector('.target'),null);assert.equal(el.textContent,'abcdef');dom.window.close();
+  });
+  it('stan oznaczeń obejmuje także samą pozycję kursora',()=>{
+    const {dom,doc,el}=fixture('a<span class="legato">b</span>');const inner=el.querySelector('span').firstChild;
+    assert.deepEqual([...activeMarks(el,select(doc,inner,1,inner,1))],['legato']);
+    assert.deepEqual([...activeMarks(el,select(doc,el.firstChild,0,inner,1))],[]);dom.window.close();
   });
   it('puste i obce zaznaczenie pozostaje nietknięte',()=>{
     const dom=new JSDOM('<div id="edit">tekst</div><p>inne</p>');const el=dom.window.document.querySelector('#edit');
@@ -118,14 +145,15 @@ const editHash='#/browse/adam-andrzejewski?edit=1';
 const input=(el,value)=>{el.value=value;el.dispatchEvent(new app.window.Event('input',{bubbles:true}));};
 const richInput=(el,html)=>{el.innerHTML=html;el.dispatchEvent(new app.window.Event('input',{bubbles:true}));};
 const settle=()=>new Promise(resolve=>setTimeout(resolve,EDIT_SETTLE_MS+30));
-const field=(label)=>app.queryAll('label.field').find(el=>el.firstChild.textContent===label)?.querySelector('textarea,select');
+const field=(label)=>app.queryAll('label.field').find(el=>el.firstChild.textContent===label)?.querySelector('input,select');
 
 describe('przebieg pracy w edytorze',()=>{
   it('wchodzi z podglądu do edycji ćwiczenia i wybranego wariantu',async()=>{
     app=await bootApp({hash:'#/browse/adam-andrzejewski'});
     const variantLink=app.queryAll('a').find(el=>el.textContent==='Edytuj wariant').getAttribute('href');
     await app.click('a[href*="edit=1"]');assert.match(app.text(),/Edycja ćwiczenia/);
-    assert.ok(field('Tytuł'));assert.equal(app.queryAll('[data-mark]').length,8);
+    assert.ok(field('Tytuł'));assert.equal(app.queryAll('.rich-editor').length,app.queryAll('[data-rich]').length);
+    assert.equal(app.query('.rich-editor').querySelectorAll('[data-mark]').length,8);
     await app.goto(variantLink);assert.match(app.text(),/Edycja wariantu/);assert.equal(field('Tytuł'),undefined);
   });
   it('pola tekstowe i HTML aktualizują podgląd na każdym input',async()=>{
@@ -141,9 +169,45 @@ describe('przebieg pracy w edytorze',()=>{
     const range=app.document.createRange();range.setStart(rich.firstChild,1);range.setEnd(rich.firstChild,3);
     const selection=app.window.getSelection();selection.removeAllRanges();selection.addRange(range);
     app.document.dispatchEvent(new app.window.Event('selectionchange'));
-    const button=app.query('[data-mark="legato"]');button.focus();button.click();
+    const button=rich.closest('.rich-editor').querySelector('[data-mark="legato"]');button.focus();button.click();
     assert.equal(rich.innerHTML,'a<span class="legato">bc</span> def');
     assert.equal(selection.toString(),'bc');await settle();assert.match(app.query('#editor-preview').innerHTML,/class="legato">bc/);
+  });
+  it('każde pole HTML ma własny pasek z próbkami oznaczeń; pola proste są bez paska',async()=>{
+    app=await bootApp({hash:editHash});
+    const frames=app.queryAll('.rich-editor');assert.ok(frames.length>=3);
+    for(const frame of frames){
+      const toolbar=frame.querySelector('[role="toolbar"]');const editable=frame.querySelector('[data-rich]');
+      assert.equal(toolbar.getAttribute('aria-controls'),editable.id);
+      const target=toolbar.querySelector('[data-mark="target"]');
+      assert.equal(target.getAttribute('aria-label'),MARKS.target);assert.ok(target.querySelector('.target'));
+      assert.ok(!/Głoska/.test(target.textContent));
+    }
+    for(const label of ['Tytuł','Kategoria','Poziom','Jakość odczytu']) assert.equal(field(label).closest('.rich-editor'),null,label);
+    assert.equal(field('Tytuł').tagName,'INPUT');assert.equal(app.queryAll('#editor-fields textarea').length,0);
+  });
+  it('pasek pokazuje stan zaznaczenia i działa tylko na swoim polu',async()=>{
+    app=await bootApp({hash:editHash});const [first,second]=app.queryAll('[data-rich]');
+    richInput(first,'ab<span class="target">cd</span>');richInput(second,'xyz');
+    const choose=(node,start,end)=>{const r=app.document.createRange();r.setStart(node,start);r.setEnd(node,end);const s=app.window.getSelection();s.removeAllRanges();s.addRange(r);app.document.dispatchEvent(new app.window.Event('selectionchange'));};
+    choose(first.querySelector('.target').firstChild,0,2);
+    const button=(el,mark)=>el.closest('.rich-editor').querySelector(`[data-mark="${mark}"]`);
+    assert.equal(button(first,'target').getAttribute('aria-pressed'),'true');assert.equal(button(first,'legato').getAttribute('aria-pressed'),'false');
+    button(second,'legato').click();assert.equal(second.innerHTML,'xyz');assert.match(app.query('#editor-status').textContent,/Zaznacz w tym polu/);
+    button(first,'target').click();assert.equal(first.querySelector('.target'),null);assert.equal(button(first,'target').getAttribute('aria-pressed'),'false');
+    await settle();assert.doesNotMatch(app.query('#editor-preview').innerHTML,/class="target">cd/);
+  });
+  it('pasek obsługuje klawiaturę: Alt+F10, strzałki, Home/End i Escape',async()=>{
+    app=await bootApp({hash:editHash});const rich=app.query('[data-rich]');const buttons=[...rich.closest('.rich-editor').querySelectorAll('[data-mark]')];
+    const key=(el,k,extra={})=>el.dispatchEvent(new app.window.KeyboardEvent('keydown',{key:k,bubbles:true,cancelable:true,...extra}));
+    assert.deepEqual(buttons.map(b=>b.tabIndex),[0,-1,-1,-1,-1,-1,-1,-1]);
+    key(rich,'F10',{altKey:true});assert.equal(app.document.activeElement,buttons[0]);
+    key(buttons[0],'ArrowRight');assert.equal(app.document.activeElement,buttons[1]);assert.equal(buttons[1].tabIndex,0);assert.equal(buttons[0].tabIndex,-1);
+    key(buttons[1],'End');assert.equal(app.document.activeElement,buttons[7]);
+    key(buttons[7],'ArrowRight');assert.equal(app.document.activeElement,buttons[0]);
+    key(buttons[0],'ArrowLeft');assert.equal(app.document.activeElement,buttons[7]);
+    key(buttons[7],'Home');assert.equal(app.document.activeElement,buttons[0]);
+    key(buttons[0],'Escape');assert.equal(app.document.activeElement,rich);
   });
   it('wklejenie HTML trafia do pola jako tekst, bez wykonania kodu',async()=>{
     app=await bootApp({hash:editHash});const rich=app.query('[data-rich]');richInput(rich,'');

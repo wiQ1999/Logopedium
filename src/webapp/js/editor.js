@@ -1,6 +1,7 @@
 import { normalizeDatabase, saveDatabase, SaveError, validateExercise } from './data.js';
-import { MARKS, sanitizeHtml } from './html.js';
+import { sanitizeHtml } from './html.js';
 import { escapeHtml, formatRevision, renderExerciseCard, renderNotice } from './render.js';
+import { activeMarks, attachToolbarKeys, renderMarkToolbar, showActiveMarks, toggleMark } from './rich-text.js';
 
 /** The editing buffer covers a single exercise; the base itself lives only in the served file. */
 export const createDraft = (db, exerciseId) => {
@@ -12,34 +13,6 @@ export const createDraft = (db, exerciseId) => {
 export function prepareSave(db, draft) {
   const raw = { ...db.raw, exercises: db.raw.exercises.map((e) => e.id === draft.id ? draft : e) };
   return normalizeDatabase(raw);
-}
-
-export function applyMark(editable, range, mark) {
-  if (!Object.hasOwn(MARKS, mark) || !range || range.collapsed ||
-      !editable.contains(range.startContainer) || !editable.contains(range.endContainer)) return null;
-  const doc = editable.ownerDocument;
-  const walker = doc.createTreeWalker(editable, 4 /* SHOW_TEXT */);
-  const portions = [];
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    if (!range.intersectsNode(node)) continue;
-    const start = node === range.startContainer ? range.startOffset : 0;
-    const end = node === range.endContainer ? range.endOffset : node.length;
-    if (end > start) portions.push({ node, start, end });
-  }
-  const spans = portions.map(({ node, start, end }) => {
-    if (end < node.length) node.splitText(end);
-    const middle = start ? node.splitText(start) : node;
-    const span = doc.createElement('span');
-    span.className = mark;
-    middle.replaceWith(span); span.append(middle);
-    return span;
-  });
-  if (!spans.length) return null;
-  const next = doc.createRange();
-  next.setStart(spans[0].firstChild, 0);
-  next.setEnd(spans.at(-1).firstChild, spans.at(-1).textContent.length);
-  return next;
 }
 
 /** Idle time after the last keystroke before the exercise is re-checked and the preview redrawn. */
@@ -70,23 +43,26 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
   let savedRange = null;
   let activeEditable = null;
   const register = (object, key, parse) => { bindings.push({ object, key, parse }); return bindings.length - 1; };
-  const textField = (object, key, label, kind = 'text', nullable = false) => {
-    const index = register(object, key, (value) => kind === 'array' ? value.split('\n').map((s) => s.trim()).filter(Boolean) : nullable && value === '' ? null : value);
-    const value = kind === 'array' ? object[key].join('\n') : object[key] ?? '';
-    return `<label class="field">${escapeHtml(label)}<textarea class="input" data-field="${index}" rows="${kind === 'array' ? 3 : 1}">${escapeHtml(value)}</textarea></label>`;
+  // Plain fields hold text without markup; only the HTML fields of the schema get the formatting frame.
+  const textField = (object, key, label, nullable = false) => {
+    const index = register(object, key, (value) => nullable && value === '' ? null : value);
+    return `<label class="field">${escapeHtml(label)}<input class="input" type="text" data-field="${index}" value="${escapeHtml(object[key] ?? '')}"></label>`;
   };
   const selectField = (object, key, label, values, parse = (s) => s) => {
     const index = register(object, key, parse);
-    return `<label class="field">${escapeHtml(label)}<select class="select" data-field="${index}">${values.map(([value, name]) => `<option value="${escapeHtml(value)}" ${String(object[key] ?? '') === String(value) ? 'selected' : ''}>${escapeHtml(name)}</option>`).join('')}</select></label>`;
+    const current = String(object[key] ?? '');
+    const options = values.some(([value]) => String(value) === current) ? values : [...values, [current, current]];
+    return `<label class="field">${escapeHtml(label)}<select class="select" data-field="${index}">${options.map(([value, name]) => `<option value="${escapeHtml(value)}" ${current === String(value) ? 'selected' : ''}>${escapeHtml(name)}</option>`).join('')}</select></label>`;
   };
   const richField = (object, key, label, nullable = true) => {
     const index = register(object, key, (s) => nullable && s === '' ? null : s);
     const result = sanitizeHtml(object[key]);
     return `<div class="field rich-field"><span class="field__label" id="edit-label-${index}">${escapeHtml(label)}</span>
-      <div class="input rich-input content" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="edit-label-${index}" data-rich="${index}" data-marks="full">${result.html}</div></div>`;
+      <div class="rich-editor">${renderMarkToolbar(`edit-rich-${index}`, label)}
+      <div class="rich-input content" id="edit-rich-${index}" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="edit-label-${index}" data-rich="${index}" data-marks="full">${result.html}</div></div></div>`;
   };
   const variantFields = (v) => `<details class="disclosure" open><summary>${escapeHtml(v.label ?? 'Wariant')} — ${escapeHtml(v.id)}</summary><div class="disclosure__body editor-fields">
-    ${textField(v, 'label', 'Nazwa wariantu', 'text', true)}
+    ${textField(v, 'label', 'Nazwa wariantu', true)}
     ${selectField(v, 'type', 'Typ wariantu', [['items','Pozycje'],['text','Tekst'],['syllables','Sylaby'],['prompt','Polecenie']])}
     ${richField(v, 'instructionHtml', 'Polecenie wariantu (puste = polecenie ćwiczenia)')}
     ${richField(v, 'syllablesHtml', 'Sylaby')}${richField(v, 'textHtml', 'Tekst')}
@@ -99,14 +75,13 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     ${selectField(exercise, 'categoryId', 'Kategoria', categories.map((c) => [c.id,c.name]))}
     ${selectField(exercise, 'level', 'Poziom', [['','Nieokreślony'], ...[1,2,3,4].map((n) => [n,String(n)])], (s) => s === '' ? null : Number(s))}
     ${selectField(exercise, 'randomizable', 'Losowanie pozycji', [['true','Dozwolone'],['false','Materiał w całości']], (s) => s === 'true')}
-    ${textField(exercise, 'readQuality', 'Jakość odczytu')}
+    ${selectField(exercise, 'readQuality', 'Jakość odczytu', [['pewny','Pewny'],['do_weryfikacji','Do weryfikacji']])}
     ${richField(exercise, 'headerHtml', 'Nagłówek')}${richField(exercise, 'contextHtml', 'Materiał wprowadzający')}${richField(exercise, 'instructionHtml', 'Polecenie ćwiczenia')}
     </div>${exercise.variants.map(variantFields).join('')}`;
   root.innerHTML = `<section class="view-head"><h1>${variant ? 'Edycja wariantu' : 'Edycja ćwiczenia'}</h1><p>${escapeHtml(exercise.title)}</p>
     <div class="btn-row"><a class="btn" href="${escapeHtml(backHref)}">Wróć do podglądu</a><button class="btn" type="button" data-action="discard">Odrzuć zmiany</button>
     <button class="btn btn--primary" type="button" data-action="save">Zapisz w pliku bazy</button></div>
     <p class="panel__hint" id="editor-revision">Rewizja bazy: ${escapeHtml(formatRevision(app.db.generated))}</p><p id="editor-status" role="status"></p></section>
-    <div class="editor-toolbar" role="group" aria-label="Formatowanie zaznaczonego tekstu">${Object.entries(MARKS).map(([key,label]) => `<button class="btn" type="button" data-mark="${key}">${label}</button>`).join('')}</div>
     <div id="editor-errors"></div><div class="editor-layout"><div class="editor-fields" id="editor-fields">${fields}</div>
     <section class="editor-preview" aria-label="Podgląd na żywo"><h2>Podgląd na żywo</h2><div id="editor-preview"></div></section></div>`;
   const preview = root.querySelector('#editor-preview');
@@ -146,8 +121,10 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     const editable = (range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement)?.closest('[data-rich]');
     if (editable && root.contains(editable) && editable.contains(range.endContainer)) {
       activeEditable = editable; savedRange = range.cloneRange();
+      showActiveMarks(toolbarOf(editable), activeMarks(editable, savedRange));
     }
   };
+  const toolbarOf = (editable) => editable.closest('.rich-editor').querySelector('[role="toolbar"]');
   doc.addEventListener('selectionchange', capture);
   root.querySelectorAll('[data-rich]').forEach((el) => {
     el.addEventListener('input', () => { capture(); readRich(el); });
@@ -186,14 +163,20 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     };
     el.addEventListener('input', updateField); el.addEventListener('change', updateField);
   });
-  root.querySelector('.editor-toolbar').addEventListener('mousedown', (e) => { if (e.target.closest('button')) { capture(); e.preventDefault(); } });
-  root.querySelector('.editor-toolbar').addEventListener('click', (e) => {
-    const button = e.target.closest('[data-mark]');
-    if (!button || !activeEditable) return;
-    const range = applyMark(activeEditable, savedRange, button.dataset.mark);
-    if (!range) { status.textContent = 'Zaznacz tekst do sformatowania.'; return; }
-    activeEditable.focus(); const selection = win.getSelection(); selection.removeAllRanges(); selection.addRange(range);
-    savedRange = range; readRich(activeEditable);
+  root.querySelectorAll('.rich-editor').forEach((frame) => {
+    const toolbar = frame.querySelector('[role="toolbar"]');
+    const editable = frame.querySelector('[data-rich]');
+    attachToolbarKeys(toolbar, editable);
+    // Pressing a button must not move the caret out of the text, or the selection would be lost.
+    toolbar.addEventListener('mousedown', (e) => { if (e.target.closest('button')) { capture(); e.preventDefault(); } });
+    toolbar.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-mark]');
+      if (!button) return;
+      const range = activeEditable === editable ? toggleMark(editable, savedRange, button.dataset.mark) : null;
+      if (!range) { status.textContent = 'Zaznacz w tym polu tekst do oznaczenia.'; return; }
+      editable.focus(); const selection = win.getSelection(); selection.removeAllRanges(); selection.addRange(range);
+      savedRange = range; showActiveMarks(toolbar, activeMarks(editable, range)); readRich(editable);
+    });
   });
   const leave = () => !dirty() || win.confirm('Opuścić edytor? Zmiany niezapisane do pliku zostaną odrzucone.');
   app.beforeLeave = () => {
