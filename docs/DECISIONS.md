@@ -5,6 +5,39 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-09-28 — pasek oznaczeń w polu i dodawanie materiału w edytorze
+
+Realizacja zadań BACKLOG 9 i 10. Wymagania: APPLICATION §7.1, §7.2; ARCHITECTURE §10;
+DATA-SCHEMA; CONTENT.
+
+- **Własny komponent zamiast biblioteki edytora.** Przegląd: Quill 2 i Squire dają własne
+  formaty z klasą, ale przepisują treść na model „każdy wiersz w akapicie” — zmieniłyby `<br>`
+  w tekstach i pozycje bez akapitu w całej bazie. Tiptap/ProseMirror wymaga bundlera (łamie
+  „bez budowania”), Trix nie nadaje klas, Jodit i Pell stoją na `execCommand` i stylach
+  wbudowanych, Wysi nie ma własnych klas. Kod nakładania oznaczeń już istniał; pasek w polu,
+  zdejmowanie i stan przycisków to ok. 140 wierszy bez nowej zależności.
+- **Przycisk jest przełącznikiem.** Na zaznaczeniu w całości oznaczonym zdejmuje oznaczenie,
+  inaczej je nakłada — jak pogrubienie w edytorze tekstu; bez tego nie było jak cofnąć
+  oznaczenia inaczej niż przepisując tekst.
+- **Krótsze próbki na przyciskach niż w legendzie** („ţs”, „[uc]”), żeby pasek zmieścił się
+  w jednym wierszu na telefonie (375 px).
+- **`examples` to pole HTML.** Walidacja i sanitacja już tak je traktowały, a wszystkie trzy
+  przykłady w bazie mają znaczniki; DATA-SCHEMA opisywała je jako zwykły tekst.
+- **Jakość odczytu jako lista wyboru.** Schemat zna dwie wartości; nieznana wartość z pliku
+  pojawia się jako dodatkowa opcja, więc edycja jej nie gubi.
+- **Nowa kategoria powstaje razem z pierwszym ćwiczeniem.** Kategoria bez ćwiczeń nie pojawia
+  się w liście, parametrach ani sesji, a przez zapis bez treści powstawałby „martwy” wpis.
+- **Nazwy kategorii muszą być unikalne** (bez względu na wielkość liter i odstępy). Kategorię
+  nazywa teraz użytkownik, a dwie o tej samej nazwie byłyby nie do odróżnienia.
+- **Identyfikator nowego elementu ustalany przy dodaniu, nie przy zapisie.** Zmiana tytułu przed
+  zapisem go nie zmienia — ten sam identyfikator widać w edytorze od początku.
+- **Usunąć można tylko elementy dodane w bieżącej edycji.** Usuwanie zapisanego materiału nie było
+  częścią zadania, a zmienia rozkład losowania i stany sesji zapisane w adresach.
+- **Dodanie lub usunięcie przebudowuje formularz z bufora.** Wiązania pól są indeksami; odtworzenie
+  całości jest prostsze i pewniejsze niż wstawianie fragmentów, a przewinięcie jest zachowane.
+
+---
+
 ## 2026-09-28 — wdrożenie zapisu do pliku i płynnego przeciągania
 
 Realizacja zadań BACKLOG 3, 5, 6, 7 i 8. Wymagania: APPLICATION §3.2, §7.1; ARCHITECTURE §4, §10;
