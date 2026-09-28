@@ -30,6 +30,8 @@ Wzór: `- [ ] **7 (N)** — tytuł zadania`, po zamknięciu `- [x] **7 (N)** —
 - [x] **4 (N)** — przenoszenie bloków i ćwiczeń na ekranie dotykowym · 2026-09-22
 - [ ] **5 (N)** — koszt walidacji przy pisaniu w edytorze
 - [ ] **6 (R)** — zapis bazy bez ręcznej podmiany pliku
+- [ ] **7 (R)** — płynne przeciąganie bloków i ćwiczeń w parametrach sesji
+- [ ] **8 (R)** — podział kategorii przez wyciągnięcie ćwiczenia poza kategorię
 
 ---
 
@@ -69,7 +71,35 @@ przebiegu, choć odczyt ze skanów jest jednym z filarów projektu.
 
 **Oczekiwany efekt.**
 
-- [ ] Poprawka naniesiona w edytorze trafia do opublikowanej bazy bez kopiowania plików.
-- [ ] Widać, że opublikowana baza jest nowsza od poprzedniej.
-- [ ] Baza niezgodna ze strukturą nie może zostać opublikowana.
+- [ ] Poprawka naniesiona w edytorze trafia od razu do pliku bazy, bez pobierania i kopiowania plików.
+- [ ] Nie powstaje pośrednia kopia bazy do ręcznej podmiany.
+- [ ] Widać, że zapisana baza jest nowsza od poprzedniej.
+- [ ] Baza niezgodna ze strukturą nie może zostać zapisana, a plik zostaje bez zmian.
 - [ ] Wprowadzanie nowych zadań ze skanów ma opisaną, powtarzalną drogę.
+
+### 7 (R) — płynne przeciąganie bloków i ćwiczeń w parametrach sesji
+
+**Potrzeba.** Przenoszenie wiersza wskazuje cel dopiero w chwili upuszczenia, więc trudno
+przewidzieć, gdzie wiersz stanie — szczególnie przy długiej liście rozwiniętych bloków.
+Układ sesji poprawia się więc metodą prób i cofania.
+
+**Oczekiwany efekt.**
+
+- [ ] W trakcie przeciągania widać miejsce, w którym wiersz wyląduje, i przesuwa się ono
+  razem z wierszem.
+- [ ] Sąsiednie wiersze rozsuwają się płynnie, także na telefonie.
+- [ ] Lista przewija się sama, gdy wiersz zbliża się do krawędzi ekranu.
+- [ ] Przerwanie przeciągania przywraca poprzedni układ.
+- [ ] Przeciąganie klawiaturą działa jak dotąd.
+
+### 8 (R) — podział kategorii przez wyciągnięcie ćwiczenia poza kategorię
+
+**Potrzeba.** Kategorię dzieli się na części o różnych ustawieniach, ale nie widać, że
+służy do tego wyciągnięcie ćwiczenia z bloku, ani gdzie nowa część stanie.
+
+**Oczekiwany efekt.**
+
+- [ ] Ćwiczenie wyciągnięte z bloku na poziom bloków tworzy kopię jego kategorii z osobną
+  pulą ćwiczeń.
+- [ ] Nowy blok staje w miejscu upuszczenia, a przed upuszczeniem widać go jako przerwę.
+- [ ] Blok innej kategorii nie przyjmuje ćwiczenia.
