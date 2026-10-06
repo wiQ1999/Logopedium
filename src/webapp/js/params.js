@@ -75,18 +75,18 @@ export function mount(root, app) {
   let onRefresh = null;
   root.innerHTML = `<section class="view-head"><h1>Parametry sesji</h1>
     <p class="view-head__lead">Ustaw materiał i kolejność bloków. Rozwiń blok, aby wybrać lub przenieść ćwiczenia; kliknij ćwiczenie, aby zobaczyć jego opis i treść.</p></section>
-    <form id="params-form"><div class="panel field-grid">
+    <form id="params-form" class="params-layout"><div class="panel field-grid params-layout__settings">
       <label class="field" for="param-date">Data sesji<input class="input" type="date" id="param-date" required value="${escapeHtml(app.params.date)}"></label>
       <label class="field" for="param-level">Poziom trudności<select class="select" id="param-level">${[1,2,3,4].map((l) => `<option value="${l}" ${l === app.params.level ? 'selected' : ''}>Poziom ${l} i niższe</option>`).join('')}</select></label>
-    </div><div class="panel"><h2>Bloki ćwiczeń</h2>
+    </div><div class="panel params-layout__blocks"><h2>Bloki ćwiczeń</h2>
       <p id="drag-help" class="panel__hint">Przeciągnij uchwyt, aby zmienić kolejność — przerwa w liście pokazuje, gdzie wiersz wyląduje. Ćwiczenie wyciągnięte z bloku między bloki tworzy nowy blok tej kategorii z osobną pulą ćwiczeń. Escape albo upuszczenie poza listą wycofuje ruch. Na ekranie dotykowym przytrzymaj uchwyt, a potem przesuń wiersz. Klawiatura: spacja — przejęcie i upuszczenie, strzałki góra/dół — kolejność, lewo — nowy blok, prawo — następny blok tej kategorii, Escape — wycofanie.</p>
       <p id="drag-status" role="status" aria-live="polite"></p><ol class="params-list" id="params-list"></ol></div>
-      <details class="disclosure"><summary>Ziarno losowania</summary><div class="disclosure__body">
+      <div class="params-layout__session"><details class="disclosure"><summary>Ziarno losowania</summary><div class="disclosure__body">
         <label class="field" for="param-seed">Własne ziarno (opcjonalne)<input class="input" id="param-seed" value="${escapeHtml(app.plan?.seedOverride ?? '')}"></label>
         <div class="btn-row"><button class="btn" type="button" data-role="seed-random">Wylosuj nowe ziarno</button><button class="btn" type="button" data-role="seed-clear">Wyczyść</button></div>
       </div></details>
       <details class="disclosure"><summary>Oznaczenia w treści ćwiczeń</summary><div class="disclosure__body">${renderMarksLegend()}</div></details>
-      <div class="params-summary"><span id="params-total"></span><div class="btn-row"><button class="btn" type="button" data-role="reset">Przywróć domyślne</button><button class="btn btn--primary" id="params-submit" type="submit">Rozpocznij sesję</button></div></div>
+      <div class="params-summary"><span id="params-total"></span><div class="btn-row"><button class="btn" type="button" data-role="reset">Przywróć domyślne</button><button class="btn btn--primary" id="params-submit" type="submit">Rozpocznij sesję</button></div></div></div>
     </form>`;
   const list = root.querySelector('#params-list');
   const status = root.querySelector('#drag-status');

@@ -8,9 +8,7 @@
 
 .app-header__inner {
   width: 100%;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--gutter);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -64,9 +62,7 @@
 .app-main {
   flex: 1;
   width: 100%;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--space-5) var(--space-4) var(--space-7);
+  padding: var(--space-5) var(--gutter) var(--space-7);
 }
 
 .app-main:focus {
@@ -80,9 +76,7 @@
 
 .app-footer__inner {
   width: 100%;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--gutter);
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-4);
@@ -388,7 +382,7 @@
 .editor-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
 .editor-fields { display: grid; gap: var(--space-3); min-width: 0; }
 .editor-fields .input, .editor-fields .select { width: 100%; min-width: 0; }
-.editor-preview { min-width: 0; position: sticky; top: 5rem; max-height: calc(100vh - 6rem); overflow: auto; }
+.editor-preview { min-width: 0; position: sticky; top: var(--sticky-top); max-height: calc(100vh - var(--sticky-top) - var(--space-4)); overflow: auto; }
 /* A formatted field: toolbar and text share one frame, like a word processor's page. */
 .rich-editor { min-width: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius); }
 .rich-editor:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-ring); }
@@ -913,6 +907,52 @@
   padding: var(--space-7) var(--space-4);
   text-align: center;
   color: var(--text-muted);
+}
+
+/* Desktop: the page fills the window; wide views spread into columns instead of one long strip. */
+@media (min-width: 1200px) {
+  .params-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(20rem, 24vw, 28rem);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+
+  .params-layout__blocks {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .params-layout__settings,
+  .params-layout__session {
+    grid-column: 2;
+  }
+
+  /* Start stays in reach while the block list scrolls. */
+  .params-layout__session {
+    position: sticky;
+    top: var(--sticky-top);
+    max-height: calc(100vh - var(--sticky-top) - var(--space-4));
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .params-layout__session .params-summary {
+    order: -1;
+  }
+
+  .browse-list,
+  .summary-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  }
+
+  /* Prose keeps a readable line length inside a wide card. */
+  .exercise-card .content {
+    max-width: 75ch;
+  }
 }
 
 @media (max-width: 640px) {

@@ -48,7 +48,10 @@
   --space-6: 32px;
   --space-7: 48px;
 
-  --content-width: 62rem;
+  /* Side margin of the page: 16 px on a phone, growing with the window up to 48 px. */
+  --gutter: clamp(var(--space-4), 4vw - var(--space-4), var(--space-7));
+  /* Below the header, for panels that stay in view while the page scrolls. */
+  --sticky-top: 5rem;
 }
 
 @media (prefers-color-scheme: dark) {
