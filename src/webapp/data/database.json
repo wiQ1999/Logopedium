@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "generated": "2026-09-22",
+  "generated": "2026-10-06T19:37:43.033Z",
   "categories": [
     {
       "id": "motoryka-orofacjalna-i-polykanie",
@@ -615,7 +615,7 @@
       "randomizable": true,
       "readQuality": "pewny",
       "headerHtml": null,
-      "contextHtml": "<p><span class=\"target\">Zasady wykonania</span></p>\n<p>- Szpatułkę delikatnie przygryzamy zębami, ułożoną poziomo między siekaczami. Stanowi barierę dla języka podczas artykulacji.<br>\n- Najpierw każdą sylabę, wyraz i wyrażenie czytamy ze szpatułką między siekaczami.<br>\n- Następnie ustawiamy zęby — delikatne zaciśnięcie podczas wymowy newralgicznych głosek. Siekacze powinny blokować język, górne nachodzą na dolne.<br>\n- Język i wargi układamy symetrycznie. Subtelnie dociskamy kąciki ust do zębów. Uwaga na pracę mięśnia dźwigacza kącika ust.<br>\n- Powietrze powinno lecieć wzdłuż środka języka.<br>\n- Nie zaciskamy mocno zębów — delikatnie nachodzą na siebie; staw skroniowo-żuchwowy nie powinien być napięty.<br>\n- Język nieznacznie uniesiony, maksymalnie do miejsca styku górnych siekaczy z dolnymi.<br>\n- Newralgiczne głoski wydłużamy, np. &lt;span class=\"phonetic\"&gt;a<span class=\"target\">ss</span>a&lt;/span&gt;.</p>",
+      "contextHtml": "<p><span class=\"target\">Zasady wykonania</span></p>\n<p>- Szpatułkę delikatnie przygryzamy zębami, ułożoną poziomo między siekaczami. Stanowi barierę dla języka podczas artykulacji.<br>\n- Najpierw każdą sylabę, wyraz i wyrażenie czytamy ze szpatułką między siekaczami.<br>\n- Następnie ustawiamy zęby — delikatne zaciśnięcie podczas wymowy newralgicznych głosek. Siekacze powinny blokować język, górne nachodzą na dolne.<br>\n- Język i wargi układamy symetrycznie. Subtelnie dociskamy kąciki ust do zębów. Uwaga na pracę mięśnia dźwigacza kącika ust.<br>\n- Powietrze powinno lecieć wzdłuż środka języka.<br>\n- Nie zaciskamy mocno zębów — delikatnie nachodzą na siebie; staw skroniowo-żuchwowy nie powinien być napięty.<br>\n- Język nieznacznie uniesiony, maksymalnie do miejsca styku górnych siekaczy z dolnymi.<br>\n- Newralgiczne głoski wydłużamy, np. a<span class=\"target\">ss</span>a.</p>",
       "instructionHtml": null,
       "variants": [
         {
@@ -2221,11 +2221,11 @@
           "items": [
             {
               "id": "mowa-legato-cwiczenia-bazowe-w2-p01",
-              "html": "poniedziałek · wtorek · środa · czwartek &lt;span class=\"uncertain\"&gt;pauza&lt;/span&gt; piątek · sobota · niedziela"
+              "html": "poniedziałek · wtorek · środa · czwartek (pauza) piątek · sobota · niedziela"
             },
             {
               "id": "mowa-legato-cwiczenia-bazowe-w2-p02",
-              "html": "styczeń · luty · marzec · kwiecień &lt;span class=\"uncertain\"&gt;pauza&lt;/span&gt; maj · czerwiec · lipiec · sierpień &lt;span class=\"uncertain\"&gt;pauza&lt;/span&gt; wrzesień · październik · listopad · grudzień"
+              "html": "styczeń · luty · marzec · kwiecień (pauza) maj · czerwiec · lipiec · sierpień (pauza) wrzesień · październik · listopad · grudzień"
             }
           ]
         },
@@ -3818,7 +3818,7 @@
           "id": "staw-skroniowo-zuchwowy-w1",
           "label": "Zadanie 1 — sylaba da z oporem",
           "type": "prompt",
-          "instructionHtml": "<p>Mówimy sylabę <span class=\"target\">d</span>&lt;span class=\"legato\"&gt;a&lt;/span&gt;… <span class=\"target\">d</span>&lt;span class=\"legato\"&gt;a&lt;/span&gt;… <span class=\"target\">d</span>&lt;span class=\"legato\"&gt;a&lt;/span&gt; w sekwencji. W trakcie realizacji szeroko otwieramy<br>\njamę ustną. Wyraźne brzmienie samogłoski, mocne odwiedzenie żuchwy.<br>\nW tym samym czasie trzymamy dłoń pod brodą, stawiając opór żuchwie.</p>",
+          "instructionHtml": "<p>Mówimy sylabę <span class=\"target\">d</span>a… <span class=\"target\">d</span>a… <span class=\"target\">d</span>a w sekwencji. W trakcie realizacji szeroko otwieramy<br>\njamę ustną. Wyraźne brzmienie samogłoski, mocne odwiedzenie żuchwy.<br>\nW tym samym czasie trzymamy dłoń pod brodą, stawiając opór żuchwie.</p>",
           "syllablesHtml": null,
           "textHtml": null,
           "examples": [],
