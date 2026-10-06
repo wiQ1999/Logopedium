@@ -35,16 +35,10 @@ Wzór: `- [ ] **7 (N)** — tytuł zadania`, po zamknięciu `- [x] **7 (N)** —
 - [x] **9 (R)** — pasek formatowania wbudowany w pole treści edytora · 2026-09-28
 - [x] **10 (N)** — dodawanie kategorii, ćwiczeń, wariantów i pozycji w edytorze · 2026-09-28
 - [x] **11 (R)** — podgląd ćwiczenia rozwijany w parametrach sesji · 2026-09-28
-- [ ] **12 (R)** — układ aplikacji dopasowany do szerokiego ekranu
+- [x] **12 (R)** — układ aplikacji dopasowany do szerokiego ekranu · 2026-10-06
 
 ---
 
 ## Szczegóły
 
-### 12 (R) — układ aplikacji dopasowany do szerokiego ekranu
-
-**Potrzeba.** Obecny wygląd sprawdza się na telefonie, ale na komputerze aplikacja zostaje
-wąską kolumną pośrodku okna, a reszta ekranu stoi pusta.
-
-**Oczekiwany efekt.** Na urządzeniu desktopowym interfejs rozszerza się do pełnego okna
-i wykorzystuje dostępną szerokość; na telefonie wygląda i działa tak jak dotąd.
+Brak otwartych zadań.

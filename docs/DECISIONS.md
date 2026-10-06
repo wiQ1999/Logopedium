@@ -5,6 +5,25 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-10-06 — układ na pełne okno
+
+Realizacja zadania BACKLOG 12. Wymagania: APPLICATION §2 „Szerokość ekranu”.
+
+- **Zmienna `--gutter` zamiast stałej szerokości 62rem.** Margines rośnie z oknem od 16 do 48 px,
+  a do ok. 800 px zostaje 16 px, więc telefon i tablet wyglądają co do piksela tak samo jak przedtem
+  (porównanie pozycji wszystkich elementów 6 widoków przy 375 i 768 px).
+- **Próg desktopu 1200 px.** Poniżej lista bloków obok kolumny ustawień zostałaby węższa niż
+  wiersz bloku z trzema polami liczbowymi i doborem.
+- **Kolumna parametrów to dwa obszary w kolejności dokumentu.** Ustawienia stoją przed blokami,
+  a ziarno, legenda i start po nich, więc na telefonie kolejność się nie zmienia. Przyklejony jest
+  tylko obszar ze startem (na desktopie podsumowanie idzie w nim na górę) — przyklejenie obu
+  wymagałoby znajomości wysokości pierwszego.
+- **Listy w siatce, tekst ciągły ograniczony do 75ch.** Lista bazy i podsumowanie to niezależne
+  kafle, więc kolumny skracają przewijanie; akapit na 1800 px byłby nieczytelny przy głośnym czytaniu.
+- **Pozycje ćwiczenia bez kolumn.** Czyta się je kolejno, z góry na dół — kolumny łamałyby ten porządek.
+
+---
+
 ## 2026-09-28 — podgląd ćwiczenia w parametrach sesji
 
 Realizacja zadania BACKLOG 11. Wymagania: APPLICATION §3.2 „Podgląd ćwiczenia”.
