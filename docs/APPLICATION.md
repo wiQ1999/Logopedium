@@ -22,6 +22,19 @@ Dwa niezależne tryby pracy:
 
 Każdy stan ma własny adres.
 
+### Szerokość ekranu
+
+Interfejs zajmuje całe okno przy każdej szerokości; nie ma stałej kolumny pośrodku.
+
+- **Telefon i tablet** — jedna kolumna.
+- **Desktop (od 1200 px)** — szerokość wykorzystują kolumny:
+  - parametry sesji: po lewej lista bloków, po prawej data i poziom, a pod nimi podsumowanie
+    ze startem, ziarno i legenda; podsumowanie ze startem zostaje w zasięgu przy przewijaniu listy;
+  - lista bazy i podsumowanie sesji układają się w kilka kolumn, a kolejność biegnie wierszami;
+  - tekst ciągły na karcie ćwiczenia ma najwyżej około 75 znaków w wierszu.
+- Edytor od 900 px ma dwie kolumny: formularz i podgląd na żywo.
+- Pozycje ćwiczenia stoją zawsze jedna pod drugą, niezależnie od szerokości.
+
 ---
 
 ## 3. Parametry sesji
