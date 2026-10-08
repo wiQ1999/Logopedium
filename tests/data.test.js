@@ -116,9 +116,9 @@ describe('normalizacja bazy', () => {
 
   it('liczy zawartość bazy', () => {
     assert.equal(db.stats.categoryCount, 7);
-    assert.equal(db.stats.exerciseCount, 70);
-    assert.equal(db.stats.variantCount, 132);
-    assert.equal(db.stats.itemCount, 735);
+    assert.equal(db.stats.exerciseCount, 68);
+    assert.equal(db.stats.variantCount, 128);
+    assert.equal(db.stats.itemCount, 726);
   });
 
   it('zachowuje kolejność kategorii z pliku', () => {

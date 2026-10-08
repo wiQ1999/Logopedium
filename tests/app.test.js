@@ -40,7 +40,7 @@ describe('start aplikacji', () => {
     const app = await boot();
     assert.match(app.text(), /Parametry sesji/);
     assert.equal(app.queryAll('.params-row').length, 7);
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 7 bloków');
+    assert.equal(app.query('#params-total').textContent.trim(), '68 ćwiczeń z 7 bloków');
     assert.match(app.query('#app-footer-info').textContent, /schemat 2\.0/);
   });
 
@@ -79,7 +79,7 @@ describe('przebieg sesji', () => {
     assert.match(app.hash(), /^#\/session\/1\?/);
     assert.match(app.hash(), /\?s=[A-Za-z0-9_-]+$/);
     assert.match(stateFromHash(app).params.date, /^\d{4}-\d{2}-\d{2}$/);
-    assert.match(app.text(), /Ćwiczenie 1 z 70/);
+    assert.match(app.text(), /Ćwiczenie 1 z 68/);
   });
 
   it('przechodzi kolejno przez ćwiczenia i kończy podsumowaniem', async () => {
@@ -118,7 +118,7 @@ describe('przebieg sesji', () => {
 
   it('uszkodzony lub stary stan sesji uruchamia ustawienia domyślne', async () => {
     const app = await boot({ hash: '#/session/1?d=2026-09-10&l=4&c=stary-format&s=uszkodzone' });
-    assert.match(app.text(), /Ćwiczenie 1 z 70/);
+    assert.match(app.text(), /Ćwiczenie 1 z 68/);
   });
 
   it('ten sam adres po odświeżeniu daje ten sam zestaw ćwiczeń', async () => {
@@ -217,7 +217,7 @@ describe('parametry sesji', () => {
 
     assert.equal(row.dataset.active, 'false');
     assert.equal(row.querySelector('[data-role="count"]').value, '0');
-    assert.equal(app.query('#params-total').textContent.trim(), '64 ćwiczenia z 6 bloków');
+    assert.equal(app.query('#params-total').textContent.trim(), '62 ćwiczenia z 6 bloków');
     assert.deepEqual(app.queryAll('.params-row').map((item) => item.dataset.category), before);
   });
 
@@ -228,7 +228,7 @@ describe('parametry sesji', () => {
     input.value = '99';
     input.dispatchEvent(new app.window.Event('input', { bubbles: true }));
     input.dispatchEvent(new app.window.Event('change', { bubbles: true }));
-    assert.equal(input.value, '21');
+    assert.equal(input.value, '19');
   });
 
   it('uchwyt pozwala przenieść blok klawiaturą', async () => {
@@ -336,7 +336,7 @@ describe('parametry sesji', () => {
     await app.click('#params-submit');
     const restored = stateFromHash(app).params;
     assert.deepEqual(blockSettings(restored, 'artykulacja-i-roznicowanie-glosek'),
-      { count: 21, variantLimit: 2, itemLimit: 5, pick: 'losowo' });
+      { count: 19, variantLimit: 2, itemLimit: 5, pick: 'losowo' });
     assert.deepEqual(blockSettings(restored, 'teksty-do-czytania-terapeutycznego'),
       { count: 23, variantLimit: 1, itemLimit: 0, pick: 'kolejnosc' });
   });
@@ -354,7 +354,7 @@ describe('zapamiętywanie ustawień', () => {
     assert.equal(stored.level, 4);
     assert.deepEqual(stored.blocks.find((entry) => entry.id === 'artykulacja-i-roznicowanie-glosek'), {
       id: 'artykulacja-i-roznicowanie-glosek',
-      count: 21,
+      count: 19,
       variantLimit: 6,
       itemLimit: 58,
       pick: 'kolejnosc',
@@ -406,23 +406,23 @@ describe('zapamiętywanie ustawień', () => {
     assert.equal(storage.data.has(STORAGE_KEY), false);
     assert.equal(app.query('#param-level').value, '4');
     assert.equal(app.query('#param-items-artykulacja-i-roznicowanie-glosek').value, '58');
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 7 bloków');
+    assert.equal(app.query('#params-total').textContent.trim(), '68 ćwiczeń z 7 bloków');
   });
 
   it('uszkodzony zapis jest pomijany bez komunikatu', async () => {
     const storage = makeStorage({ [STORAGE_KEY]: 'to nie jest JSON' });
     const app = await boot({ storage });
     assert.match(app.text(), /Parametry sesji/);
-    assert.equal(app.query('#params-total').textContent.trim(), '70 ćwiczeń z 7 bloków');
+    assert.equal(app.query('#params-total').textContent.trim(), '68 ćwiczeń z 7 bloków');
   });
 });
 
 describe('przeglądanie bazy', () => {
   it('pokazuje całą bazę pogrupowaną po kategoriach', async () => {
     const app = await boot({ hash: '#/browse' });
-    assert.equal(app.queryAll('.browse-item').length, 70);
+    assert.equal(app.queryAll('.browse-item').length, 68);
     assert.equal(app.queryAll('.browse-group').length, 7);
-    assert.match(app.text(), /Znaleziono 70 ćwiczeń/);
+    assert.match(app.text(), /Znaleziono 68 ćwiczeń/);
   });
 
   it('wyszukiwanie zawęża listę i zapisuje się w adresie', async () => {

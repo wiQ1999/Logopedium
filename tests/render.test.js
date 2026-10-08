@@ -101,10 +101,11 @@ describe('karta ćwiczenia', () => {
   });
 
   it('powtórzone polecenie wariantów pokazuje raz, nad wariantami', () => {
-    const repeated = db.exerciseById.get('uderz-mocnym-dzwiekiem-nosowym');
+    // Zadania 2–7 mają wspólne polecenie, zadanie 1 — własne.
+    const repeated = db.exerciseById.get('rezonatory-gloska-m');
     const html = renderExerciseCard(
       repeated,
-      repeated.variants.map((variant) => ({ variant, items: variant.items })),
+      repeated.variants.slice(1).map((variant) => ({ variant, items: variant.items })),
       {},
     );
     assert.equal(html.split('block--instruction').length - 1, 1);
