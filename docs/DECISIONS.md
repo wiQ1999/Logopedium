@@ -5,6 +5,30 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-10-08 — porządki w treści bazy
+
+Przegląd ćwiczeń ze skanów: niekompletne fragmenty usunięte lub uzupełnione, duplikaty scalone.
+
+- **Ćwiczenia z głoską m scalone w „Rezonatory — głoska m”** (kategoria: oddech, fonacja
+  i rezonans). Rezonatory miały polecenie czytania sekwencji wyrazów bez wyrazów; „mamrotliwa
+  marmolada” to ta sekwencja, a nagłos nosowy to dalsze zadania. Krańce kategorii rosną
+  do `W` = 7 i `P` = 67.
+- **Duplikaty „Ewentualnie ezoteryczne ewolucje” i „Arogancki aligator ambitnie adoruje”
+  usunięte** — te same zdania są zadaniem 1 ćwiczeń „Samogłoska „e”” i „Samogłoska „a””.
+- **Urwany tekst kończy się „[…]”** zamiast opisu braku strony — czytający widzi przerwę,
+  a nie uwagę redakcyjną.
+- **„Mowa legato” rozdzielona na dwa ćwiczenia** (sylaby; dni tygodnia i miesiące), oba z zasadami
+  techniki we wstępie — dopiero osobne ćwiczenia da się osobno włączyć w parametrach sesji.
+- **Polecenia ucięte na skanie odtworzone tylko z czytelnej części** (np. „…warcie” → „Zwarcie”);
+  polecenie bez czytelnej treści usunięte albo zastąpione opisem tego, co widać w ćwiczeniu.
+- **Polskie cudzysłowy „…” w całej treści**, także w nazwach zadań — wcześniej mieszane z prostymi.
+- **Głoska docelowa oznaczana tylko na swojej literze** — pogrubione pierwsze litery zdań w tekstach
+  na inną głoskę były błędem przeniesienia ze skanu.
+- **Identyfikatory wariantów scalonego ćwiczenia przenumerowane** według konwencji z CONTENT;
+  usunięte ćwiczenia znikają z zapisanych parametrów sesji przy najbliższym wczytaniu.
+
+---
+
 ## 2026-10-06 — układ na pełne okno
 
 Realizacja zadania BACKLOG 12. Wymagania: APPLICATION §2 „Szerokość ekranu”.
