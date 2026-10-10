@@ -51,7 +51,7 @@ describe('serwer projektu', () => {
     const db = await send('GET', '/data/database.json');
     assert.equal(db.status, 200);
     assert.equal(db.headers['x-logopedium-writable'], '1');
-    assert.equal(JSON.parse(db.text).exercises.length, 68);
+    assert.equal(JSON.parse(db.text).exercises.length, 71);
   });
 
   it('zapisuje poprawną bazę wprost do pliku i podnosi rewizję', async () => {
@@ -139,7 +139,7 @@ describe('import zadań ze skanów', () => {
     const result = await importExercises(template, { file });
     assert.equal(result.status, 'saved');
     const saved = JSON.parse(await readFile(file, 'utf8'));
-    assert.equal(saved.exercises.length, 69);
+    assert.equal(saved.exercises.length, 72);
     assert.equal(saved.exercises.at(-1).readQuality, 'do_weryfikacji');
     assert.equal(saved.generated, result.generated);
     assert.equal((await importExercises(template, { file })).status, 'invalid');

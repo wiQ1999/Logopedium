@@ -82,7 +82,7 @@ describe('zaznaczenie i klasy semantyczne',()=>{
 });
 
 describe('zapis kompletnej bazy',()=>{
-  it('otwiera wszystkie 68 ćwiczeń bez zmiany danych i z aktywnym zapisem',()=>{
+  it('otwiera wszystkie 71 ćwiczeń bez zmiany danych i z aktywnym zapisem',()=>{
     const dom = new JSDOM('<main></main>'); const root = dom.window.document.querySelector('main');
     for (const exercise of db.exercises) {
       const state = { db: { ...db, writable: true } };
@@ -108,7 +108,7 @@ describe('zapis kompletnej bazy',()=>{
     assert.notEqual(db.raw.exercises[0].title,'Poprawiony tytuł');
     assert.deepEqual(result.raw.extra,{preserved:true});
     assert.deepEqual(result.raw.exercises.map(e=>e.id),db.raw.exercises.map(e=>e.id));
-    assert.equal(buildDatabase(result.raw).stats.exerciseCount,68);
+    assert.equal(buildDatabase(result.raw).stats.exerciseCount,71);
   });
   it('zapis sprawdza całą bazę, także ćwiczenia spoza bufora',()=>{
     const raw=structuredClone(db.raw);raw.exercises.at(-1).variants[0].instructionHtml='<script>bad()</script>';
@@ -267,7 +267,7 @@ describe('przebieg pracy w edytorze',()=>{
     await app.goto(editHash);input(field('Tytuł'),'Tytuł po zapisie');await app.click('[data-action="save"]');await tick();
     await app.goto('#/params');await app.click('#params-submit');
     const titles=[];
-    for(let step=1;step<=68;step++){await app.goto(app.hash().replace(/session\/\d+/,`session/${step}`));titles.push(app.query('.exercise-card__title').textContent);}
+    for(let step=1;step<=71;step++){await app.goto(app.hash().replace(/session\/\d+/,`session/${step}`));titles.push(app.query('.exercise-card__title').textContent);}
     assert.ok(titles.includes('Tytuł po zapisie'));assert.ok(!titles.includes('Adam Andrzejewski'));
     await app.goto(oldSession);assert.match(app.hash(),/^#\/session\/1\?s=/);assert.ok(app.query('.exercise-card__title'));
   });
@@ -365,7 +365,7 @@ describe('nowe elementy bazy',()=>{
     state.exercise.variants[0].items[0].html='ta <span class="target">ta</span>';
     const result=prepareSave(db,state.exercise,state.newCategory);assert.deepEqual(result.issues,[]);
     assert.deepEqual(result.raw.categories.at(-1),{id:'rytm',name:'Rytm'});assert.equal(result.raw.exercises.at(-1).id,'tempo');
-    assert.equal(result.raw.exercises.length,69);
+    assert.equal(result.raw.exercises.length,72);
     state.exercise.categoryId='samogloski';assert.equal(prepareSave(db,state.exercise,state.newCategory).raw.categories.length,7);
   });
 });

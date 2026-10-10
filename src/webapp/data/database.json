@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "generated": "2026-10-08T20:13:57.310Z",
+  "generated": "2026-10-10T19:08:24.101Z",
   "categories": [
     {
       "id": "motoryka-orofacjalna-i-polykanie",
@@ -3525,43 +3525,78 @@
           "items": [
             {
               "id": "rozgrzewka-cwiczenia-jezyka-w1-p01",
-              "html": "Liczenie dolnych zębów czubkiem języka, po wewnętrznej ich stronie."
-            },
-            {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p02",
-              "html": "Oblizywanie językiem wewnętrznej powierzchni dolnych zębów."
-            },
-            {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p03",
               "html": "Zlizywanie czubkiem języka dżemu, czekolady lub miodu z dolnych dziąseł."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p04",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p02",
               "html": "Dmuchanie na język — brzegi języka delikatnie unoszą się, symetryczne ułożenie brzegów w kształt „rynienki”."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p05",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p03",
               "html": "Szybkie wyrzucanie całej masy języka."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p06",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p04",
               "html": "Delikatne „żucie” brzegów języka zębami trzonowymi, a końcówki języka — siekaczami."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p07",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p05",
               "html": "Kląskanie „konika”, mlaskanie, zasysanie całej masy języka do podniebienia („kapselek”)."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p08",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p06",
               "html": "Dotykanie czubkiem języka górnych zębów od wewnętrznej strony."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p09",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p07",
               "html": "Przytrzymanie przez kilka sekund czubka języka na podniebieniu, przy szeroko otwartych ustach."
             },
             {
-              "id": "rozgrzewka-cwiczenia-jezyka-w1-p10",
+              "id": "rozgrzewka-cwiczenia-jezyka-w1-p08",
               "html": "Zlizywanie czubkiem języka odrobiny dżemu, czekolady lub miodu z wałka dziąsłowego (tuż za górnymi siekaczami)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rozgrzewka-jezyka-dolne-zeby",
+      "title": "Rozgrzewka języka — dolne zęby",
+      "categoryId": "motoryka-orofacjalna-i-polykanie",
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Ćwiczenia wykonujemy przed lustrem.</p>",
+      "variants": [
+        {
+          "id": "rozgrzewka-jezyka-dolne-zeby-w1",
+          "label": "Zadanie 1 — liczenie zębów",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-jezyka-dolne-zeby-w1-p01",
+              "html": "Liczenie dolnych zębów czubkiem języka, po ich wewnętrznej stronie."
+            }
+          ]
+        },
+        {
+          "id": "rozgrzewka-jezyka-dolne-zeby-w2",
+          "label": "Zadanie 2 — oblizywanie zębów",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-jezyka-dolne-zeby-w2-p01",
+              "html": "Oblizywanie językiem wewnętrznej powierzchni dolnych zębów."
             }
           ]
         }
@@ -3589,31 +3624,131 @@
           "items": [
             {
               "id": "rozgrzewka-cwiczenia-warg-w1-p01",
-              "html": "Rozciąganie warg do uśmiechu i wymawianie głoski <span class=\"target\">E</span>."
-            },
-            {
-              "id": "rozgrzewka-cwiczenia-warg-w1-p02",
-              "html": "Naprzemienny uśmiech z pokazywaniem zębów, a następnie z zasłanianiem ich wargami."
-            },
-            {
-              "id": "rozgrzewka-cwiczenia-warg-w1-p03",
-              "html": "Dmuchanie na boki — szyja i głowa nie ruszają się, pracują kąciki ust."
-            },
-            {
-              "id": "rozgrzewka-cwiczenia-warg-w1-p04",
               "html": "Cmokanie ustami."
             },
             {
-              "id": "rozgrzewka-cwiczenia-warg-w1-p05",
+              "id": "rozgrzewka-cwiczenia-warg-w1-p02",
               "html": "Wysuwanie zaokrąglonych warg do przodu, następnie ruchy warg w prawo i w lewo — grymasy."
             },
             {
-              "id": "rozgrzewka-cwiczenia-warg-w1-p06",
+              "id": "rozgrzewka-cwiczenia-warg-w1-p03",
               "html": "Ustawianie warg jak do wymowy <span class=\"target\">u</span>, następnie — z uruchomieniem mięśni antagonistycznych — ustawienie warg spłaszczonych jak do <span class=\"target\">e</span>."
-            },
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki",
+      "title": "Rozgrzewka warg — uśmiech i dmuchanie na boki",
+      "categoryId": "motoryka-orofacjalna-i-polykanie",
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w1",
+          "label": "Zadanie 1 — uśmiech z „E”",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
             {
-              "id": "rozgrzewka-cwiczenia-warg-w1-p07",
-              "html": "Mówienie naprzemienne <span class=\"target\">E</span> / <span class=\"target\">U</span>, a następnie <span class=\"target\">S</span> / <span class=\"target\">SZ</span>: przy <span class=\"target\">E</span>–<span class=\"target\">S</span> usta mocno rozciągnięte i symetrycznie ustawione; przy <span class=\"target\">U</span>–<span class=\"target\">SZ</span> usta mocno wysunięte do przodu, co pomaga we właściwej pionizacji języka."
+              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w1-p01",
+              "html": "Rozciąganie warg do uśmiechu i wymawianie głoski <span class=\"target\">E</span>."
+            }
+          ]
+        },
+        {
+          "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w2",
+          "label": "Zadanie 2 — uśmiech z zębami i bez",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w2-p01",
+              "html": "Naprzemienny uśmiech: z pokazywaniem zębów, a następnie z zasłanianiem ich wargami."
+            }
+          ]
+        },
+        {
+          "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w3",
+          "label": "Zadanie 3 — dmuchanie na boki",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w3-p01",
+              "html": "Dmuchanie na boki — szyja i głowa nie ruszają się, pracują kąciki ust."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz",
+      "title": "Rozgrzewka warg — naprzemienne E/U i S/SZ",
+      "categoryId": "motoryka-orofacjalna-i-polykanie",
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w1",
+          "label": "Zadanie 1 — E / U i S / SZ",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w1-p01",
+              "html": "Mówienie naprzemiennie <span class=\"target\">E</span> / <span class=\"target\">U</span>, a następnie <span class=\"target\">S</span> / <span class=\"target\">SZ</span> — wargi układamy analogicznie: przy <span class=\"target\">S</span> jak przy <span class=\"target\">E</span>, przy <span class=\"target\">SZ</span> jak przy <span class=\"target\">U</span>."
+            }
+          ]
+        },
+        {
+          "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w2",
+          "label": "Zadanie 2 — E – S",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w2-p01",
+              "html": "<span class=\"target\">E</span> – <span class=\"target\">S</span>: usta mocno rozciągnięte i symetrycznie ustawione."
+            }
+          ]
+        },
+        {
+          "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w3",
+          "label": "Zadanie 3 — U – SZ",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w3-p01",
+              "html": "<span class=\"target\">U</span> – <span class=\"target\">SZ</span>: usta mocno wysunięte do przodu, również z zachowaniem symetrii — pomaga to we właściwej pionizacji języka."
             }
           ]
         }

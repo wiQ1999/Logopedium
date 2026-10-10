@@ -3,7 +3,7 @@
 `src/webapp/data/database.json` jest statyczną bazą ćwiczeń wczytywaną przy starcie aplikacji
 i ponownie po każdym zapisie z edytora, który zmienia ten plik bezpośrednio. Wersja schematu: **2.0**.
 
-Aktualna zawartość: 7 kategorii, 68 ćwiczeń, 128 wariantów i 726 pozycji.
+Aktualna zawartość: 7 kategorii, 71 ćwiczeń, 136 wariantów i 728 pozycji.
 
 ## Zakres bazy
 
@@ -90,7 +90,7 @@ Kolejność wariantów wynika z kolejności w tablicy.
 
 | Wartość | Liczba | Renderowanie |
 |---|---:|---|
-| `items` | 90 | lista niezależnych pozycji |
+| `items` | 98 | lista niezależnych pozycji |
 | `text` | 27 | tekst ciągły lub wierszowany, czytany w całości |
 | `prompt` | 9 | polecenie bez pozycji, np. zadanie długoterminowe |
 | `syllables` | 2 | wiersz sylab treningowych |
@@ -138,16 +138,16 @@ Rozdzielenie `target` i `legato` pozwala przełączać trzy warstwy prezentacji:
   oznaczają brak polecenia.
 - `randomizable: false` wyłącza ograniczanie pozycji także dla wariantów `items`. Typy `text`,
   `syllables` i `prompt` zawsze są podawane w całości.
-- `readQuality` pozostaje w bazie, ponieważ steruje ostrzeżeniem w interfejsie. Obecnie 9 z 68
+- `readQuality` pozostaje w bazie, ponieważ steruje ostrzeżeniem w interfejsie. Obecnie 9 z 71
   ćwiczeń wymaga weryfikacji.
-- 52 ćwiczenia nie mają określonego poziomu. Poziomy 1–4 mają odpowiednio 1, 3, 4 i 8 ćwiczeń.
-- 35 ćwiczeń ma `randomizable: false`.
+- 55 ćwiczeń nie ma określonego poziomu. Poziomy 1–4 mają odpowiednio 1, 3, 4 i 8 ćwiczeń.
+- 38 ćwiczeń ma `randomizable: false`.
 
 Krańce parametrów sesji `W` (warianty) i `P` (pozycje), liczone dla ćwiczeń w kategorii:
 
 | Kategoria | maks. `W` | maks. `P` |
 |---|---:|---:|
-| motoryka orofacjalna i połykanie | 2 | 10 |
+| motoryka orofacjalna i połykanie | 3 | 10 |
 | oddech, fonacja i rezonans | 7 | 67 |
 | technika mowy i głosu | 4 | 21 |
 | samogłoski | 2 | 5 |
