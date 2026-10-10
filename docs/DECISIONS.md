@@ -5,6 +5,20 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-10-10 — rozgrzewki: wydzielone ćwiczenia wariantowe
+
+- **Z rozgrzewek wydzielone trzy ćwiczenia, każda czynność jako osobny wariant** (zadanie):
+  „Rozgrzewka języka — dolne zęby” (liczenie, oblizywanie), „Rozgrzewka warg — uśmiech
+  i dmuchanie na boki” (uśmiech z „E”, uśmiech z zębami i bez, dmuchanie na boki),
+  „Rozgrzewka warg — naprzemienne E/U i S/SZ” (pary naprzemienne, ułożenie warg przy E–S i U–SZ).
+- **Wydzielone pozycje usunięte z „Rozgrzewki — ćwiczeń języka” i „…warg”**, żeby treść
+  nie powtarzała się w bazie. Pozostałe pozycje zostają; ich identyfikatory przenumerowane.
+- **Ćwiczenie z parami E/U i S/SZ rozpisane na trzy zadania** — dawna jedna pozycja łączyła
+  polecenie i oba ułożenia warg. Uwaga o pionizacji języka zostaje przy U–SZ.
+- Kraniec `W` motoryki orofacjalnej rośnie do 3.
+
+---
+
 ## 2026-10-08 — porządki w treści bazy
 
 Przegląd ćwiczeń ze skanów: niekompletne fragmenty usunięte lub uzupełnione, duplikaty scalone.
