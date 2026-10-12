@@ -15,7 +15,7 @@ bezpośrednio do pliku bazy (wymaga serwera z `npm start`).
 Aplikacja wymaga lokalnego serwera HTTP uruchomionego w katalogu `src/webapp/`. Otwarcie
 pliku `index.html` bezpośrednio z dysku uniemożliwia wczytanie bazy.
 
-Serwer dołączony do repozytorium (Node 20+, bez zależności):
+Serwer dołączony do repozytorium (Node 22+, bez zależności):
 
 ```bash
 npm start
