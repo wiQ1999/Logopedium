@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "generated": "2026-10-10T19:08:24.101Z",
+  "generated": "2026-10-14T12:24:59.591Z",
   "categories": [
     {
       "id": "motoryka-orofacjalna-i-polykanie",
@@ -560,6 +560,20 @@
               "html": "kocham moje ciało, dbam o nie, opiekuję się nim i pozwalam mu wydobywać najpiękniejsze dźwięki"
             }
           ]
+        },
+        {
+          "id": "cwiczenia-pracuje-nad-moim-glosem-w4",
+          "label": "Własne afirmacje",
+          "type": "prompt",
+          "instructionHtml": "<p>Podaj 3 własne afirmacje związane z mową.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [
+            "<em>Mówienie według zasad techniki daje mi większą pewność siebie.</em>",
+            "<em>Mój głos brzmi profesjonalnie.</em>",
+            "<em>Coraz częściej zabieram głos na forum.</em>"
+          ],
+          "items": []
         }
       ]
     },
@@ -1342,19 +1356,19 @@
       ]
     },
     {
-      "id": "indyk-irytowal-interesownoscia",
-      "title": "Indyk irytował interesownością",
+      "id": "samogloski-stopniowanie-glosnosci",
+      "title": "Samogłoski w nagłosie — stopniowanie głośności",
       "categoryId": "samogloski",
       "level": null,
       "randomizable": true,
       "readQuality": "pewny",
       "headerHtml": null,
       "contextHtml": null,
-      "instructionHtml": null,
+      "instructionHtml": "<p>Czytamy zdania, stopniując głośność: część zdań mówimy od cichej do głośnej,<br>\na pozostałe — od głośnej do cichej. Samogłoskę w nagłosie każdego wyrazu<br>\nwypowiadamy wyraziście.</p>",
       "variants": [
         {
-          "id": "indyk-irytowal-interesownoscia-w1",
-          "label": null,
+          "id": "samogloski-stopniowanie-glosnosci-w1",
+          "label": "Samogłoska „a”",
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -1362,26 +1376,183 @@
           "examples": [],
           "items": [
             {
-              "id": "indyk-irytowal-interesownoscia-w1-p01",
+              "id": "samogloski-stopniowanie-glosnosci-w1-p01",
+              "html": "<span class=\"target\">A</span>rogancki <span class=\"target\">a</span>ligator <span class=\"target\">a</span>mbitnie <span class=\"target\">a</span>doruje <span class=\"target\">a</span>trakcyjną <span class=\"target\">a</span>ligatorzycę."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w1-p02",
+              "html": "<span class=\"target\">A</span>lbert <span class=\"target\">a</span>takuje <span class=\"target\">a</span>tomową <span class=\"target\">a</span>trakcją – <span class=\"target\">a</span>le <span class=\"target\">a</span>fera!"
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w1-p03",
+              "html": "<span class=\"target\">A</span>trakcyjny <span class=\"target\">a</span>krobata <span class=\"target\">a</span>utomatycznie <span class=\"target\">a</span>sfaltuje <span class=\"target\">a</span>utostradę."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w1-p04",
+              "html": "<span class=\"target\">A</span>labastrowa <span class=\"target\">A</span>licja <span class=\"target\">a</span>systuje <span class=\"target\">a</span>żurowym, <span class=\"target\">a</span>mbiwalentnym <span class=\"target\">a</span>trakcjom."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w1-p05",
+              "html": "<span class=\"target\">A</span>kcjonariusz <span class=\"target\">A</span>lojzy <span class=\"target\">a</span>probuje <span class=\"target\">a</span>wansem <span class=\"target\">a</span>wangardowego <span class=\"target\">A</span>ustralijczyka."
+            }
+          ]
+        },
+        {
+          "id": "samogloski-stopniowanie-glosnosci-w2",
+          "label": "Samogłoska „e”",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w2-p01",
+              "html": "<span class=\"target\">E</span>wentualnie <span class=\"target\">e</span>zoteryczne <span class=\"target\">e</span>wolucje <span class=\"target\">e</span>lokwencji <span class=\"target\">e</span>woluują <span class=\"target\">e</span>kscentrycznie."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w2-p02",
+              "html": "<span class=\"target\">E</span>rgonomiczny <span class=\"target\">e</span>ukaliptus <span class=\"target\">e</span>mocjonalnie <span class=\"target\">e</span>manuje <span class=\"target\">e</span>lektroniczną <span class=\"target\">e</span>mancypacją."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w2-p03",
+              "html": "<span class=\"target\">E</span>lastyczny <span class=\"target\">E</span>milian <span class=\"target\">e</span>mpirycznie <span class=\"target\">e</span>liminuje <span class=\"target\">e</span>wentualnych <span class=\"target\">e</span>misariuszy."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w2-p04",
+              "html": "<span class=\"target\">E</span>lokwentna <span class=\"target\">E</span>welina <span class=\"target\">e</span>patuje <span class=\"target\">e</span>mocjami <span class=\"target\">E</span>kwadorczyków."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w2-p05",
+              "html": "<span class=\"target\">E</span>sencja <span class=\"target\">e</span>liksiru <span class=\"target\">e</span>ksploduje <span class=\"target\">e</span>maliowaną <span class=\"target\">e</span>rupcją."
+            }
+          ]
+        },
+        {
+          "id": "samogloski-stopniowanie-glosnosci-w3",
+          "label": "Samogłoska „i”",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w3-p01",
               "html": "<span class=\"target\">I</span>ndyk <span class=\"target\">i</span>rytował <span class=\"target\">i</span>nteresownością <span class=\"target\">i</span>ntencji <span class=\"target\">i</span>nne <span class=\"target\">i</span>ndyczki."
             },
             {
-              "id": "indyk-irytowal-interesownoscia-w1-p02",
+              "id": "samogloski-stopniowanie-glosnosci-w3-p02",
               "html": "<span class=\"target\">I</span>rytująca <span class=\"target\">i</span>nterwencja <span class=\"target\">i</span>nterkontynentalnych <span class=\"target\">i</span>nkwizytorów <span class=\"target\">i</span>rytuje <span class=\"target\">i</span>nternetowych <span class=\"target\">i</span>luzjonistów."
             },
             {
-              "id": "indyk-irytowal-interesownoscia-w1-p03",
+              "id": "samogloski-stopniowanie-glosnosci-w3-p03",
               "html": "<span class=\"target\">I</span>luzoryczna <span class=\"target\">i</span>nformacja <span class=\"target\">i</span>ntensywnie <span class=\"target\">i</span>mplikuje <span class=\"target\">i</span>rracjonalną <span class=\"target\">i</span>nkantację."
             },
             {
-              "id": "indyk-irytowal-interesownoscia-w1-p04",
+              "id": "samogloski-stopniowanie-glosnosci-w3-p04",
               "html": "<span class=\"target\">I</span>rlandzki <span class=\"target\">i</span>rokez <span class=\"target\">i</span>nteraktywnie <span class=\"target\">i</span>mponuje <span class=\"target\">i</span>lorazem <span class=\"target\">i</span>nteligencji <span class=\"target\">I</span>rakijczykom."
             },
             {
-              "id": "indyk-irytowal-interesownoscia-w1-p05",
+              "id": "samogloski-stopniowanie-glosnosci-w3-p05",
               "html": "<span class=\"target\">I</span>ntruz <span class=\"target\">i</span>nwigiluje <span class=\"target\">i</span>dylliczne, <span class=\"target\">i</span>nterpersonalne <span class=\"target\">i</span>nterpretacje <span class=\"target\">I</span>wony."
             }
           ]
+        },
+        {
+          "id": "samogloski-stopniowanie-glosnosci-w4",
+          "label": "Samogłoska „o”",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w4-p01",
+              "html": "<span class=\"target\">O</span>d <span class=\"target\">o</span>kolicznych <span class=\"target\">o</span>koliczności <span class=\"target\">o</span>bserwator <span class=\"target\">o</span>czekuje <span class=\"target\">o</span>piekuńczości."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w4-p02",
+              "html": "<span class=\"target\">O</span>d <span class=\"target\">o</span>sobowości <span class=\"target\">o</span> <span class=\"target\">o</span>kreślonej <span class=\"target\">o</span>kazałości <span class=\"target\">o</span>trzymujemy <span class=\"target\">o</span>błości."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w4-p03",
+              "html": "<span class=\"target\">O</span>słupiały <span class=\"target\">o</span>ligarcha <span class=\"target\">o</span>promieniony <span class=\"target\">o</span>toczką <span class=\"target\">o</span>palizuje <span class=\"target\">o</span>dwrotnością."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w4-p04",
+              "html": "<span class=\"target\">O</span>bcy <span class=\"target\">o</span>sobnik <span class=\"target\">o</span> <span class=\"target\">o</span>bojętnym <span class=\"target\">o</span>bliczu <span class=\"target\">o</span>stentacyjnie <span class=\"target\">o</span>bnosi <span class=\"target\">o</span>trzymaną <span class=\"target\">o</span>dznakę."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w4-p05",
+              "html": "<span class=\"target\">O</span>d <span class=\"target\">o</span>dwiecznych <span class=\"target\">o</span>czekiwań <span class=\"target\">o</span>tumaniło <span class=\"target\">o</span>kultystyczną <span class=\"target\">o</span>strygę."
+            }
+          ]
+        },
+        {
+          "id": "samogloski-stopniowanie-glosnosci-w5",
+          "label": "Samogłoska „u”",
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w5-p01",
+              "html": "<span class=\"target\">U</span>jmująca <span class=\"target\">u</span>ległość <span class=\"target\">u</span>trzymuje <span class=\"target\">u</span>gruntowaną <span class=\"target\">u</span>przejmość."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w5-p02",
+              "html": "<span class=\"target\">U</span>gryziona <span class=\"target\">u</span>lęgałka <span class=\"target\">u</span>grzęzła <span class=\"target\">u</span> <span class=\"target\">u</span>lubionego <span class=\"target\">u</span>czynnego <span class=\"target\">u</span>licznika."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w5-p03",
+              "html": "<span class=\"target\">U</span>smarowany <span class=\"target\">u</span>rwis <span class=\"target\">u</span>rwał <span class=\"target\">u</span>barwione <span class=\"target\">u</span>grem <span class=\"target\">u</span>kwiały."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w5-p04",
+              "html": "<span class=\"target\">U</span>sytuowanie <span class=\"target\">u</span>jścia <span class=\"target\">u</span>rugwajskiej <span class=\"target\">u</span>sterki <span class=\"target\">u</span>stalono <span class=\"target\">u</span>chwałą."
+            },
+            {
+              "id": "samogloski-stopniowanie-glosnosci-w5-p05",
+              "html": "<span class=\"target\">U</span>śmiechnięta <span class=\"target\">U</span>rszulka <span class=\"target\">u</span>kąsiła <span class=\"target\">u</span>cho <span class=\"target\">u</span>wielbianego, <span class=\"target\">u</span>miłowanego <span class=\"target\">U</span>szatka."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "samogloski-a-e-wiersze",
+      "title": "Samogłoski „a” i „e” — wiersze",
+      "categoryId": "samogloski",
+      "level": null,
+      "randomizable": true,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": "<p>Ćwiczenia należy wykonywać przed lustrem,<br>\nkontrolując ułożenie artykulatorów.</p>\n<p><strong>Opis układu artykulatorów — samogłoska „a”</strong></p>\n<p>Żuchwa nisko opuszczona. Język położony płasko w jamie ustnej.<br>\nWargi rozchylone bardzo szeroko. Układ artykulatorów przypomina szerokie ziewnięcie.</p>\n<p><strong>Opis układu artykulatorów — samogłoska „e”</strong></p>\n<p>Żuchwa średnio obniżona. Język w porównaniu z „a” przesunięty lekko do przodu<br>\ni w stronę górnych zębów. Wargi rozchylone jak do szerokiego uśmiechu.</p>",
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "samogloski-a-e-wiersze-w1",
+          "label": "Samogłoska „a”",
+          "type": "text",
+          "instructionHtml": "<p>Proszę przeczytać poniższy wiersz, starając się wyraziście wypowiedzieć każde „a”.</p>",
+          "syllablesHtml": null,
+          "textHtml": "<p><span class=\"target\">A</span></p>\n<p><span class=\"target\">A</span>le „<span class=\"target\">a</span>” – m<span class=\"target\">a</span>wia t<span class=\"target\">a</span>k<br>\nK<span class=\"target\">a</span>żd<span class=\"target\">a</span> z m<span class=\"target\">a</span>m,<br>\nGdy jej d<span class=\"target\">a</span>m<br>\nObr<span class=\"target\">a</span>z bez r<span class=\"target\">a</span>m.<br>\n<span class=\"target\">A</span> j<span class=\"target\">a</span>k jej d<span class=\"target\">a</span>m<br>\nTen obr<span class=\"target\">a</span>z bez r<span class=\"target\">a</span>m,<br>\nRodzi się pyt<span class=\"target\">a</span>nie: co z tego m<span class=\"target\">a</span>m?<br>\nM<span class=\"target\">a</span>m n<span class=\"target\">a</span>jlepszą z m<span class=\"target\">a</span>m!</p>",
+          "examples": [],
+          "items": []
+        },
+        {
+          "id": "samogloski-a-e-wiersze-w2",
+          "label": "Samogłoska „e”",
+          "type": "text",
+          "instructionHtml": "<p>Proszę przeczytać poniższy wiersz, starając się wyraziście wypowiedzieć każde „e”.</p>",
+          "syllablesHtml": null,
+          "textHtml": "<p><span class=\"target\">E</span></p>\n<p><span class=\"target\">E</span>wentualn<span class=\"target\">e</span> „<span class=\"target\">e</span>”<br>\nGdzi<span class=\"target\">e</span>ś zapodziało si<span class=\"target\">ę</span>,<br>\nNi<span class=\"target\">e</span> wi<span class=\"target\">e</span>my – <span class=\"target\">e</span>ch! – no gdzi<span class=\"target\">e</span><br>\nJ<span class=\"target\">e</span>st nasz<span class=\"target\">e</span> mał<span class=\"target\">e</span> „<span class=\"target\">e</span>”.<br>\nA nasz<span class=\"target\">e</span> mał<span class=\"target\">e</span> „<span class=\"target\">e</span>”<br>\nSprytni<span class=\"target\">e</span> wymknęło si<span class=\"target\">ę</span>,<br>\nBo opowi<span class=\"target\">e</span>dzi<span class=\"target\">e</span>ć chc<span class=\"target\">e</span></p>",
+          "examples": [],
+          "items": []
         }
       ]
     },
@@ -2101,50 +2272,6 @@
       ]
     },
     {
-      "id": "od-okolicznych-okolicznosci",
-      "title": "Od okolicznych okoliczności",
-      "categoryId": "samogloski",
-      "level": null,
-      "randomizable": true,
-      "readQuality": "pewny",
-      "headerHtml": null,
-      "contextHtml": null,
-      "instructionHtml": null,
-      "variants": [
-        {
-          "id": "od-okolicznych-okolicznosci-w1",
-          "label": null,
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
-            {
-              "id": "od-okolicznych-okolicznosci-w1-p01",
-              "html": "<span class=\"target\">O</span>d <span class=\"target\">o</span>kolicznych <span class=\"target\">o</span>koliczności <span class=\"target\">o</span>bserwator <span class=\"target\">o</span>czekuje <span class=\"target\">o</span>piekuńczości."
-            },
-            {
-              "id": "od-okolicznych-okolicznosci-w1-p02",
-              "html": "<span class=\"target\">O</span>d <span class=\"target\">o</span>sobowości <span class=\"target\">o</span> <span class=\"target\">o</span>kreślonej <span class=\"target\">o</span>kazałości <span class=\"target\">o</span>trzymujemy <span class=\"target\">o</span>błości."
-            },
-            {
-              "id": "od-okolicznych-okolicznosci-w1-p03",
-              "html": "<span class=\"target\">O</span>słupiały <span class=\"target\">o</span>ligarcha <span class=\"target\">o</span>promieniony <span class=\"target\">o</span>toczką <span class=\"target\">o</span>palizuje <span class=\"target\">o</span>dwrotnością."
-            },
-            {
-              "id": "od-okolicznych-okolicznosci-w1-p04",
-              "html": "<span class=\"target\">O</span>bcy <span class=\"target\">o</span>sobnik <span class=\"target\">o</span> <span class=\"target\">o</span>bojętnym <span class=\"target\">o</span>bliczu <span class=\"target\">o</span>stentacyjnie <span class=\"target\">o</span>bnosi <span class=\"target\">o</span>trzymaną <span class=\"target\">o</span>dznakę."
-            },
-            {
-              "id": "od-okolicznych-okolicznosci-w1-p05",
-              "html": "<span class=\"target\">O</span>d <span class=\"target\">o</span>dwiecznych <span class=\"target\">o</span>czekiwań <span class=\"target\">o</span>tumaniło <span class=\"target\">o</span>kultystyczną <span class=\"target\">o</span>strygę."
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "ogrod-oliwiera",
       "title": "Ogród Oliwiera",
       "categoryId": "teksty-do-czytania-terapeutycznego",
@@ -2677,14 +2804,6 @@
             },
             {
               "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p03",
-              "html": "Dotykanie końca języka i części przyzębnej podniebienia przedmiotem (szpatułką lub zimną łyżeczką) — uwrażliwienie właściwego miejsca artykulacji głosek dziąsłowych, a tym samym pozycji spoczynkowej języka."
-            },
-            {
-              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p04",
-              "html": "Uwrażliwienie wałka dziąsłowego odrobiną miodu — zlizujemy końcówką języka."
-            },
-            {
-              "id": "pionizacja-i-pozycja-spoczynkowa-jezyka-w1-p05",
               "html": "Subtelne dociskanie końcówką języka wałka dziąsłowego."
             }
           ]
@@ -2692,8 +2811,40 @@
       ]
     },
     {
-      "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa",
-      "title": "Podaj 3 własne afirmacje związane z mową",
+      "id": "pionizacja-jezyka-z-akcesoriami",
+      "title": "Pionizacja języka — ćwiczenia z akcesoriami",
+      "categoryId": "motoryka-orofacjalna-i-polykanie",
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": "<p>Ćwiczenia powtarzamy kilkakrotnie w trakcie sesji.</p>",
+      "variants": [
+        {
+          "id": "pionizacja-jezyka-z-akcesoriami-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "pionizacja-jezyka-z-akcesoriami-w1-p01",
+              "html": "Dotykanie końca języka i części przyzębnej podniebienia przedmiotem (szpatułką lub zimną łyżeczką) — uwrażliwienie właściwego miejsca artykulacji głosek dziąsłowych, a tym samym pozycji spoczynkowej języka."
+            },
+            {
+              "id": "pionizacja-jezyka-z-akcesoriami-w1-p02",
+              "html": "Uwrażliwienie wałka dziąsłowego odrobiną miodu — zlizujemy końcówką języka."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dluzsze-wypowiedzi",
+      "title": "Dłuższe wypowiedzi",
       "categoryId": "technika-mowy-i-glosu",
       "level": null,
       "randomizable": true,
@@ -2703,69 +2854,111 @@
       "instructionHtml": null,
       "variants": [
         {
-          "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w1",
-          "label": "Zadanie 1 — afirmacje",
-          "type": "prompt",
-          "instructionHtml": "<p>Podaj 3 własne afirmacje związane z mową.</p>",
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [
-            "<em>Mówienie według zasad techniki daje mi większą pewność siebie.</em>",
-            "<em>Mój głos brzmi profesjonalnie.</em>",
-            "<em>Coraz częściej zabieram głos na forum.</em>"
-          ],
-          "items": []
-        },
-        {
-          "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w2",
-          "label": "Zadanie 2 — dialogizacja",
-          "type": "prompt",
-          "instructionHtml": "<p>Codzienna dialogizacja (minimum 5 razy w tygodniu) z jedną lub dwiema osobami.</p>",
+          "id": "dluzsze-wypowiedzi-w1",
+          "label": "Wypowiedź na temat",
+          "type": "items",
+          "instructionHtml": "<p>Dłuższa wypowiedź (minimum 5 zdań, najlepiej 5–8) na temat:</p>",
           "syllablesHtml": null,
           "textHtml": null,
           "examples": [],
-          "items": []
+          "items": [
+            {
+              "id": "dluzsze-wypowiedzi-w1-p01",
+              "html": "zagrożenia związane z rozwojem wysokich technologii"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p02",
+              "html": "współczesny obraz Europy; największe zagrożenia dla Starego Kontynentu"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p03",
+              "html": "„zawód” influencer – znak czasów?"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p04",
+              "html": "zdrowy styl życia... – na czym powinien się opierać"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p05",
+              "html": "prezentacja profilu firmy / produktu sprzedażowego"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p06",
+              "html": "zapowiedź pogody"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p07",
+              "html": "przepis na danie (składniki + wykonanie)"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p08",
+              "html": "rekrutowanie potencjalnego pracownika (pytania, jakie mogą potencjalnie paść w trakcie rozmowy)"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p09",
+              "html": "refleksja na temat 3 ostatnich wydarzeń politycznych (krajowe i międzynarodowe)"
+            },
+            {
+              "id": "dluzsze-wypowiedzi-w1-p10",
+              "html": "zagrożenia związane z rozwojem sztucznej inteligencji"
+            }
+          ]
         },
         {
-          "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w3",
-          "label": "Zadanie 3 — opis zdjęć",
+          "id": "dluzsze-wypowiedzi-w2",
+          "label": "Opis zdjęć",
           "type": "prompt",
           "instructionHtml": "<p>Opis 3–5 zdjęć, np. zdjęć stockowych lub z czasopism (tematyka dowolna).</p>",
           "syllablesHtml": null,
           "textHtml": null,
           "examples": [],
           "items": []
-        },
+        }
+      ]
+    },
+    {
+      "id": "dialogi",
+      "title": "Dialogi",
+      "categoryId": "technika-mowy-i-glosu",
+      "level": null,
+      "randomizable": true,
+      "readQuality": "pewny",
+      "headerHtml": "<p><span class=\"legato\">Ćwiczenia aktywujące technikę legato na mowie spontanicznej</span></p>",
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
         {
-          "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4",
-          "label": "Zadanie 4 — dłuższa wypowiedź",
+          "id": "dialogi-w1",
+          "label": "Inscenizacja dialogu",
           "type": "items",
-          "instructionHtml": "<p>Dłuższa wypowiedź (minimum 5 zdań) na temat:</p>",
+          "instructionHtml": "<p>Inscenizacja krótkiego dialogu w:</p>",
           "syllablesHtml": null,
           "textHtml": null,
           "examples": [],
           "items": [
             {
-              "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4-p01",
-              "html": "zagrożenia związane z rozwojem wysokich technologii"
+              "id": "dialogi-w1-p01",
+              "html": "aptece"
             },
             {
-              "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4-p02",
-              "html": "współczesny obraz Europy; największe zagrożenia dla Starego Kontynentu"
+              "id": "dialogi-w1-p02",
+              "html": "sklepie spożywczym"
             },
             {
-              "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4-p03",
-              "html": "„zawód” influencer – znak czasów?"
-            },
-            {
-              "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4-p04",
-              "html": "zdrowy styl życia... – na czym powinien się opierać"
-            },
-            {
-              "id": "podaj-3-wlasne-afirmacje-zwiazane-z-mowa-w4-p05",
-              "html": "prezentacja profilu firmy / produktu sprzedażowego"
+              "id": "dialogi-w1-p03",
+              "html": "restauracji"
             }
           ]
+        },
+        {
+          "id": "dialogi-w2",
+          "label": "Codzienna dialogizacja",
+          "type": "prompt",
+          "instructionHtml": "<p>Codzienna dialogizacja (minimum 5 razy w tygodniu) z jedną lub dwiema osobami.</p>",
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": []
         }
       ]
     },
@@ -2809,13 +3002,13 @@
       "level": null,
       "randomizable": true,
       "readQuality": "pewny",
-      "headerHtml": null,
+      "headerHtml": "<p><span class=\"legato\">Ćwiczenia aktywujące technikę legato na mowie spontanicznej</span></p>",
       "contextHtml": null,
       "instructionHtml": null,
       "variants": [
         {
           "id": "powtorz-i-uzupelnij-zdanie-w1",
-          "label": "Zadanie 1 — uzupełnianie zdań",
+          "label": null,
           "type": "items",
           "instructionHtml": "<p>Powtórz i uzupełnij zdanie:</p>",
           "syllablesHtml": null,
@@ -2863,60 +3056,6 @@
               "html": "Doświadczenia życiowe..."
             }
           ]
-        },
-        {
-          "id": "powtorz-i-uzupelnij-zdanie-w2",
-          "label": "Zadanie 2 — dłuższe wypowiedzi",
-          "type": "items",
-          "instructionHtml": "<p>Dłuższe wypowiedzi (ok. 5–8 zdań):</p>",
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w2-p01",
-              "html": "zapowiedź pogody"
-            },
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w2-p02",
-              "html": "przepis na danie (składniki + wykonanie)"
-            },
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w2-p03",
-              "html": "rekrutowanie potencjalnego pracownika (pytania, jakie mogą potencjalnie paść w trakcie rozmowy)"
-            },
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w2-p04",
-              "html": "refleksja na temat 3 ostatnich wydarzeń politycznych (krajowe i międzynarodowe)"
-            },
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w2-p05",
-              "html": "zagrożenia związane z rozwojem sztucznej inteligencji"
-            }
-          ]
-        },
-        {
-          "id": "powtorz-i-uzupelnij-zdanie-w3",
-          "label": "Zadanie 3 — inscenizacja dialogu",
-          "type": "items",
-          "instructionHtml": "<p>Inscenizacja krótkiego dialogu w:</p>",
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w3-p01",
-              "html": "aptece"
-            },
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w3-p02",
-              "html": "sklepie spożywczym"
-            },
-            {
-              "id": "powtorz-i-uzupelnij-zdanie-w3-p03",
-              "html": "restauracji"
-            }
-          ]
         }
       ]
     },
@@ -2945,7 +3084,7 @@
     },
     {
       "id": "praksja-jezyka",
-      "title": "Praksja i pionizacja języka",
+      "title": "Praksja i pionizacja języka — głoska L",
       "categoryId": "motoryka-orofacjalna-i-polykanie",
       "level": null,
       "randomizable": false,
@@ -2965,43 +3104,87 @@
           "items": [
             {
               "id": "praksja-jezyka-w1-p01",
-              "html": "Ssanie końcówką języka pudrowego cukierka."
-            },
-            {
-              "id": "praksja-jezyka-w1-p02",
-              "html": "„Konik” — końcówka języka uderza o wałek dziąsłowy (usta lekko wysunięte do przodu)."
-            },
-            {
-              "id": "praksja-jezyka-w1-p03",
-              "html": "„Mlaskanie” — luźna praca całej masy języka."
-            },
-            {
-              "id": "praksja-jezyka-w1-p04",
-              "html": "„Kapselek” — środek języka przyklejony do sklepienia podniebienia twardego."
-            },
-            {
-              "id": "praksja-jezyka-w1-p05",
-              "html": "Dotykanie końcówką języka zębów górnego łuku."
-            },
-            {
-              "id": "praksja-jezyka-w1-p06",
-              "html": "Oblizywanie zębów od zewnętrznej i wewnętrznej strony — górny łuk zębowy."
-            },
-            {
-              "id": "praksja-jezyka-w1-p07",
               "html": "Bardzo szybkie powtarzanie głoski <span class=\"target\">L</span>."
             },
             {
-              "id": "praksja-jezyka-w1-p08",
+              "id": "praksja-jezyka-w1-p02",
               "html": "Sylaby: <span class=\"target\">L</span>alala… <span class=\"target\">L</span>ololo… <span class=\"target\">L</span>ululu… <span class=\"target\">L</span>elele… <span class=\"target\">L</span>ylyly…"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "praksja-jezyka-mlaskanie-konik-kapselek",
+      "title": "Praksja języka — mlaskanie, konik, kapselek",
+      "categoryId": "motoryka-orofacjalna-i-polykanie",
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "praksja-jezyka-mlaskanie-konik-kapselek-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "praksja-jezyka-mlaskanie-konik-kapselek-w1-p01",
+              "html": "„Mlaskanie” — luźna praca całej masy języka."
             },
             {
-              "id": "praksja-jezyka-w1-p09",
+              "id": "praksja-jezyka-mlaskanie-konik-kapselek-w1-p02",
+              "html": "„Konik” — końcówka języka uderza o wałek dziąsłowy (usta lekko wysunięte do przodu)."
+            },
+            {
+              "id": "praksja-jezyka-mlaskanie-konik-kapselek-w1-p03",
+              "html": "„Kapselek” — środek języka przyklejony do sklepienia podniebienia twardego."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "praksja-jezyka-ruchy-wahadlowe-wargi-zeby",
+      "title": "Praksja języka — ruchy wahadłowe, wargi i zęby",
+      "categoryId": "motoryka-orofacjalna-i-polykanie",
+      "level": null,
+      "randomizable": false,
+      "readQuality": "pewny",
+      "headerHtml": null,
+      "contextHtml": null,
+      "instructionHtml": null,
+      "variants": [
+        {
+          "id": "praksja-jezyka-ruchy-wahadlowe-wargi-zeby-w1",
+          "label": null,
+          "type": "items",
+          "instructionHtml": null,
+          "syllablesHtml": null,
+          "textHtml": null,
+          "examples": [],
+          "items": [
+            {
+              "id": "praksja-jezyka-ruchy-wahadlowe-wargi-zeby-w1-p01",
+              "html": "Ruchy wahadłowe języka na zewnątrz jamy ustnej."
+            },
+            {
+              "id": "praksja-jezyka-ruchy-wahadlowe-wargi-zeby-w1-p02",
               "html": "Zakrywanie językiem górnej i dolnej wargi."
             },
             {
-              "id": "praksja-jezyka-w1-p10",
-              "html": "Ruchy wahadłowe języka na zewnątrz jamy ustnej."
+              "id": "praksja-jezyka-ruchy-wahadlowe-wargi-zeby-w1-p03",
+              "html": "Oblizywanie zębów od zewnętrznej i wewnętrznej strony — górny łuk zębowy."
+            },
+            {
+              "id": "praksja-jezyka-ruchy-wahadlowe-wargi-zeby-w1-p04",
+              "html": "Dotykanie końcówką języka zębów górnego i dolnego łuku."
             }
           ]
         }
@@ -3572,7 +3755,7 @@
       "variants": [
         {
           "id": "rozgrzewka-jezyka-dolne-zeby-w1",
-          "label": "Zadanie 1 — liczenie zębów",
+          "label": null,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3582,20 +3765,9 @@
             {
               "id": "rozgrzewka-jezyka-dolne-zeby-w1-p01",
               "html": "Liczenie dolnych zębów czubkiem języka, po ich wewnętrznej stronie."
-            }
-          ]
-        },
-        {
-          "id": "rozgrzewka-jezyka-dolne-zeby-w2",
-          "label": "Zadanie 2 — oblizywanie zębów",
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
+            },
             {
-              "id": "rozgrzewka-jezyka-dolne-zeby-w2-p01",
+              "id": "rozgrzewka-jezyka-dolne-zeby-w1-p02",
               "html": "Oblizywanie językiem wewnętrznej powierzchni dolnych zębów."
             }
           ]
@@ -3651,7 +3823,7 @@
       "variants": [
         {
           "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w1",
-          "label": "Zadanie 1 — uśmiech z „E”",
+          "label": null,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3661,35 +3833,13 @@
             {
               "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w1-p01",
               "html": "Rozciąganie warg do uśmiechu i wymawianie głoski <span class=\"target\">E</span>."
-            }
-          ]
-        },
-        {
-          "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w2",
-          "label": "Zadanie 2 — uśmiech z zębami i bez",
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
+            },
             {
-              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w2-p01",
+              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w1-p02",
               "html": "Naprzemienny uśmiech: z pokazywaniem zębów, a następnie z zasłanianiem ich wargami."
-            }
-          ]
-        },
-        {
-          "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w3",
-          "label": "Zadanie 3 — dmuchanie na boki",
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
+            },
             {
-              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w3-p01",
+              "id": "rozgrzewka-warg-usmiech-i-dmuchanie-na-boki-w1-p03",
               "html": "Dmuchanie na boki — szyja i głowa nie ruszają się, pracują kąciki ust."
             }
           ]
@@ -3709,7 +3859,7 @@
       "variants": [
         {
           "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w1",
-          "label": "Zadanie 1 — E / U i S / SZ",
+          "label": null,
           "type": "items",
           "instructionHtml": null,
           "syllablesHtml": null,
@@ -3719,146 +3869,16 @@
             {
               "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w1-p01",
               "html": "Mówienie naprzemiennie <span class=\"target\">E</span> / <span class=\"target\">U</span>, a następnie <span class=\"target\">S</span> / <span class=\"target\">SZ</span> — wargi układamy analogicznie: przy <span class=\"target\">S</span> jak przy <span class=\"target\">E</span>, przy <span class=\"target\">SZ</span> jak przy <span class=\"target\">U</span>."
-            }
-          ]
-        },
-        {
-          "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w2",
-          "label": "Zadanie 2 — E – S",
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
+            },
             {
-              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w2-p01",
+              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w1-p02",
               "html": "<span class=\"target\">E</span> – <span class=\"target\">S</span>: usta mocno rozciągnięte i symetrycznie ustawione."
-            }
-          ]
-        },
-        {
-          "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w3",
-          "label": "Zadanie 3 — U – SZ",
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
+            },
             {
-              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w3-p01",
+              "id": "rozgrzewka-warg-naprzemienne-e-u-i-s-sz-w1-p03",
               "html": "<span class=\"target\">U</span> – <span class=\"target\">SZ</span>: usta mocno wysunięte do przodu, również z zachowaniem symetrii — pomaga to we właściwej pionizacji języka."
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "samogloska-a-arogancki-aligator",
-      "title": "Samogłoska „a” — Arogancki aligator",
-      "categoryId": "samogloski",
-      "level": null,
-      "randomizable": true,
-      "readQuality": "pewny",
-      "headerHtml": null,
-      "contextHtml": "<p>Ćwiczenia należy wykonywać przed lustrem,<br>\nkontrolując ułożenie artykulatorów.</p>\n<p><strong>Opis układu artykulatorów — samogłoska „a”</strong></p>\n<p>Żuchwa nisko opuszczona. Język położony płasko w jamie ustnej.<br>\nWargi rozchylone bardzo szeroko. Układ artykulatorów przypomina szerokie ziewnięcie.</p>",
-      "instructionHtml": null,
-      "variants": [
-        {
-          "id": "samogloska-a-arogancki-aligator-w1",
-          "label": "Zadanie 1 — zdania",
-          "type": "items",
-          "instructionHtml": "<p>Proszę przeczytać poniższe zdania, wypowiadając w przejaskrawiony sposób<br>\nkażde pierwsze „a” w wyrazie.</p>",
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
-            {
-              "id": "samogloska-a-arogancki-aligator-w1-p01",
-              "html": "<span class=\"target\">A</span>rogancki <span class=\"target\">a</span>ligator <span class=\"target\">a</span>mbitnie <span class=\"target\">a</span>doruje <span class=\"target\">a</span>trakcyjną <span class=\"target\">a</span>ligatorzycę."
-            },
-            {
-              "id": "samogloska-a-arogancki-aligator-w1-p02",
-              "html": "<span class=\"target\">A</span>lbert <span class=\"target\">a</span>takuje <span class=\"target\">a</span>tomową <span class=\"target\">a</span>trakcją – <span class=\"target\">a</span>le <span class=\"target\">a</span>fera!"
-            },
-            {
-              "id": "samogloska-a-arogancki-aligator-w1-p03",
-              "html": "<span class=\"target\">A</span>trakcyjny <span class=\"target\">a</span>krobata <span class=\"target\">a</span>utomatycznie <span class=\"target\">a</span>sfaltuje <span class=\"target\">a</span>utostradę."
-            },
-            {
-              "id": "samogloska-a-arogancki-aligator-w1-p04",
-              "html": "<span class=\"target\">A</span>labastrowa <span class=\"target\">A</span>licja <span class=\"target\">a</span>systuje <span class=\"target\">a</span>żurowym, <span class=\"target\">a</span>mbiwalentnym <span class=\"target\">a</span>trakcjom."
-            },
-            {
-              "id": "samogloska-a-arogancki-aligator-w1-p05",
-              "html": "<span class=\"target\">A</span>kcjonariusz <span class=\"target\">A</span>lojzy <span class=\"target\">a</span>probuje <span class=\"target\">a</span>wansem <span class=\"target\">a</span>wangardowego <span class=\"target\">A</span>ustralijczyka."
-            }
-          ]
-        },
-        {
-          "id": "samogloska-a-arogancki-aligator-w2",
-          "label": "Zadanie 2 — wiersz",
-          "type": "text",
-          "instructionHtml": "<p>Proszę przeczytać poniższy wiersz, starając się wyraziście wypowiedzieć każde „a”.</p>",
-          "syllablesHtml": null,
-          "textHtml": "<p><span class=\"target\">A</span></p>\n<p><span class=\"target\">A</span>le „<span class=\"target\">a</span>” – m<span class=\"target\">a</span>wia t<span class=\"target\">a</span>k<br>\nK<span class=\"target\">a</span>żd<span class=\"target\">a</span> z m<span class=\"target\">a</span>m,<br>\nGdy jej d<span class=\"target\">a</span>m<br>\nObr<span class=\"target\">a</span>z bez r<span class=\"target\">a</span>m.<br>\n<span class=\"target\">A</span> j<span class=\"target\">a</span>k jej d<span class=\"target\">a</span>m<br>\nTen obr<span class=\"target\">a</span>z bez r<span class=\"target\">a</span>m,<br>\nRodzi się pyt<span class=\"target\">a</span>nie: co z tego m<span class=\"target\">a</span>m?<br>\nM<span class=\"target\">a</span>m n<span class=\"target\">a</span>jlepszą z m<span class=\"target\">a</span>m!</p>",
-          "examples": [],
-          "items": []
-        }
-      ]
-    },
-    {
-      "id": "samogloska-e-ewentualnie-ezoteryczne",
-      "title": "Samogłoska „e” — Ewentualnie ezoteryczne ewolucje",
-      "categoryId": "samogloski",
-      "level": null,
-      "randomizable": true,
-      "readQuality": "pewny",
-      "headerHtml": null,
-      "contextHtml": "<p><strong>Opis układu artykulatorów — samogłoska „e”</strong></p>\n<p>Żuchwa średnio obniżona. Język w porównaniu z „a” przesunięty lekko do przodu<br>\ni w stronę górnych zębów. Wargi rozchylone jak do szerokiego uśmiechu.</p>",
-      "instructionHtml": null,
-      "variants": [
-        {
-          "id": "samogloska-e-ewentualnie-ezoteryczne-w1",
-          "label": "Zadanie 1 — zdania",
-          "type": "items",
-          "instructionHtml": "<p>Proszę przeczytać poniższe zdania, wypowiadając w przejaskrawiony sposób<br>\nkażde pierwsze „e” w wyrazie.</p>",
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
-            {
-              "id": "samogloska-e-ewentualnie-ezoteryczne-w1-p01",
-              "html": "<span class=\"target\">E</span>wentualnie <span class=\"target\">e</span>zoteryczne <span class=\"target\">e</span>wolucje <span class=\"target\">e</span>lokwencji <span class=\"target\">e</span>woluują <span class=\"target\">e</span>kscentrycznie."
-            },
-            {
-              "id": "samogloska-e-ewentualnie-ezoteryczne-w1-p02",
-              "html": "<span class=\"target\">E</span>rgonomiczny <span class=\"target\">e</span>ukaliptus <span class=\"target\">e</span>mocjonalnie <span class=\"target\">e</span>manuje <span class=\"target\">e</span>lektroniczną <span class=\"target\">e</span>mancypacją."
-            },
-            {
-              "id": "samogloska-e-ewentualnie-ezoteryczne-w1-p03",
-              "html": "<span class=\"target\">E</span>lastyczny <span class=\"target\">E</span>milian <span class=\"target\">e</span>mpirycznie <span class=\"target\">e</span>liminuje <span class=\"target\">e</span>wentualnych <span class=\"target\">e</span>misariuszy."
-            },
-            {
-              "id": "samogloska-e-ewentualnie-ezoteryczne-w1-p04",
-              "html": "<span class=\"target\">E</span>lokwentna <span class=\"target\">E</span>welina <span class=\"target\">e</span>patuje <span class=\"target\">e</span>mocjami <span class=\"target\">E</span>kwadorczyków."
-            },
-            {
-              "id": "samogloska-e-ewentualnie-ezoteryczne-w1-p05",
-              "html": "<span class=\"target\">E</span>sencja <span class=\"target\">e</span>liksiru <span class=\"target\">e</span>ksploduje <span class=\"target\">e</span>maliowaną <span class=\"target\">e</span>rupcją."
-            }
-          ]
-        },
-        {
-          "id": "samogloska-e-ewentualnie-ezoteryczne-w2",
-          "label": "Zadanie 2 — wiersz",
-          "type": "text",
-          "instructionHtml": "<p>Proszę przeczytać poniższy wiersz, starając się wyraziście wypowiedzieć każde „e”.</p>",
-          "syllablesHtml": null,
-          "textHtml": "<p><span class=\"target\">E</span></p>\n<p><span class=\"target\">E</span>wentualn<span class=\"target\">e</span> „<span class=\"target\">e</span>”<br>\nGdzi<span class=\"target\">e</span>ś zapodziało si<span class=\"target\">ę</span>,<br>\nNi<span class=\"target\">e</span> wi<span class=\"target\">e</span>my – <span class=\"target\">e</span>ch! – no gdzi<span class=\"target\">e</span><br>\nJ<span class=\"target\">e</span>st nasz<span class=\"target\">e</span> mał<span class=\"target\">e</span> „<span class=\"target\">e</span>”.<br>\nA nasz<span class=\"target\">e</span> mał<span class=\"target\">e</span> „<span class=\"target\">e</span>”<br>\nSprytni<span class=\"target\">e</span> wymknęło si<span class=\"target\">ę</span>,<br>\nBo opowi<span class=\"target\">e</span>dzi<span class=\"target\">e</span>ć chc<span class=\"target\">e</span></p>",
-          "examples": [],
-          "items": []
         }
       ]
     },
@@ -4698,50 +4718,6 @@
           "textHtml": "<p>Fioletowe góry<br>\nzapadają w mgły,<br>\nciemnieją lazury –<br>\njakby w głębię szły,</p>\n<p>&nbsp;&nbsp;&nbsp;&nbsp;Złoty róg miesiąca<br>\n&nbsp;&nbsp;&nbsp;&nbsp;sieje poblask mdły<br>\n&nbsp;&nbsp;&nbsp;&nbsp;lasów wiatr nie trąca,<br>\n&nbsp;&nbsp;&nbsp;&nbsp;jakby do snu szły.</p>\n<p>Potok wciąż głośniejszy<br>\nrwie się jak zwierz zły –<br>\nsmutek wciąż czarniejszy –<br>\ncoraz gęstsze mgły.</p>",
           "examples": [],
           "items": []
-        }
-      ]
-    },
-    {
-      "id": "ujmujaca-uleglosc-utrzymuje",
-      "title": "Ujmująca uległość utrzymuje",
-      "categoryId": "samogloski",
-      "level": null,
-      "randomizable": true,
-      "readQuality": "pewny",
-      "headerHtml": null,
-      "contextHtml": null,
-      "instructionHtml": null,
-      "variants": [
-        {
-          "id": "ujmujaca-uleglosc-utrzymuje-w1",
-          "label": null,
-          "type": "items",
-          "instructionHtml": null,
-          "syllablesHtml": null,
-          "textHtml": null,
-          "examples": [],
-          "items": [
-            {
-              "id": "ujmujaca-uleglosc-utrzymuje-w1-p01",
-              "html": "<span class=\"target\">U</span>jmująca <span class=\"target\">u</span>ległość <span class=\"target\">u</span>trzymuje <span class=\"target\">u</span>gruntowaną <span class=\"target\">u</span>przejmość."
-            },
-            {
-              "id": "ujmujaca-uleglosc-utrzymuje-w1-p02",
-              "html": "<span class=\"target\">U</span>gryziona <span class=\"target\">u</span>lęgałka <span class=\"target\">u</span>grzęzła <span class=\"target\">u</span> <span class=\"target\">u</span>lubionego <span class=\"target\">u</span>czynnego <span class=\"target\">u</span>licznika."
-            },
-            {
-              "id": "ujmujaca-uleglosc-utrzymuje-w1-p03",
-              "html": "<span class=\"target\">U</span>smarowany <span class=\"target\">u</span>rwis <span class=\"target\">u</span>rwał <span class=\"target\">u</span>barwione <span class=\"target\">u</span>grem <span class=\"target\">u</span>kwiały."
-            },
-            {
-              "id": "ujmujaca-uleglosc-utrzymuje-w1-p04",
-              "html": "<span class=\"target\">U</span>sytuowanie <span class=\"target\">u</span>jścia <span class=\"target\">u</span>rugwajskiej <span class=\"target\">u</span>sterki <span class=\"target\">u</span>stalono <span class=\"target\">u</span>chwałą."
-            },
-            {
-              "id": "ujmujaca-uleglosc-utrzymuje-w1-p05",
-              "html": "<span class=\"target\">U</span>śmiechnięta <span class=\"target\">U</span>rszulka <span class=\"target\">u</span>kąsiła <span class=\"target\">u</span>cho <span class=\"target\">u</span>wielbianego, <span class=\"target\">u</span>miłowanego <span class=\"target\">U</span>szatka."
-            }
-          ]
         }
       ]
     },

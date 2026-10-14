@@ -5,6 +5,30 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-10-14 — podział ćwiczeń według przeznaczenia
+
+- **Ćwiczenia z przedmiotem wydzielone z „Pionizacji i pozycji spoczynkowej języka”** do
+  „Pionizacji języka — ćwiczeń z akcesoriami” (szpatułka lub łyżeczka, miód), żeby dało się
+  je pominąć w sesji bez tych przedmiotów.
+- **„Praksja i pionizacja języka” rozbita na trzy ćwiczenia:** głoska L (zachowuje identyfikator
+  `praksja-jezyka`); mlaskanie, konik, kapselek; ruchy wahadłowe, zakrywanie warg, oblizywanie
+  i dotykanie zębów. Ssanie cukierka usunięte, dotykanie zębów obejmuje oba łuki zębowe.
+- **Rozgrzewki z 2026-10-10 mają jeden wariant z pozycjami zamiast wariantu na czynność.**
+  Jednopozycyjne warianty pokazywały etykietę „Zadanie n” nad pojedynczym zdaniem.
+- **Technika mowy i głosu pogrupowana według rodzaju wypowiedzi.** Własne afirmacje dołączone
+  do „Afirmacji — pracy nad głosem”; tematy dłuższych wypowiedzi z obu ćwiczeń scalone
+  w „Dłuższe wypowiedzi” (z opisem zdjęć), dialogi w „Dialogi”. „Powtórz i uzupełnij zdanie”
+  zostaje z samymi początkami zdań. Nagłówek o legato w mowie spontanicznej trafia do
+  wszystkich trzech ćwiczeń, bo dotyczył obu stron materiału.
+- **Zdania aliteracyjne na samogłoski A, E, I, O, U w jednym ćwiczeniu stopniowania głośności**,
+  wariant na samogłoskę. Polecenie: część zdań od cichej do głośnej, reszta odwrotnie.
+  Polecenie przejaskrawiania pierwszej samogłoski zastąpione wyrazistym nagłosem. Wiersze
+  „a” i „e” razem z opisami artykulatorów tworzą osobne ćwiczenie.
+- Usunięte identyfikatory (`podaj-3-wlasne-afirmacje-zwiazane-z-mowa`, pięć ćwiczeń samogłoskowych)
+  znikają z zapisanych parametrów sesji. Krańce: motoryka `W` 2 / `P` 8, samogłoski `W` 5 / `P` 25.
+
+---
+
 ## 2026-10-10 — rozgrzewki: wydzielone ćwiczenia wariantowe
 
 - **Z rozgrzewek wydzielone trzy ćwiczenia, każda czynność jako osobny wariant** (zadanie):

@@ -3,7 +3,7 @@
 `src/webapp/data/database.json` jest statyczną bazą ćwiczeń wczytywaną przy starcie aplikacji
 i ponownie po każdym zapisie z edytora, który zmienia ten plik bezpośrednio. Wersja schematu: **2.0**.
 
-Aktualna zawartość: 7 kategorii, 71 ćwiczeń, 136 wariantów i 728 pozycji.
+Aktualna zawartość: 7 kategorii, 72 ćwiczenia, 133 warianty i 727 pozycji.
 
 ## Zakres bazy
 
@@ -30,10 +30,10 @@ Szczegółowy cel ćwiczenia wynika z jego tytułu, poleceń i treści.
 
 | `id` | Nazwa | Ćwiczeń |
 |---|---|---:|
-| `motoryka-orofacjalna-i-polykanie` | motoryka orofacjalna i połykanie | 6 |
+| `motoryka-orofacjalna-i-polykanie` | motoryka orofacjalna i połykanie | 12 |
 | `oddech-fonacja-i-rezonans` | oddech, fonacja i rezonans | 8 |
-| `technika-mowy-i-glosu` | technika mowy i głosu | 5 |
-| `samogloski` | samogłoski | 5 |
+| `technika-mowy-i-glosu` | technika mowy i głosu | 6 |
+| `samogloski` | samogłoski | 2 |
 | `artykulacja-i-roznicowanie-glosek` | artykulacja i różnicowanie głosek | 19 |
 | `wprawki-artykulacyjne` | wprawki artykulacyjne | 2 |
 | `teksty-do-czytania-terapeutycznego` | teksty do czytania terapeutycznego | 23 |
@@ -90,7 +90,7 @@ Kolejność wariantów wynika z kolejności w tablicy.
 
 | Wartość | Liczba | Renderowanie |
 |---|---:|---|
-| `items` | 98 | lista niezależnych pozycji |
+| `items` | 95 | lista niezależnych pozycji |
 | `text` | 27 | tekst ciągły lub wierszowany, czytany w całości |
 | `prompt` | 9 | polecenie bez pozycji, np. zadanie długoterminowe |
 | `syllables` | 2 | wiersz sylab treningowych |
@@ -138,19 +138,19 @@ Rozdzielenie `target` i `legato` pozwala przełączać trzy warstwy prezentacji:
   oznaczają brak polecenia.
 - `randomizable: false` wyłącza ograniczanie pozycji także dla wariantów `items`. Typy `text`,
   `syllables` i `prompt` zawsze są podawane w całości.
-- `readQuality` pozostaje w bazie, ponieważ steruje ostrzeżeniem w interfejsie. Obecnie 9 z 71
+- `readQuality` pozostaje w bazie, ponieważ steruje ostrzeżeniem w interfejsie. Obecnie 9 z 72
   ćwiczeń wymaga weryfikacji.
-- 55 ćwiczeń nie ma określonego poziomu. Poziomy 1–4 mają odpowiednio 1, 3, 4 i 8 ćwiczeń.
-- 38 ćwiczeń ma `randomizable: false`.
+- 56 ćwiczeń nie ma określonego poziomu. Poziomy 1–4 mają odpowiednio 1, 3, 4 i 8 ćwiczeń.
+- 41 ćwiczeń ma `randomizable: false`.
 
 Krańce parametrów sesji `W` (warianty) i `P` (pozycje), liczone dla ćwiczeń w kategorii:
 
 | Kategoria | maks. `W` | maks. `P` |
 |---|---:|---:|
-| motoryka orofacjalna i połykanie | 3 | 10 |
+| motoryka orofacjalna i połykanie | 2 | 8 |
 | oddech, fonacja i rezonans | 7 | 67 |
 | technika mowy i głosu | 4 | 21 |
-| samogłoski | 2 | 5 |
+| samogłoski | 5 | 25 |
 | artykulacja i różnicowanie głosek | 6 | 58 |
 | wprawki artykulacyjne | 1 | 8 |
 | teksty do czytania terapeutycznego | 1 | 0 |
