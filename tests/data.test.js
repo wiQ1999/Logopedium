@@ -27,6 +27,12 @@ describe('walidacja bazy', () => {
     assert.ok(findIssue(issues, 'nie jest obsługiwana'));
   });
 
+  it('odrzuca usunięte oznaczenie fragmentu nieczytelnego', () => {
+    const raw = makeRawDatabase();
+    raw.exercises[0].variants[0].items[0].html = '<span class="uncertain">ucięte</span>';
+    assert.ok(findIssue(validateDatabase(raw), 'Nieznana klasa oznaczenia'));
+  });
+
   it('wykrywa brak wymaganych pól korzenia', () => {
     const raw = makeRawDatabase();
     delete raw.generated;

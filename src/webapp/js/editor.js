@@ -98,7 +98,7 @@ export function createExerciseDraft(db, { title = '', categoryId = '', categoryN
   if (issues.length) return { issues, state: null };
   const exercise = {
     id: uniqueId(slugify(cleanTitle) || 'cwiczenie', takenIds(db.raw)), title: cleanTitle, categoryId: newCategory?.id ?? categoryId,
-    level: null, randomizable: true, readQuality: 'do_weryfikacji', headerHtml: null, contextHtml: null, instructionHtml: null, variants: [],
+    level: null, randomizable: true, headerHtml: null, contextHtml: null, instructionHtml: null, variants: [],
   };
   const state = { exercise, saved: null, newCategory, added: [] };
   addVariant(db, state);
@@ -189,7 +189,6 @@ export function mountEditor(root, app, exerciseId, variantId, backHref) {
     ${state.newCategory ? `${textField(state.newCategory, 'name', 'Nazwa nowej kategorii')}<p class="panel__hint">Identyfikator kategorii: ${escapeHtml(state.newCategory.id)}</p>` : ''}
     ${selectField(exercise, 'level', 'Poziom', [['','Nieokreślony'], ...[1,2,3,4].map((n) => [n,String(n)])], (s) => s === '' ? null : Number(s))}
     ${selectField(exercise, 'randomizable', 'Losowanie pozycji', [['true','Dozwolone'],['false','Materiał w całości']], (s) => s === 'true')}
-    ${selectField(exercise, 'readQuality', 'Jakość odczytu', [['pewny','Pewny'],['do_weryfikacji','Do weryfikacji']])}
     ${richField(exercise, 'headerHtml', 'Nagłówek')}${richField(exercise, 'contextHtml', 'Materiał wprowadzający')}${richField(exercise, 'instructionHtml', 'Polecenie ćwiczenia')}
     </div>${exercise.variants.map(variantFields).join('')}
     <div class="btn-row"><button class="btn" type="button" data-action="add-variant">Dodaj wariant</button></div>`;

@@ -169,9 +169,6 @@ function validateExercises(raw, categoryIds, issues) {
     if (typeof exercise.randomizable !== 'boolean') {
       issues.push(`${path}.randomizable: oczekiwano wartości logicznej.`);
     }
-    if (!isNonEmptyString(exercise.readQuality)) {
-      issues.push(`${path}.readQuality: oczekiwano niepustego tekstu.`);
-    }
     ['headerHtml', 'contextHtml', 'instructionHtml'].forEach((field) => {
       if (!isNullableString(exercise[field])) {
         issues.push(`${path}.${field}: oczekiwano tekstu albo null.`);

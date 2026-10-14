@@ -71,7 +71,6 @@ function renderExerciseItem(exercise, filters) {
     levelLabel(exercise.level),
     formatCount(exercise.variants.length, ['zadanie', 'zadania', 'zadań']),
     exercise.itemCount > 0 ? formatCount(exercise.itemCount, ['pozycja', 'pozycje', 'pozycji']) : '',
-    exercise.readQuality === 'do_weryfikacji' ? 'odczyt do weryfikacji' : '',
   ].filter(Boolean);
 
   return `<li>
@@ -318,7 +317,6 @@ export function mountDetail(root, app, exerciseId, query) {
         ['Kategoria', category?.name ?? exercise.categoryId],
         ['Poziom', levelLabel(exercise.level)],
         ['Losowanie pozycji', exercise.randomizable ? 'dozwolone' : 'materiał w całości'],
-        ['Jakość odczytu', exercise.readQuality],
         ['Zadania', String(exercise.variants.length)],
         ['Pozycje', String(exercise.itemCount)],
       ])}

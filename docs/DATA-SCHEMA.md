@@ -1,7 +1,7 @@
 # Schemat pliku `database.json`
 
 `src/webapp/data/database.json` jest statyczną bazą ćwiczeń wczytywaną przy starcie aplikacji
-i ponownie po każdym zapisie z edytora, który zmienia ten plik bezpośrednio. Wersja schematu: **2.0**.
+i ponownie po każdym zapisie z edytora, który zmienia ten plik bezpośrednio. Wersja schematu: **2.1**.
 
 Aktualna zawartość: 7 kategorii, 72 ćwiczenia, 133 warianty i 727 pozycji.
 
@@ -20,7 +20,9 @@ exercises[]
 Wersja 2.0 nie przechowuje metadanych materiałów źródłowych ani rejestrów skanów. Usunięte
 zostały `source.file`, `source.kind`, `source.publication`, `notes`, `duplicates[]` oraz
 `nonTextMaterials[]`. Usunięto również pola ćwiczenia `phonemes` i `positions` oraz pole
-wariantu `noteHtml` wraz z jego treścią. Informacje audytowe powinny być utrzymywane poza bazą wykonawczą, jeśli
+wariantu `noteHtml` wraz z jego treścią. Wersja 2.1 usuwa pole ćwiczenia `readQuality`
+i klasę oznaczenia `uncertain` — baza nie przechowuje oceny odczytu ani uwag o brakach
+w materiale. Informacje audytowe powinny być utrzymywane poza bazą wykonawczą, jeśli
 będą ponownie potrzebne.
 
 ## Kategorie
@@ -65,7 +67,6 @@ Kolejność kategorii wynika z kolejności w tablicy; nie ma osobnego pola pozyc
 | `categoryId` | string | klucz obcy do `categories[].id` |
 | `level` | number \| null | poziom trudności 1–4; `null`, gdy poziom nie został określony |
 | `randomizable` | boolean | `true` pozwala ograniczać liczbę pozycji; `false` podaje cały materiał |
-| `readQuality` | string | `"pewny"` albo `"do_weryfikacji"` — zaufanie do treści transkrypcji |
 | `headerHtml` | string \| null | nagłówek materiału |
 | `contextHtml` | string \| null | opis metodyczny lub materiał wprowadzający pokazywany przed zadaniem |
 | `instructionHtml` | string \| null | wspólne polecenie; wariant może je nadpisać |
@@ -109,7 +110,6 @@ Kolejność wariantów wynika z kolejności w tablicy.
 | `target` | głoska docelowa |
 | `legato` | samogłoska przedłużana w technice legato |
 | `phonetic` | zapis fonetyczny lub ortofoniczny |
-| `uncertain` | fragment niepewny albo nieczytelny |
 | `breath` | miejsce wdechu |
 | `exhale` | fraza realizowana na jednym wydechu |
 | `blank` | miejsce na odpowiedź ustną |
@@ -138,8 +138,6 @@ Rozdzielenie `target` i `legato` pozwala przełączać trzy warstwy prezentacji:
   oznaczają brak polecenia.
 - `randomizable: false` wyłącza ograniczanie pozycji także dla wariantów `items`. Typy `text`,
   `syllables` i `prompt` zawsze są podawane w całości.
-- `readQuality` pozostaje w bazie, ponieważ steruje ostrzeżeniem w interfejsie. Obecnie 9 z 72
-  ćwiczeń wymaga weryfikacji.
 - 56 ćwiczeń nie ma określonego poziomu. Poziomy 1–4 mają odpowiednio 1, 3, 4 i 8 ćwiczeń.
 - 41 ćwiczeń ma `randomizable: false`.
 

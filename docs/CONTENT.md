@@ -36,15 +36,13 @@ Do próby bez ruszania bazy: `npm start -- --database <kopia.json>`.
    - `categoryId` — jedna z kategorii z DATA-SCHEMA.
    - `type` wariantu według układu na skanie: lista pozycji `items`, tekst ciągły `text`,
      samo polecenie `prompt`, wiersz sylab `syllables`.
-   - Oznaczenia wyłącznie klasami z DATA-SCHEMA (`target`, `legato`, `uncertain`…); fragment
-     nieczytelny oznacz `uncertain`, a nie domysłem.
-   - `readQuality: "do_weryfikacji"`, dopóki treści nie porówna ze skanem druga osoba lub drugi
-     odczyt.
+   - Oznaczenia wyłącznie klasami z DATA-SCHEMA (`target`, `legato`, `phonetic`…).
+   - Tylko treść ćwiczenia: bez uwag o ucięciach, brakach czy nieczytelnych fragmentach
+     i bez komentarzy autora spoza polecenia. Fragmentu nieczytelnego nie przepisuje się domysłem.
 3. **Próba.** `npm run import -- <plik.json> --dry-run` sprawdza plik razem z bazą i niczego
    nie zapisuje. Lista niezgodności wskazuje pole do poprawy.
 4. **Import.** `npm run import -- <plik.json>` dopisuje ćwiczenia na końcu bazy i podaje nową rewizję.
-5. **Weryfikacja.** W aplikacji porównaj podgląd ze skanem, popraw w edytorze, a po sprawdzeniu
-   ustaw `readQuality` na `pewny`.
+5. **Weryfikacja.** W aplikacji porównaj podgląd ze skanem i popraw w edytorze.
 6. **Publikacja.** `npm run validate`, zatwierdzenie pliku bazy, publikacja katalogu `src/webapp/`.
 
 Pliku bazy nie edytuje się ręcznie. Gdyby to było konieczne, `npm run validate` musi przejść

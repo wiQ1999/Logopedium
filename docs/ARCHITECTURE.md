@@ -210,8 +210,7 @@ z identyfikatora ćwiczenia, żeby zmiana limitów nie przesuwała sekwencji w p
 **Walidacja bazy.** Wczytanie kończy się sprawdzeniem struktury; zbierane są wszystkie
 niezgodności naraz, a aplikacja pokazuje ich listę zamiast pustego interfejsu. Walidowane są
 pola wymagane, unikalność identyfikatorów i nazw kategorii, odwołania do kategorii, znane typy wariantów,
-obecność treści i zakres poziomu. Pole informacyjne `readQuality` nie jest sprawdzane
-słownikowo — jego rozszerzenie nie powinno blokować startu.
+obecność treści i zakres poziomu.
 Ta sama walidacja obejmuje bazę po edycji i musi przejść przed zapisem — w edytorze i ponownie
 na serwerze (§4). Moduł walidatora nie odwołuje się do API przeglądarki, więc serwer importuje go
 bez zmian.

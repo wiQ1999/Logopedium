@@ -349,7 +349,7 @@ udostępnia odpowiadające im pola z `database.json`; identyfikatory pozostają 
 
 Każde pole z treścią HTML (nagłówek, materiał wprowadzający, polecenia, sylaby, tekst,
 przykłady, pozycje) ma własny pasek oznaczeń wbudowany w ramkę pola, jak w edytorze tekstu.
-Pola proste — tytuł, nazwa wariantu, kategoria, poziom, losowanie, jakość odczytu — są zwykłymi
+Pola proste — tytuł, nazwa wariantu, kategoria, poziom, losowanie — są zwykłymi
 polami bez paska.
 
 - Przycisk pokazuje próbkę oznaczenia w wyglądzie z materiału (np. pogrubione „sz”,
@@ -397,8 +397,7 @@ i przyciski dodawania są ukryte.
   kategorię”: tytuł i kategoria (domyślnie ta z filtra) albo „nowa kategoria…” z nazwą.
   Nowa kategoria powstaje razem ze swoim pierwszym ćwiczeniem, bo pusta nie pojawiłaby się
   w żadnym widoku; nazwa kategorii nie może powtarzać istniejącej. Ćwiczenie otwiera się
-  w edytorze z jednym wariantem typu „Pozycje” i jedną pustą pozycją, poziomem nieokreślonym
-  i jakością odczytu „do weryfikacji”.
+  w edytorze z jednym wariantem typu „Pozycje”, jedną pustą pozycją i poziomem nieokreślonym.
 - **Wariant i pozycja.** Edycja ćwiczenia ma „Dodaj wariant” na końcu listy wariantów, a każdy
   wariant typu „Pozycje” — „Dodaj pozycję” na końcu listy pozycji (także w edycji wariantu).
   Kursor przechodzi do dodanego elementu.

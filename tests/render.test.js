@@ -124,12 +124,6 @@ describe('karta ćwiczenia', () => {
     assert.equal(blocks, views.filter((view) => view.variant.instructionHtml ?? mixed.instructionHtml).length);
   });
 
-  it('oznacza ćwiczenia o niepewnym odczycie', () => {
-    const uncertain = db.exercises.find((item) => item.readQuality === 'do_weryfikacji');
-    const html = renderExerciseCard(uncertain, [], {});
-    assert.ok(html.includes('odczyt do weryfikacji'));
-  });
-
   it('nie przepuszcza znaczników z tytułu', () => {
     const html = renderExerciseCard({ ...exercise, title: '<img src=x onerror=alert(1)>' }, [], {});
     assert.ok(!html.includes('<img'));
@@ -155,7 +149,7 @@ describe('elementy pomocnicze interfejsu', () => {
 
   it('legenda opisuje wszystkie oznaczenia', () => {
     const html = renderMarksLegend();
-    ['target', 'legato', 'phonetic', 'uncertain', 'breath', 'exhale', 'juncture', 'blank'].forEach((mark) => {
+    ['target', 'legato', 'phonetic', 'breath', 'exhale', 'juncture', 'blank'].forEach((mark) => {
       assert.ok(html.includes(`class="${mark}"`), `brak oznaczenia ${mark}`);
     });
   });

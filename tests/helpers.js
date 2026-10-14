@@ -41,7 +41,6 @@ export function makeExercise(overrides = {}) {
     categoryId: 'cat-a',
     level: null,
     randomizable: true,
-    readQuality: 'pewny',
     headerHtml: null,
     contextHtml: null,
     instructionHtml: null,
@@ -52,7 +51,7 @@ export function makeExercise(overrides = {}) {
 
 export function makeRawDatabase(overrides = {}) {
   return {
-    schemaVersion: '2.0',
+    schemaVersion: '2.1',
     generated: '2026-01-01',
     categories: [
       { id: 'cat-a', name: 'Kategoria A' },

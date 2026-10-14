@@ -99,7 +99,6 @@ export function renderMarksLegend() {
     [MARK_SAMPLES.target, 'głoska docelowa'],
     [MARK_SAMPLES.legato, 'przedłużenie w technice legato'],
     [MARK_SAMPLES.phonetic, 'zapis fonetyczny z oryginału'],
-    [MARK_SAMPLES.uncertain, 'fragment nieczytelny na skanie'],
     [MARK_SAMPLES.breath, 'miejsce wdechu'],
     [MARK_SAMPLES.exhale, 'fraza na jednym wydechu'],
     [MARK_SAMPLES.juncture, 'granica zestroju akcentowego'],
@@ -161,7 +160,6 @@ export function renderExerciseCard(exercise, variantViews, options = {}) {
   const badges = [
     categoryName ? `<span class="chip">${escapeHtml(categoryName)}</span>` : '',
     `<span class="chip chip--neutral">${escapeHtml(levelLabel(exercise.level))}</span>`,
-    exercise.readQuality === 'do_weryfikacji' ? '<span class="chip chip--warn">odczyt do weryfikacji</span>' : '',
   ]
     .filter(Boolean)
     .join('');
@@ -231,7 +229,6 @@ export function renderExercisePreview(exercise) {
     `<span class="chip chip--neutral">${escapeHtml(levelLabel(exercise.level))}</span>`,
     `<span class="chip chip--neutral">${formatCount(exercise.variants.length, ['wariant', 'warianty', 'wariantów'])}</span>`,
     itemCount ? `<span class="chip chip--neutral">${formatCount(itemCount, ['pozycja', 'pozycje', 'pozycji'])}</span>` : '',
-    exercise.readQuality === 'do_weryfikacji' ? '<span class="chip chip--warn">odczyt do weryfikacji</span>' : '',
   ].join('');
   const description = [exercise.headerHtml, exercise.contextHtml].filter(Boolean).map((html) => sample(html)).join('<br>');
   const instructions = exercise.variants.map((variant) => variant.instructionHtml ?? exercise.instructionHtml ?? null);

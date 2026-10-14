@@ -153,7 +153,7 @@ describe('przebieg pracy w edytorze',()=>{
     const variantLink=app.queryAll('a').find(el=>el.textContent==='Edytuj wariant').getAttribute('href');
     await app.click('a[href*="edit=1"]');assert.match(app.text(),/Edycja ćwiczenia/);
     assert.ok(field('Tytuł'));assert.equal(app.queryAll('.rich-editor').length,app.queryAll('[data-rich]').length);
-    assert.equal(app.query('.rich-editor').querySelectorAll('[data-mark]').length,8);
+    assert.equal(app.query('.rich-editor').querySelectorAll('[data-mark]').length,7);
     await app.goto(variantLink);assert.match(app.text(),/Edycja wariantu/);assert.equal(field('Tytuł'),undefined);
   });
   it('pola tekstowe i HTML aktualizują podgląd na każdym input',async()=>{
@@ -183,7 +183,7 @@ describe('przebieg pracy w edytorze',()=>{
       assert.equal(target.getAttribute('aria-label'),MARKS.target);assert.ok(target.querySelector('.target'));
       assert.ok(!/Głoska/.test(target.textContent));
     }
-    for(const label of ['Tytuł','Kategoria','Poziom','Jakość odczytu']) assert.equal(field(label).closest('.rich-editor'),null,label);
+    for(const label of ['Tytuł','Kategoria','Poziom','Losowanie pozycji']) assert.equal(field(label).closest('.rich-editor'),null,label);
     assert.equal(field('Tytuł').tagName,'INPUT');assert.equal(app.queryAll('#editor-fields textarea').length,0);
   });
   it('pasek pokazuje stan zaznaczenia i działa tylko na swoim polu',async()=>{
@@ -200,13 +200,13 @@ describe('przebieg pracy w edytorze',()=>{
   it('pasek obsługuje klawiaturę: Alt+F10, strzałki, Home/End i Escape',async()=>{
     app=await bootApp({hash:editHash});const rich=app.query('[data-rich]');const buttons=[...rich.closest('.rich-editor').querySelectorAll('[data-mark]')];
     const key=(el,k,extra={})=>el.dispatchEvent(new app.window.KeyboardEvent('keydown',{key:k,bubbles:true,cancelable:true,...extra}));
-    assert.deepEqual(buttons.map(b=>b.tabIndex),[0,-1,-1,-1,-1,-1,-1,-1]);
+    assert.deepEqual(buttons.map(b=>b.tabIndex),[0,-1,-1,-1,-1,-1,-1]);
     key(rich,'F10',{altKey:true});assert.equal(app.document.activeElement,buttons[0]);
     key(buttons[0],'ArrowRight');assert.equal(app.document.activeElement,buttons[1]);assert.equal(buttons[1].tabIndex,0);assert.equal(buttons[0].tabIndex,-1);
-    key(buttons[1],'End');assert.equal(app.document.activeElement,buttons[7]);
-    key(buttons[7],'ArrowRight');assert.equal(app.document.activeElement,buttons[0]);
-    key(buttons[0],'ArrowLeft');assert.equal(app.document.activeElement,buttons[7]);
-    key(buttons[7],'Home');assert.equal(app.document.activeElement,buttons[0]);
+    key(buttons[1],'End');assert.equal(app.document.activeElement,buttons[6]);
+    key(buttons[6],'ArrowRight');assert.equal(app.document.activeElement,buttons[0]);
+    key(buttons[0],'ArrowLeft');assert.equal(app.document.activeElement,buttons[6]);
+    key(buttons[6],'Home');assert.equal(app.document.activeElement,buttons[0]);
     key(buttons[0],'Escape');assert.equal(app.document.activeElement,rich);
   });
   it('wklejenie HTML trafia do pola jako tekst, bez wykonania kodu',async()=>{
@@ -331,7 +331,7 @@ describe('nowe elementy bazy',()=>{
     assert.deepEqual(Object.keys(e),Object.keys(db.raw.exercises[0]));
     assert.deepEqual(e.variants.map(v=>v.id),['adam-andrzejewski-2-w1']);assert.deepEqual(e.variants[0].items,[{id:'adam-andrzejewski-2-w1-p01',html:''}]);
     assert.deepEqual(Object.keys(e.variants[0]),Object.keys(db.raw.exercises[0].variants[0]));
-    assert.equal(e.readQuality,'do_weryfikacji');assert.deepEqual(state.added,['adam-andrzejewski-2-w1','adam-andrzejewski-2-w1-p01']);
+    assert.deepEqual(state.added,['adam-andrzejewski-2-w1','adam-andrzejewski-2-w1-p01']);
     assert.ok(validateExercise(db.raw,e).some(s=>s.includes('niepustej treści')));
   });
   it('formularz odrzuca brak tytułu, brak kategorii i powtórzoną nazwę kategorii',()=>{

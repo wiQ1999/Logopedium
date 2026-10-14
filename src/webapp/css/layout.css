@@ -254,11 +254,6 @@
   color: var(--text-muted);
 }
 
-.chip--warn {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-
 .chip-row {
   display: flex;
   flex-wrap: wrap;

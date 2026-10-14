@@ -13,19 +13,6 @@
   font-style: italic;
 }
 
-.uncertain {
-  color: var(--mark-uncertain);
-  font-style: italic;
-}
-
-.uncertain::before {
-  content: "[";
-}
-
-.uncertain::after {
-  content: "]";
-}
-
 .breath {
   color: var(--mark-breath);
   font-weight: 700;

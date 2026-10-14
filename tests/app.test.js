@@ -41,7 +41,7 @@ describe('start aplikacji', () => {
     assert.match(app.text(), /Parametry sesji/);
     assert.equal(app.queryAll('.params-row').length, 7);
     assert.equal(app.query('#params-total').textContent.trim(), '72 ćwiczenia z 7 bloków');
-    assert.match(app.query('#app-footer-info').textContent, /schemat 2\.0/);
+    assert.match(app.query('#app-footer-info').textContent, /schemat 2\.1/);
   });
 
   it('nieznany adres wraca do parametrów', async () => {

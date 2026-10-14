@@ -42,13 +42,12 @@ describe('podgląd ćwiczenia', () => {
   it('pokazuje opis, polecenie i treść, skracając długi tekst', () => {
     const long = `<p>${'słowo '.repeat(100)}</p>`;
     const html = renderExercisePreview(makeExercise({
-      level: 2, readQuality: 'do_weryfikacji', contextHtml: '<p>Opis metodyczny</p>', instructionHtml: '<p>Powtórz</p>',
+      level: 2, contextHtml: '<p>Opis metodyczny</p>', instructionHtml: '<p>Powtórz</p>',
       variants: [makeVariant({ id: 'x-w1', type: 'text', textHtml: long })],
     }));
     assert.match(html, /Opis metodyczny/);
     assert.match(html, /Powtórz/);
     assert.match(html, /poziom 2/);
-    assert.match(html, /odczyt do weryfikacji/);
     const words = (text(html).match(/słowo/g) ?? []).length;
     assert.ok(words > 10 && words <= PREVIEW_LIMITS.text.chars / 'słowo '.length, String(words));
     assert.match(html, /…<\/p>/);

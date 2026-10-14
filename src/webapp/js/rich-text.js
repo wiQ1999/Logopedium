@@ -99,7 +99,7 @@ export function toggleMark(editable, range, mark) {
 }
 
 // Shorter samples than in the legend, so the whole toolbar fits one row on a phone.
-const BUTTON_SAMPLES = { ...MARK_SAMPLES, phonetic: '<span class="phonetic">ţs</span>', uncertain: '<span class="uncertain">uc</span>' };
+const BUTTON_SAMPLES = { ...MARK_SAMPLES, phonetic: '<span class="phonetic">ţs</span>' };
 
 /** Toolbar built into the field's frame; each button shows the mark as it looks in the material. */
 export function renderMarkToolbar(targetId, label) {

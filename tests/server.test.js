@@ -140,7 +140,7 @@ describe('import zadań ze skanów', () => {
     assert.equal(result.status, 'saved');
     const saved = JSON.parse(await readFile(file, 'utf8'));
     assert.equal(saved.exercises.length, 73);
-    assert.equal(saved.exercises.at(-1).readQuality, 'do_weryfikacji');
+    assert.equal(saved.exercises.at(-1).id, 'nowe-cwiczenie-ze-skanu');
     assert.equal(saved.generated, result.generated);
     assert.equal((await importExercises(template, { file })).status, 'invalid');
   });

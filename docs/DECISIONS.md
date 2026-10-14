@@ -5,6 +5,24 @@ trafia tylko decyzja i jej uzasadnienie.
 
 ---
 
+## 2026-10-14 — baza `schemaVersion` 2.1: bez oceny odczytu
+
+- **Pole `readQuality` i oznaczenie `uncertain` usunięte ze schematu**, razem z ostrzeżeniem
+  „odczyt do weryfikacji” w sesji, podglądzie i przeglądaniu oraz polem „Jakość odczytu”
+  w edytorze. Treść bazy uznano za sprawdzoną, a ocena transkrypcji należy do pracy nad skanem,
+  nie do materiału dla ćwiczącego. Klasa `uncertain` nie występowała w treści; teraz walidator ją odrzuca.
+- **`schemaVersion` podniesiona do 2.1**, tak jak przy usunięciu `order` w 1.1. Pole spoza
+  schematu w starszym pliku nie blokuje wczytania.
+- **Z treści usunięte ślady braków i uwagi redakcyjne:** znaczniki „[…]” na końcu tekstów
+  („Chrabąszcz i dyliżans”, „Prozdrowotne plany Przemysława”) zastąpione wielokropkiem;
+  komentarz „Ale to nie koniec usprawniania artykulacji…” w „trzy-czy-drza-dża” usunięty.
+  *(Zastępuje regułę „[…]” z 2026-10-08.)*
+- **„Rezonatory — głoska m” ma jedno polecenie dla całego ćwiczenia.** Sześć wariantów
+  powtarzało to samo „Uderz mocnym dźwiękiem nosowym nagłos dwusylabowców”; polecenie ćwiczenia
+  łączy je z opisem przeciągania m z zadania 1.
+
+---
+
 ## 2026-10-14 — podział ćwiczeń według przeznaczenia
 
 - **Ćwiczenia z przedmiotem wydzielone z „Pionizacji i pozycji spoczynkowej języka”** do
